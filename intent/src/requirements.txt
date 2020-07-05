@@ -97,7 +97,9 @@ wheel==0.32.2             # via -r /Users/steeve_laquitaine/Desktop/intent/inten
 whichcraft==0.6.1         # via cookiecutter
 widgetsnbextension==3.5.1  # via ipywidgets
 zipp==3.1.0               # via importlib-metadata
-
+autopep8
+conda
+scikit-learn  
 # The following packages are considered to be unsafe in a requirements file:
 # pip
 # setuptools
