@@ -100,6 +100,7 @@ zipp==3.1.0               # via importlib-metadata
 autopep8
 conda
 scikit-learn  
+matplotlib
 # The following packages are considered to be unsafe in a requirements file:
 # pip
 # setuptools
