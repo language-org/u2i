@@ -7,17 +7,19 @@
 # * A
 # * B
 #
+#
 # **APPROACH**
 #
 # 1. Classification:
-#   * Is there enough predictive lexical information in utterances to discriminate between intents
-#       * [Q]: Does low performance impair the quality of intent parsing ?
-#   * Characterise the predictive information:
-#       * the lexicon clearly differ b/w intents (clustering)
-#       * lexicon very stereotyped and redundant within an intent cluster
-#       * [Q]: Do overlapping lexicons or/and diverse lexicons impair the quality of intent parsing?
-#   * Does sentence type impair classification performance ?
-#       * why ?
+#   * _Logistic regression_
+#       * Is the lexicon predictive enough to discriminate b/w intents
+#           * [Q]: Does low performance impair the quality of our intent parsing ?
+#       * Describe the predictive information:
+#           * the lexicon clearly differ b/w intents (clustering)
+#           * the lexicon is stereotyped & redundant within an intent cluster
+#           * [Q]: Do overlapping lexicons or/and diverse lexicons impair the quality of our intent parsing?
+#       * Does sentence type impair classification performance ?
+#          * [Q] Do Some sentence types have a less discriminative lexicon than others?
 # 2. Intent detection:
 #   * assess whether an intent is expressed or not
 # 3. Intent parsing:
