@@ -4,7 +4,7 @@
 #
 #    pip-compile /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
 #
-anyconfig==0.9.11         # via kedro
+anyconfig==0.9.11         
 appdirs==1.4.4            # via black
 appnope==0.1.0            # via ipykernel, ipython
 arrow==0.15.7             # via jinja2-time
@@ -13,17 +13,17 @@ backcall==0.2.0           # via ipython
 binaryornot==0.4.4        # via cookiecutter
 black==v19.10b0           # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
 bleach==3.1.5             # via nbconvert
-cachetools==4.1.1         # via kedro
+cachetools==4.1.1         
 certifi==2020.6.20        # via requests
 chardet==3.0.4            # via binaryornot, requests
 click==7.1.2              # via black, cookiecutter, kedro, pip-tools
-cookiecutter==1.6.0       # via kedro
+cookiecutter==1.6.0       
 coverage==5.1             # via pytest-cov
 decorator==4.4.2          # via ipython, traitlets
 defusedxml==0.6.0         # via nbconvert
 entrypoints==0.3          # via nbconvert
 flake8==3.8.3             # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
-fsspec==0.6.3             # via kedro
+fsspec==0.6.3             
 future==0.18.2            # via cookiecutter
 idna==2.10                # via requests
 importlib-metadata==1.7.0  # via flake8, jsonschema, pluggy, pytest
@@ -35,7 +35,7 @@ isort==4.3.21             # via -r /Users/steeve_laquitaine/Desktop/intent/inten
 jedi==0.17.1              # via ipython
 jinja2-time==0.2.0        # via cookiecutter
 jinja2==2.11.2            # via cookiecutter, jinja2-time, nbconvert, notebook
-jmespath==0.10.0          # via kedro
+jmespath==0.10.0          
 jsonschema==3.2.0         # via jupyterlab-launcher, nbformat
 jupyter-client==5.3.5     # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in, ipykernel, jupyter-console, kedro, notebook, qtconsole
 jupyter-console==6.1.0    # via jupyter
@@ -58,8 +58,8 @@ parso==0.7.0              # via jedi
 pathspec==0.8.0           # via black
 pexpect==4.8.0            # via ipython
 pickleshare==0.7.5        # via ipython
-pip-tools==5.2.1          # via kedro
-pluggy==0.13.1            # via kedro, pytest
+pip-tools==5.2.1          
+pluggy==0.13.1            
 poyo==0.5.0               # via cookiecutter
 prometheus-client==0.8.0  # via notebook
 prompt-toolkit==3.0.5     # via ipython, jupyter-console
@@ -74,8 +74,8 @@ pytest-cov==2.10.0        # via -r /Users/steeve_laquitaine/Desktop/intent/inten
 pytest-mock==1.13.0       # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
 pytest==5.4.3             # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in, pytest-cov, pytest-mock
 python-dateutil==2.8.1    # via jupyter-client
-python-json-logger==0.1.11  # via kedro
-pyyaml==5.3.1             # via kedro
+python-json-logger==0.1.11  
+pyyaml==5.3.1             
 pyzmq==19.0.1             # via jupyter-client, notebook, qtconsole
 qtconsole==4.7.5          # via jupyter
 qtpy==1.9.0               # via qtconsole
@@ -86,7 +86,7 @@ six==1.15.0               # via bleach, jsonschema, packaging, pip-tools, python
 terminado==0.8.3          # via notebook
 testpath==0.4.4           # via nbconvert
 toml==0.10.1              # via black
-toposort==1.5             # via kedro
+toposort==1.5             
 tornado==6.0.4            # via ipykernel, jupyter-client, notebook, terminado
 traitlets==4.3.3          # via ipykernel, ipython, ipywidgets, jupyter-client, jupyter-core, nbconvert, nbformat, notebook, qtconsole
 typed-ast==1.4.1          # via black
@@ -95,19 +95,18 @@ wcwidth==0.2.5            # via prompt-toolkit, pytest
 webencodings==0.5.1       # via bleach
 wheel==0.32.2             # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
 whichcraft==0.6.1         # via cookiecutter
-widgetsnbextension==3.5.1  # via ipywidgets
+widgetsnbextension==3.5.1 # via ipywidgets
 zipp==3.1.0               # via importlib-metadata
 autopep8
 conda
-scikit-learn  
-matplotlib
-spacy
-nltk
-allennlp==1.0.0
-allennlp-models==1.0.0
-tensorflow==1.14.0
-stanza==1.1.1
-pyyaml
-# The following packages are considered to be unsafe in a requirements file:
-# pip
-# setuptools
+scikit-learn               # machine learning
+matplotlib                 # data visualisation
+spacy                      # nlp
+nltk                       # nlp
+allennlp==1.0.0            # nlp
+allennlp-models==1.0.0     # nlp
+stanza==1.1.1              # nlp
+nltk_tgrep==1.0.6          # nlp
+tensorflow==1.14.0         # machine learning
+pyyaml==5.3.1              # config
+radon== 4.3.2              # code metrics  
