@@ -103,6 +103,11 @@ scikit-learn
 matplotlib
 spacy
 nltk
+allennlp==1.0.0
+allennlp-models==1.0.0
+tensorflow==1.14.0
+stanza==1.1.1
+pyyaml
 # The following packages are considered to be unsafe in a requirements file:
 # pip
 # setuptools
