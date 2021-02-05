@@ -1,3 +1,30 @@
 {
-    "python.pythonPath": "/Applications/anaconda3/envs/intent/bin/python"
+    "python.pythonPath": "/Applications/anaconda3/envs/intent/bin/python",
+    // LINTING
+    "python.linting.pylintEnabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true,
+    "python.linting.pylintArgs": [
+        "--load-plugins",
+        "pylint.extensions.mccabe",
+        "--max-complexity",
+        "10"
+    ],
+    // FORMATTING
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false,
+    "editor.formatOnSaveTimeout": 3000,
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+        "-t",
+        "py37",
+        "Format Document",
+        "--line-length",
+        "82"
+    ],
+    // PYLANCE REFACTORING
+    "editor.lightbulb.enable": true
 }

@@ -1,5 +1,5 @@
 # author: Steeve LAQUITAINE
-
+import re
 
 # either ? or ! or .
 SENT_TYPE_PATTN = re.compile(r"[\?\!\.]")

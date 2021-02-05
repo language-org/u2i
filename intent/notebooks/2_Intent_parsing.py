@@ -3,47 +3,97 @@
 # %% [markdown]
 # * **Purpose** :
 #   * Test intent parsing with ALLENLP
+# %% [markdown]
+## TABLE OF CONTENT
+##SETUP
+##PARAMETERS
+##PARSING
+### Allennlp
+### VP extraction
 # %%[markdown]
-## SETUP
+# # SETUP
 # %%
+import os
 from time import time
-import pandas as pd
 
-from src.intent.nodes import parsing
+import numpy as np
+import pandas as pd
 from nltk.tree import ParentedTree
-import nltk_tgrep
+from pigeon import annotate
+
+from intent.src.intent.nodes import mood, parsing
 
 pd.set_option("display.max_colwidth", 100)
 # %%
 proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/intent/"
-train_data_path = proj_path + "data/01_raw/banking77/train.csv"
+tr_data_path = proj_path + "data/01_raw/banking77/train.csv"
 test_data_path = proj_path + "data/01_raw/banking77/test.csv"
-# %%
-train_data = pd.read_csv(train_data_path)
-# %%
-train_data.head(5)
-# %%
-sample = train_data["text"].iloc[0]
+os.chdir(proj_path)
 # %% [markdown]
-## PARSING
+# # PARAMETERS
+prm = dict()
+prm["sample"] = 100
+prm["mood"] = ["declarative"]
+# prm[
+#     "intent_class"
+# ] = "card_arrival"  # "contactless_not_working"  # small class with 35 samples
+prm["intent_class"] = "contactless_not_working"  # small class with 35 samples
+# %%
+# read queries data
+tr_data = pd.read_csv(tr_data_path)
+# %%
+# select data for an input class
+data_class_i = tr_data[tr_data["category"].eq(prm["intent_class"])]
+# %%
+data_class_i.head(5)
+# %%
+sample = data_class_i["text"].iloc[0]
 # %% [markdown]
-### ALLENLP
+# # PARSING
+# %% [markdown]
+# ## ALLENLP
 # %%
 tic = time()
-allen_predictor = parsing.instantiate_allennlp_constituency_parser()
+al_prdctor = parsing.init_allen_parser()
 print(f"(Instantiation) took {round(time()-tic,2)} secs")
 # %%
 tic = time()
-output = allen_predictor.predict(sentence=sample)
-all_parsed_sample = output["trees"]
+output = al_prdctor.predict(sentence=sample)
+parsed_txt = output["trees"]
 print(f"(Inference) took {round(time()-tic,2)} secs")
-print(f"Parsed sample:\n{all_parsed_sample}")
+print(f"Parsed sample:\n{parsed_txt}")
 # %% [markdown]
-### VP EXTRACTION
+# ## VP EXTRACTION
 # %%
-tree = ParentedTree.fromstring(all_parsed_sample)
+tree = ParentedTree.fromstring(parsed_txt)
+assert len(parsing.extract_VP(al_prdctor, "I want coffee")) > 0, "VP is Empty"
 # %%
-verb_p = nltk_tgrep.tgrep_nodes(tree, "VP")
-verb_p[0].pretty_print()
-verb_p[0].leaves()
-
+# Speed up (1 hour / 10K queries)
+VPs = parsing.extract_all_VPs(prm, data_class_i, al_prdctor)
+assert (
+    len(VPs) == len(data_class_i) or len(VPs) == prm["sample"]
+), '''VP's length does not match "data_class_i"'''
+# %%
+# add to data, show
+data_class_i["VP"] = pd.DataFrame(VPs)
+data_class_i.iloc[: prm["sample"]]
+# %% [markdown]
+## ANNOTATE
+# %%
+annots = annotate(data_class_i["VP"], options=["yes", "no"])
+# %%
+# verb_p[0].pretty_print()
+# %% [markdown]
+## SELECT QUERY W/ INPUT MOOD
+# TODO:
+# 1. Annotate VPs that look like intent vs. not
+# 2. Look what make them different
+# 3. Test some hypothesis:
+#   - mood: declarative vs. interrogative syntax ?
+#   - tense: present vs. past ?
+#   - lexical: some verbs and not others
+#   - else ?
+#   - semantics: direct object vs. indirect ?
+# %%
+moods = mood.classify_sentence_type(data_class_i["text"])
+moods
