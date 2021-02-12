@@ -23,7 +23,7 @@
         "py37",
         "Format Document",
         "--line-length",
-        "82"
+        "79"
     ],
     // PYLANCE REFACTORING
     "editor.lightbulb.enable": true

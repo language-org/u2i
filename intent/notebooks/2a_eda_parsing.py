@@ -12,6 +12,9 @@ from time import time
 
 import pandas as pd
 
+proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
+os.chdir(proj_path)
+
 from intent.src.intent.nodes import parsing
 
 to_df = pd.DataFrame
@@ -29,8 +32,7 @@ prm[
        'exchange_via_app'] # take a sample of 10 classes
 # %%
 # set data path
-proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/intent/"
-data_path = proj_path + "data/01_raw/banking77/train.csv"
+data_path = proj_path + "intent/data/01_raw/banking77/train.csv"
 os.chdir(proj_path)
 # %%
 # read data

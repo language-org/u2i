@@ -33,6 +33,7 @@ from typing import Dict
 
 from kedro.pipeline import Pipeline
 
+
 def create_pipelines(**kwargs) -> Dict[str, Pipeline]:
     """Create the project's pipeline.
 
