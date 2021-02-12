@@ -48,6 +48,8 @@ pd.set_option("display.max_rows", 1000)
 # load catalog
 with open(proj_path+"intent/conf/base/catalog.yml") as file:
     catalog = yaml.load(file)
+with open(proj_path+"intent/conf/base/parameters.yml") as file:
+    prms = yaml.load(file)
 tr_data_path = proj_path + "intent/data/01_raw/banking77/train.csv"
 test_data_path = proj_path + "intent/data/01_raw/banking77/test.csv"
 # %% [markdown]
@@ -124,31 +126,40 @@ data.to_excel(catalog['parsed'])
 #   - else ?
 #   - semantics: direct object vs. indirect ?
 # %%
-annots = annotate(data["VP"], options=["yes", "no"])
+annots = []
+filepath = os.path.splitext(catalog['annots'])
+myfile, myext = filepath[0], filepath[1]
+if prms['annotation']=='do':
+    annots = annotate(data["VP"], options=["yes", "no"])
+elif prms['annotation'] == 'load':
+    annot_path = os.path.split(catalog['annots'])[0]
+    files = os.listdir(annot_path); 
+    files = [file for file in files if file.startswith('annots')]
+    latest_version = annot_path + '/' + files[-1]
+    annots = pd.read_excel(latest_version)    
+else:
+    print('WARNING: you must either "load" or "do" annotations')
 # %% [markdown]
 # Write annots
 # %%
-if not os.path.isfile(catalog['annots']):
+if prms['annotation']=='do' and not os.path.isfile(catalog['annots']):
     # add current time to filename 
     now = datetime.now().strftime("%d/%m/%Y %H:%M:%S").replace(' ','_').replace(':','_').replace('/','_')    
-    filepath = os.path.splitext(catalog['annots'])
-    myfile, myext = filepath[0], filepath[1]
-    pd.DataFrame(annots).to_excel(f'{myfile}_{now}{myext}')
+    annots_df = pd.DataFrame(annots)
+    annots_df.to_excel(f'{myfile}_{now}{myext}')
 else:
     print('WARNING: Annots was not written. To write, delete existing and rerun.')
 # %%
-annots_df = pd.DataFrame(annots, columns=['text','annot'])
+annots_df = annots.rename(columns={0:'text',1:'annot'})
 annots_df['annot'][annots_df['text'].isnull()] = np.nan
 # %% [markdown]
-# **Fig. Queries are sorted by annot class below.**
+# **Fig. Queries are sorted by annotation result below.**
 # %%
 annots_df = annots_df.sort_values(by='annot', ascending=False)
-# %% [markdown]
-# to convert to pdf  
 # %%
 annots_df
 # %% [markdown]
-# **Fig. Proportion of yes.**
+# **Fig. Only 16% of intents are well formed.**
 # %%
 n_total = len(annots_df)
 n_null = annots_df['annot'].isnull().sum()
@@ -156,8 +167,8 @@ n_yes = annots_df['annot'].eq('yes').sum()
 n_no = annots_df['annot'].eq('no').sum()
 stats = pd.DataFrame({
     'annot': ['null', 'yes', 'no','Total'], 
-    'count': [n_yes, n_no, n_null, n_total],
-    '%': [n_yes/n_total, n_no/n_total, n_null/n_total, 1]
+    'count': [n_null, n_yes, n_no, n_total],
+    '%': [n_null/n_total*100, n_yes/n_total*100, n_no/n_total*100, 100]
     })
 stats
 # %%
