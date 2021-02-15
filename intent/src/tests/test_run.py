@@ -39,7 +39,9 @@ from pathlib import Path
 
 import pytest
 
-from intent.run import ProjectContext
+from intent.src.intent.nodes import parsing
+
+# from intent.run import ProjectContext
 
 
 @pytest.fixture
@@ -53,3 +55,13 @@ class TestProjectContext:
 
     def test_project_version(self, project_context):
         assert project_context.project_version == "0.16.2"
+
+def test_extract_all_VPs(VPs, data, prm):
+    
+    assert (
+        len(VPs) == len(data) or len(VPs) == prm["sample"]
+    ), '''VP's length does not match "data"'''
+
+def test_extract_VP(al_prdctor):
+    
+    assert len(parsing.extract_VP(al_prdctor, "I want coffee")) > 0, "VP is Empty"

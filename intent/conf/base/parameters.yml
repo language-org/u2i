@@ -2,3 +2,8 @@
 
 
 annotation: 'load' # 'do', 'load'
+sampling:
+  random_state: 0
+  sample: 100
+clause_type: "declarative"
+intent_class: "card_arrival"  # good parsing performance

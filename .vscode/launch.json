@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "/Users/steeve_laquitaine/Desktop/CodeHub/intent/intent/notebooks/eda_parsing.py",
+            "name": "/Users/steeve_laquitaine/Desktop/CodeHub/intent/intent/notebooks/2_intent_parsing.py",
             "type": "python",
             "request": "launch",
             "program": "${file}",

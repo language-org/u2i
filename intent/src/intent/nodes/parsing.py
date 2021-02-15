@@ -2,6 +2,7 @@
 
 import glob
 import os
+from datetime import datetime
 from time import time
 
 import allennlp_models.structured_prediction
@@ -9,6 +10,7 @@ import nltk_tgrep
 import numpy as np
 import pandas as pd
 import stanza
+import yaml
 from allennlp.predictors.predictor import Predictor
 from nltk.tree import ParentedTree
 from stanza.server import CoreNLPClient
@@ -22,6 +24,10 @@ proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/intent/"
 train_data_path = proj_path + "data/01_raw/banking77/train.csv"
 test_data_path = proj_path + "data/01_raw/banking77/test.csv"
 
+# load paths
+with open(proj_path+"conf/base/catalog.yml") as file:
+    catalog = yaml.load(file)
+
 os.chdir(proj_path)
 
 def init_allen_parser():
@@ -33,7 +39,11 @@ def init_allen_parser():
       (NP (PRP you)) (VP (VB buy) (NP (PRP me)) (NP (NN lunch))) (. ?))'
     - takes: ~0.4 s per sentence (slow)
     """
-    return Predictor.from_path(paths["path_constituency_parser"])
+    tic = time()
+    out = Predictor.from_path(paths["path_constituency_parser"])
+    print(f"(Instantiation) took {round(time()-tic,2)} secs")
+
+    return out
 
 
 def init_Stanza_constituency_parsing(sample):
@@ -113,17 +123,21 @@ def extract_VP(al_prdctor, query):
     parsed_txt = output["trees"]
     tree = ParentedTree.fromstring(parsed_txt)
     verb_p = nltk_tgrep.tgrep_nodes(tree, "VP")
+    out = dict()
+
     if not len(verb_p) == 0:
-        out = verb_p[0].leaves()
+        out['terminals'] = verb_p[0].leaves()
+        out['tree'] = verb_p[0]
+        out['message'] = 'chunks found'
     else:
-        out = None
+        out['terminals'] = out['tree'] = None
+        out['message'] = 'chunking failed'
     return out
 
-def extract_all_VPs(prm, data, predictor):
+def extract_all_VPs(data, predictor):
     """[summary]
 
     Args:
-        prm ([type]): [description]
         data ([type]): [description]
         predictor ([type]): [description]
 
@@ -133,26 +147,45 @@ def extract_all_VPs(prm, data, predictor):
 
     tic = time()
     n_data = len(data)
-    if n_data > prm["sample"]:
-        texts = data["text"].sample(prm["sample"])
-    else:
-        texts= data["text"]
     VPs = []
     dur = []
-    for ix in range(len(texts)):
+    for ix in range(len(data)):
         t0 = time()
-        VP = parsing.extract_VP(predictor, texts.iloc[ix])
-        if VP is not None:
-            VPs.append([' '.join(VP)])
+        VP = parsing.extract_VP(predictor, data['text'].iloc[ix])
+        if VP['terminals'] is not None:
+            VPs.append(VP)
         else:
             VPs.append([])
         if ix <= 10:
             dur.append(time() - t0)
-            estTime = round(len(texts) * np.mean(dur), 2)
+            estTime = round(len(data) * np.mean(dur), 2)
             print(f'Time to completion: {estTime}')
     print(f'{round(time()-tic,2)}')
     return VPs
 
+def make_VPs_readable(VPs):
+    
+    VP_list = []
+    for VP in VPs:
+        if not len(VP) == 0:
+            VP_list.append(' '.join(VP['terminals']))
+        else: 
+            VP_list.append([])
+    return VP_list
+
+def get_CFG(VP):
+    """Get CFG productions of a query from its parsed tree 
+
+    Args:
+        VP ([type]): [description]
+    """
+    return VP['tree'].productions()[0]
+
+def get_CFGs(VP_info):
+    for ix in range(len(VP_info)):
+        if not len(VP_info[ix])==0:
+            VP_info[ix]['cfg'] = parsing.get_CFG(VP_info[ix])
+    return VP_info
 
 def run_parsing_pipe(data:pd.DataFrame, predictor:object, prm:dict, verbose:bool=True) -> pd.DataFrame:
     """[summary]
@@ -197,3 +230,18 @@ def run_parsing_pipe(data:pd.DataFrame, predictor:object, prm:dict, verbose:bool
     print(f"(run_parsing_pipe) took {round(time()-tic,2)} secs\n")
     return data_class_i
 
+
+def write_cfg(cfg:pd.DataFrame)->pd.DataFrame:
+    """Write dataset augmented with context free grammar productions
+
+    Args:
+        cfg (pd.DataFrame): [description]
+
+    Returns:
+        pd.DataFrame: [description]
+    """
+    # add current time to filename 
+    now = datetime.now().strftime("%d/%m/%Y %H:%M:%S").replace(' ','_').replace(':','_').replace('/','_')
+    filepath = os.path.splitext(catalog['cfg'])
+    myfile, myext = filepath[0], filepath[1]    
+    cfg.to_excel(f'{myfile}_{now}{myext}')
