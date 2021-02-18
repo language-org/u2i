@@ -114,4 +114,5 @@ rope==0.18.0               # refactoring
 nbconvert==5.6.1           # convert to report
 torch==1.5.1
 numpy==1.19.5
-nltk_tgrep==1.0.6
+nltk_tgrep==1.0.6          # search grammar tree
+scikit-network==0.22.0     # graphs

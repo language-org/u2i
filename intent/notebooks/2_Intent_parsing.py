@@ -188,7 +188,17 @@ stats
 #   - SBAR: Subordinate Clause (e.g., after ..)
 # %% [markdown]
 # CFG FEATURES 
+# * What are the signature features of well-formed intent queries?  
+#   * structured SVM
+#   * clustering in directed graphs (adjacency matrix of pos tags)  
+#   * see 2b_eda_VP_graphs.py  
 # %%
 sorted_annots.head()
+
 # %%
 # jupyter nbconvert --no-input --to=pdf 2_Intent_parsing.ipynb
+
+# %% [markdown]  
+# # References
+#
+# https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html    
