@@ -6,6 +6,9 @@
 #   * calculate parsing performances:  
 #       * parsed / or not
 #       * intent / or not
+#
+# INPUT: queries stored in .csv  
+# OUTPUT: 
 # %%
 import os
 from time import time

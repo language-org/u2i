@@ -94,7 +94,11 @@ def setup_stanza():
 
 
 def is_exist_model():
+    """Check if model exists in path
 
+    Returns:
+        bool: True or False
+    """
     model_file = [
         file
         for file in os.listdir(paths["coreNLP_path"])
@@ -134,19 +138,21 @@ def extract_VP(al_prdctor, query):
         out['message'] = 'chunking failed'
     return out
 
-def extract_all_VPs(data, predictor):
-    """[summary]
+def extract_all_VPs(data:pd.DataFrame, predictor):
+    """parse all verb phrases from data
 
     Args:
-        data ([type]): [description]
-        predictor ([type]): [description]
+        data (pd.DataFrame): 
+            rows: each contains a string
+            columns: include name: 'text'
+        predictor ([type]): 
+            allennlp's predictor for constituency parsing  
 
     Returns:
         [type]: [description]
     """
 
     tic = time()
-    n_data = len(data)
     VPs = []
     dur = []
     for ix in range(len(data)):
@@ -219,13 +225,19 @@ def run_parsing_pipe(data:pd.DataFrame, predictor:object, prm:dict, verbose:bool
     assert len(parsing.extract_VP(predictor, "I want coffee")) > 0, "VP is Empty\n"
 
     # Speed up (1 hour / 10K queries)
-    VPs = parsing.extract_all_VPs(prm, data_class_i, predictor)
+    VPs = parsing.extract_all_VPs(data_class_i, predictor)
     assert (
         len(VPs) == len(data_class_i) or len(VPs) == prm["sample"]
     ), '''(run_parsing_pipe) VP's length does not match "data_class_i"\n'''
+    
+    # convert to list of strings
+    list_of_VPs = make_VPs_readable(VPs)
 
     # add to data, show
-    data_class_i["VP"] = pd.DataFrame(VPs)
+    try:
+        data_class_i["VP"] = pd.DataFrame(list_of_VPs)
+    except:
+        from ipdb import set_trace; set_trace()
     assert data_class_i.category.nunique() == len(prm['intent_class']), '''The intent classes in the parsed_data does not match input data's'''
     print(f"(run_parsing_pipe) took {round(time()-tic,2)} secs\n")
     return data_class_i
