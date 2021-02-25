@@ -10,7 +10,7 @@
 # * TABLE OF CONTENT  
 # * GRAPHS of VP's constituents
 #
-# [TODO]: svg plots can't be converted to pdf. Convert to png.
+# TODO: svg plots can't be converted to pdf. Convert to png.
 # %% [markdown]
 ## GRAPHS of VP constituent connections
 # 
@@ -65,8 +65,8 @@ size_window = 2 # bigrams
 # %% [markdown]
 # # GRAPHS
 # %%
-corpus = pd.Series(['I would like to understand the mind.', 'I want to do good research.'])
-dict_graph_of_words = graphs.get_gow(corpus, isdirected, isweighted, size_window)
+text = pd.Series(['I would like to understand the mind.', 'I want to do good research.'])
+dict_graph_of_words = graphs.get_gow(text, isdirected, isweighted, size_window)
 # %% [markdown]
 # **Fig. text sample 1**
 # %%
@@ -75,7 +75,6 @@ dict_graph_of_words[0].edges
 # **Fig. text sample 2**
 # %%
 dict_graph_of_words[1].edges
-
 # %% [markdown]
 # **Fig. graph text sample 1**
 # %%
@@ -85,11 +84,19 @@ nx.draw(dict_graph_of_words[0], with_labels=True, font_weight='bold')
 # **Fig. graph text sample 2**
 # %%
 nx.draw(dict_graph_of_words[1], with_labels=True, font_weight='bold')
+# %% [markdown]
+# H0: Randomness or Chance: The `Erdos Renyi random graph model` (4)
+#   * Skewed power law degree distribution  
+#   * Short average distance b/w nodes (small world)  
+#   *  ...
+# %%
 # %%
 # jupyter nbconvert --no-input --to=pdf 2_Intent_parsing.ipynb
 # %% [markdown]  
 # # References
 #
-# https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html    
-# https://stackoverflow.com/questions/32441605/generating-ngrams-unigrams-bigrams-etc-from-a-large-corpus-of-txt-files-and-t   
-# https://github.com/Nath-B/Graph-Of-Words  
+# (1) https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html    
+# (2) https://stackoverflow.com/questions/32441605/generating-ngrams-unigrams-bigrams-etc-from-a-large-text-of-txt-files-and-t   
+# (3) https://github.com/Nath-B/Graph-Of-Words  
+# (4) Fragkiskos D Malliaros and Michalis Vazirgiannis, “Clustering and Community Detection in Directed Networks: A Survey,” Physics Reports 533, no. 4 (2013): 95–142.  
+

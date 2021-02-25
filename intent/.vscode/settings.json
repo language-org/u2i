@@ -21,7 +21,6 @@
     "python.formatting.blackArgs": [
         "-t",
         "py37",
-        "Format Document",
         "--line-length",
         "79"
     ],

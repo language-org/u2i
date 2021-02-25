@@ -56,3 +56,44 @@ def get_gow(corpus:pd.Series, isdirected:bool, isweighted:bool, size_window:int)
         
     return dict_graph_of_words
 
+def from_sents_to_graphs(text:pd.Series, isdirected:bool=False, isweighted:bool=False, size_window:int=2)->dict:
+    """Convert text sentences to a dictionary of networkx graphs
+    note: parallelizable 
+
+    Args:
+        text (pd.Series): series of text strings
+        isdirected (bool, optional): [description]. Defaults to False.
+        isweighted (bool, optional): [description]. Defaults to False.
+        size_window (int, optional): [description]. Defaults to 2.
+
+    Returns:
+        dict: dictionary of networkx graphs for each sentence
+    """
+
+    graphs = get_gow(text, isdirected, isweighted, size_window)
+
+    return graphs
+    
+
+def from_text_to_graph(text:pd.Series, isdirected:bool=False, isweighted:bool=False, size_window:int=2)->nx.classes.graph.Graph:
+    """Convert text sentences to a dictionary of networkx graphs
+
+    Args:
+        text (pd.Series): series of text strings
+        isdirected (bool, optional): [description]. Defaults to False.
+        isweighted (bool, optional): [description]. Defaults to False.
+        size_window (int, optional): [description]. Defaults to 2.
+
+    Returns:
+        nx.classes.graph.Graph: dictionary of networkx graphs for each sentence
+    """
+    
+    # convert each sentence to a graph
+    # convert dictionary of graphs to list of graphs 
+    # merge all graphs
+    graphs_by_sent = from_sents_to_graphs(text, isdirected, isweighted, size_window)
+    list_of_graphs = list(graphs_by_sent.values())
+    graph = nx.compose_all(list_of_graphs)
+
+    return graph
+    
