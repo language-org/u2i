@@ -88,20 +88,6 @@ def from_sents_to_graphs(
     return graphs
 
 
-def from_cfg_to_constituents(cfg: pd.Series) -> pd.Series:
-    """Convert a pandas series of string VP production rules ('VP -> V NP') to 
-    a series of string constituents ('V NP')
-
-    Args:
-        cfg (pd.Series): pandas series of string VP production rules ('VP -> V NP')
-
-    Returns:
-        pd.Series: a series of string constituents ('V NP')
-    """
-    constt = cfg.apply(lambda x: x.replace("VP ->", ""))
-    return constt
-
-
 def from_text_to_graph(
     text: pd.Series,
     isdirected: bool = False,

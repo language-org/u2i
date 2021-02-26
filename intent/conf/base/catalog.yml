@@ -7,3 +7,4 @@
 parsed: "/Users/steeve_laquitaine/desktop/CodeHub/intent/intent/data/02_intermediate/parsed.xlsx"
 annots: "/Users/steeve_laquitaine/desktop/CodeHub/intent/intent/data/02_intermediate/annots.xlsx"
 cfg: "/Users/steeve_laquitaine/desktop/CodeHub/intent/intent/data/02_intermediate/cfg.xlsx"
+cfg_productions: "/Users/steeve_laquitaine/desktop/CodeHub/intent/intent/data/02_intermediate/cfg"

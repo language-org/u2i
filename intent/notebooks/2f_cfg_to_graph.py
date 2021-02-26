@@ -10,7 +10,7 @@ import pandas as pd
 # %%
 proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
 os.chdir(proj_path)
-from intent.src.intent.nodes import graphs
+from intent.src.intent.nodes import graphs, parsing
 
 # %% [markdown]
 ## LOAD CFG DATA
@@ -28,9 +28,7 @@ size_window = 2  # bigrams
 # %% [markdown]
 ## EXTRACT VP CFG right side production
 # %%
-cfg = data["cfg"]
-constituents = cfg.apply(lambda x: x.replace("VP ->", ""))
-
+constituents = parsing.from_cfg_to_constituents(data["cfg"])
 # %% [markdown]
 ## TEXT TO GRAPH
 # %%
