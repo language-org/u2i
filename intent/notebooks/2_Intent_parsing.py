@@ -27,12 +27,15 @@ import os
 from datetime import datetime
 from time import time
 
-import init
 import numpy as np
 import pandas as pd
 import yaml
 from nltk.tree import ParentedTree
 from pigeon import annotate
+
+proj_path= "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
+os.chdir(proj_path)
+
 
 # in root
 from intent.src.intent.nodes import annotation, mood, parsing, preprocess
