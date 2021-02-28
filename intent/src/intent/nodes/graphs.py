@@ -94,10 +94,10 @@ def from_text_to_graph(
     isweighted: bool = False,
     size_window: int = 2,
 ) -> nx.classes.graph.Graph:
-    """Convert text sentences to a dictionary of networkx graphs
+    """Convert a series of text (str) to a dictionary of networkx graphs
 
     Args:
-        text (pd.Series): series of text strings
+        text (pd.Series): series of text strings (e.g., verb phrases chunks, full sentences,.)
         isdirected (bool, optional): [description]. Defaults to False.
         isweighted (bool, optional): [description]. Defaults to False.
         size_window (int, optional): [description]. Defaults to 2.

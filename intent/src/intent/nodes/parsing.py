@@ -6,6 +6,7 @@ from datetime import datetime
 from time import time
 
 import allennlp_models.structured_prediction
+import nltk
 import nltk_tgrep
 import numpy as np
 import pandas as pd
@@ -246,16 +247,39 @@ def from_cfg_to_constituents(cfg: pd.Series) -> pd.Series:
     Returns:
         pd.Series: a series of string constituents ('V NP')
     """
-    from ipdb import set_trace
 
-    set_trace()
-
-    constt = cfg.apply(lambda x: x.replace("VP ->", ""))
+    if isinstance(cfg.iloc[0], str):
+        constt = cfg.apply(lambda x: x.replace("VP ->", ""))
+    elif isinstance(cfg.iloc[0], nltk.grammar.Production):
+        constt = cfg.apply(lambda x: str(x).replace("VP ->", ""))
+    else:
+        raise TypeError(
+            f"""cfg entries are of type {type(cfg.iloc[0])} but must either be of type 'str' 
+            or 'nltk.grammar.Production'
+            """
+        )
     return constt
 
 
-def from_text_to_constituents():
-    pass
+def from_text_to_constituents(
+    data: pd.DataFrame,
+    al_prdctor: allennlp_models.structured_prediction.predictors.constituency_parser.ConstituencyParserPredictor,
+) -> pd.DataFrame:
+    """Convert text to constituents (e.g., 'V NP')
+
+    Args:
+        data (pd.DataFrame): dataframe of 
+            rows (str): speech sentence texts
+            columns: 'text', 'category'
+        al_prdctor (allennlp_models.structured_prediction.predictors.constituency_parser.ConstituencyParserPredictor): [description]
+
+    Returns:
+        pd.DataFrame: [description]
+    """
+
+    data = parsing.from_text_to_cfg(data, al_prdctor)
+    constt = parsing.from_cfg_to_constituents(data["cfg"])
+    return constt
 
 
 def run_parsing_pipe(

@@ -21,7 +21,6 @@ with open(proj_path + "intent/conf/base/catalog.yml") as file:
 # %%
 proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
 os.chdir(proj_path)
-
 raw_data_path = proj_path + "intent/data/01_raw/banking77/train.csv"
 
 # %% [markdown]
@@ -48,12 +47,10 @@ data["cfg"] = np.asarray(
 data.head()
 # %%
 joblib.dump(sample, catalog["cfg_productions"])
-# %%
-# text = parsing.from_text_to_cfg(data, al_prdctor)
-constt = parsing.from_cfg_to_constituents(text["cfg"])
-constt
+
 
 # %%
-productions = joblib.load(catalog["cfg_productions"])
+al_prdctor = parsing.init_allen_parser()
+text = parsing.from_text_to_constituents(raw_data, al_prdctor)
 
 # %%
