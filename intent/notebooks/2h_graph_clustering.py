@@ -70,7 +70,7 @@ nx.draw(
 # # Search clusters with LOUVAIN
 #
 # * LOUVAIN is a node clustering heuristics that maximizes modularity
-# (such that cluster have more internal connections that external)
+# (such that cluster have higher internal density compared with outside interactions)
 # * It has O(n * log2n) complexity (6)
 # * It does not use directionality to identify clusters
 #

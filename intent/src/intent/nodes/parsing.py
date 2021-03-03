@@ -185,8 +185,15 @@ def extract_all_VPs(data: pd.DataFrame, predictor):
     return VPs
 
 
-def make_VPs_readable(VPs):
+def make_VPs_readable(VPs) -> list:
+    """[summary]
 
+    Args:
+        VPs ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     VP_list = []
     for VP in VPs:
         if not len(VP) == 0:
@@ -205,7 +212,15 @@ def get_CFG(VP):
     return VP["tree"].productions()[0]
 
 
-def get_CFGs(VP_info):
+def get_CFGs(VP_info: list) -> list:
+    """[summary]
+
+    Args:
+        VP_info (list): [description]
+
+    Returns:
+        list: [description]
+    """
     for ix in range(len(VP_info)):
         if not len(VP_info[ix]) == 0:
             VP_info[ix]["cfg"] = parsing.get_CFG(VP_info[ix])
@@ -238,7 +253,7 @@ def from_text_to_cfg(
 
 
 def from_cfg_to_constituents(cfg: pd.Series) -> pd.Series:
-    """Convert a pandas series of string VP production rules ('VP -> V NP') to 
+    """Convert a series of string VP production rules ('VP -> V NP') to 
     a series of string constituents ('V NP')
 
     Args:
