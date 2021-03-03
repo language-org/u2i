@@ -13,6 +13,9 @@
 # %% [markdown]
 # PACKAGES
 # %%
+
+from itertools import chain, repeat
+
 import init
 import networkx as nx
 import pandas as pd
@@ -52,9 +55,7 @@ graph = graphs.from_text_to_graph(
 # **Fig. text graph**
 # %%
 fig = plt.figure(figsize=(10, 10))
-# pos = nx.kamada_kawai_layout(graph)
 pos = nx.spring_layout(graph)
-# pos = nx.spiral_layout(graph)
 nx.draw(
     graph,
     pos=pos,
@@ -71,12 +72,34 @@ nx.draw(
 # Plot the directed graph with the undirected graph's node clusters represented by different colors
 # %%
 undirected_graph = graph.to_undirected()
-coms = algorithms.louvain(
+communities = algorithms.louvain(
     undirected_graph, weight="weight", resolution=1.0, randomize=False
 )
 # %%
+# plot with cdlib
 pos = nx.spring_layout(graph)
-v = viz.plot_network_clusters(graph, coms, pos)
+v = viz.plot_network_clusters(graph, communities, pos)
+# %%
+# plot with networkx (more control)
+# assign colors to clusters
+node_colors = [
+    list(zip(nodes, repeat(colr, len(nodes))))
+    for colr, nodes in enumerate(communities.communities)
+]
+node_colors = dict(chain.from_iterable(node_colors))
+# %%
+# plot
+nx.set_node_attributes(graph, node_colors, "color")
+# %%
+nx.draw(
+    graph,
+    pos=nx.spring_layout(graph),
+    node_color=list(node_colors.values()),  # node facecolor
+    edgecolors="k",  # node boundary's color (3)
+    linewidths=1,
+    width=3,
+    with_labels=True,
+)
 # %% [markdown]
 # to convert to notebook
 # jupyter nbconvert --no-input --to=pdf 2_Intent_parsing.ipynb
