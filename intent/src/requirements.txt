@@ -116,3 +116,4 @@ torch==1.5.1
 numpy==1.19.5
 nltk_tgrep==1.0.6          # search grammar tree
 scikit-network==0.22.0     # graphs
+cdlib==0.2.0               # graph clustering  

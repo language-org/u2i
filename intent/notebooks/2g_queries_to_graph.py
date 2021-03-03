@@ -13,6 +13,7 @@
 # %%
 import init
 import pandas as pd
+from matplotlib import pyplot as plt
 from networkx import nx
 
 from intent.src.intent.nodes import graphs, parsing
@@ -27,7 +28,7 @@ data = pd.read_csv(raw_data_path)
 # %% [markdown]
 ## PARAMETERS
 # %%
-isdirected = False
+isdirected = True
 isweighted = True
 size_window = 2  # bigrams
 # %% [markdown]
@@ -38,7 +39,6 @@ verb_phrases_str = parsing.from_text_to_constituents(data, al_prdctor)
 # %% [markdown]
 ## VERB PHRASES TO GRAPH
 # %%
-# %%
 graph = graphs.from_text_to_graph(
     verb_phrases_str,
     isdirected=isdirected,
@@ -48,10 +48,14 @@ graph = graphs.from_text_to_graph(
 # %% [markdown]
 # **Fig. text graph**
 # %%
+fig = plt.figure(figsize=(10, 10))
+# pos = nx.kamada_kawai_layout(graph)
+# pos = nx.spring_layout(graph)
 pos = nx.spiral_layout(graph)
 nx.draw(
     graph,
     pos=pos,
+    node_size=1500,
     node_color="w",  # node facecolor
     edgecolors="k",  # node boundary's color (3)
     linewidths=1,
