@@ -76,10 +76,6 @@ communities = algorithms.louvain(
     undirected_graph, weight="weight", resolution=1.0, randomize=False
 )
 # %%
-# plot with cdlib
-pos = nx.spring_layout(graph)
-v = viz.plot_network_clusters(graph, communities, pos)
-# %%
 # plot with networkx (more control)
 # assign colors to clusters
 node_colors = [
@@ -87,18 +83,20 @@ node_colors = [
     for colr, nodes in enumerate(communities.communities)
 ]
 node_colors = dict(chain.from_iterable(node_colors))
-# %%
-# plot
 nx.set_node_attributes(graph, node_colors, "color")
-# %%
+
+# plot
+fig = plt.figure(figsize=(10, 10))
 nx.draw(
     graph,
-    pos=nx.spring_layout(graph),
-    node_color=list(node_colors.values()),  # node facecolor
-    edgecolors="k",  # node boundary's color (3)
+    pos=pos,
+    node_color=list(node_colors.values()),
+    node_size=1500,
+    edgecolors="k",
     linewidths=1,
-    width=3,
     with_labels=True,
+    font_weight="bold",
+    cmap=plt.cm.Set2,
 )
 # %% [markdown]
 # to convert to notebook
