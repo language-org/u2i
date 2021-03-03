@@ -68,6 +68,12 @@ nx.draw(
 )
 # %% [markdown]
 # # Search clusters with LOUVAIN
+#
+# * LOUVAIN is a node clustering heuristics that maximizes modularity
+# (such that cluster have more internal connections that external)
+# * It has O(n * log2n) complexity (6)
+# * It does not use directionality to identify clusters
+#
 # Drop graph directionality for clustering and search clusters <br>
 # Plot the directed graph with the undirected graph's node clusters represented by different colors
 # %%
@@ -109,6 +115,6 @@ nx.draw(
 # (3) https://github.com/Nath-B/Graph-Of-Words <br>
 # (4) Fragkiskos D Malliaros and Michalis Vazirgiannis, “Clustering and Community Detection in Directed Networks: A Survey,” Physics Reports 533, no. 4 (2013): 95–142. <br>
 # (5) https://cdlib.readthedocs.io/en/latest/reference/generated/cdlib.viz.plot_network_clusters.html#cdlib.viz.plot_network_clusters <br>
-
+# (6) https://en.wikipedia.org/wiki/Louvain_method <br>
 
 # %%
