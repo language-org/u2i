@@ -55,7 +55,7 @@ graph = graphs.from_text_to_graph(
 # **Fig. text graph**
 # %%
 fig = plt.figure(figsize=(10, 10))
-pos = nx.spring_layout(graph)
+pos = nx.kamada_kawai_layout(graph)
 nx.draw(
     graph,
     pos=pos,
@@ -110,3 +110,5 @@ nx.draw(
 # (4) Fragkiskos D Malliaros and Michalis Vazirgiannis, “Clustering and Community Detection in Directed Networks: A Survey,” Physics Reports 533, no. 4 (2013): 95–142. <br>
 # (5) https://cdlib.readthedocs.io/en/latest/reference/generated/cdlib.viz.plot_network_clusters.html#cdlib.viz.plot_network_clusters <br>
 
+
+# %%
