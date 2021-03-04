@@ -108,7 +108,7 @@ nx.draw(
 )
 
 # %% [markdown]
-## Compare with well-formed intents
+## Well-formed intents graph
 # %%
 def draw_subgraph(graph, pos, cfg, color: str):
     series_of_constt = parsing.from_cfg_to_constituents(cfg)
@@ -139,7 +139,7 @@ def draw_subgraph(graph, pos, cfg, color: str):
 well_formed = cfg[["VP", "cfg", "annots"]][cfg["annots"].eq("yes")]
 draw_subgraph(graph, pos, well_formed["cfg"], "red")
 # %% [markdown]
-## Compare with ill-formed intents
+## Ill-formed intents graph
 # %%
 # select subgraph of well-formed intents (annotated)
 ill_formed = cfg[["VP", "cfg", "annots"]][cfg["annots"].eq("no")]

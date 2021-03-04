@@ -89,10 +89,7 @@ def from_sents_to_graphs(
 
 
 def from_text_to_graph(
-    text: pd.Series,
-    isdirected: bool = False,
-    isweighted: bool = False,
-    size_window: int = 2,
+    text: pd.Series, isdirected: bool = False, isweighted: bool = False,
 ) -> nx.classes.graph.Graph:
     """Convert a series of text (str) to a dictionary of networkx graphs
 
@@ -100,7 +97,6 @@ def from_text_to_graph(
         text (pd.Series): series of text strings (e.g., verb phrases chunks, full sentences,.)
         isdirected (bool, optional): [description]. Defaults to False.
         isweighted (bool, optional): [description]. Defaults to False.
-        size_window (int, optional): [description]. Defaults to 2.
 
     Returns:
         nx.classes.graph.Graph: dictionary of networkx graphs for each sentence
@@ -109,9 +105,7 @@ def from_text_to_graph(
     # convert each sentence to a graph
     # convert dictionary of graphs to list of graphs
     # merge all graphs
-    graphs_by_sent = from_sents_to_graphs(
-        text, isdirected, isweighted, size_window
-    )
+    graphs_by_sent = from_sents_to_graphs(text, isdirected, isweighted, 2)
     list_of_graphs = list(graphs_by_sent.values())
     graph = nx.compose_all(list_of_graphs)
 
