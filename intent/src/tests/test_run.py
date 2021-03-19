@@ -35,6 +35,8 @@ named ``test_*`` which test a unit of logic.
 
 To run the tests, run ``kedro test``.
 """
+from collections import defaultdict
+from itertools import chain
 from pathlib import Path
 
 import pytest
@@ -56,12 +58,32 @@ class TestProjectContext:
     def test_project_version(self, project_context):
         assert project_context.project_version == "0.16.2"
 
+
 def test_extract_all_VPs(VPs, data, prm):
-    
     assert (
         len(VPs) == len(data) or len(VPs) == prm["sample"]
     ), '''VP's length does not match "data"'''
 
+
 def test_extract_VP(al_prdctor):
-    
-    assert len(parsing.extract_VP(al_prdctor, "I want coffee")) > 0, "VP is Empty"
+    assert (
+        len(parsing.extract_VP(al_prdctor, "I want coffee")) > 0
+    ), "VP is Empty"
+
+
+def simil_matx(simil_matx):
+    assert (
+        simil_matx.shape[0] + 1 == simil_matx.shape[1]
+    ), "similarity matrix shape should be (n, n+1)"
+    assert not len(simil_matx) == 0, "similarity matrix is empty"
+
+
+def test_posting_list(posting_list, simil_matx):
+    assert len(list(chain(*posting_list.values()))) == len(
+        simil_matx
+    ), """" Some values from the index list are missing. 
+    The number of values should match the length of the similarity matrix"""
+
+
+def test_print_ranked_VPs():
+    pass
