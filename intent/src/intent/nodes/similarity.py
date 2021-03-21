@@ -111,3 +111,24 @@ def print_ranked_VPs(
     df = pd.DataFrame(ranked_vps, columns=["VP"])
     df["score"] = score
     return df
+
+
+def rank_nearest_to_seed(simil_matx: pd.DataFrame, seed: str) -> pd.Series:
+    """rank by similarity to seed syntax
+
+    Args:
+        simil_matx (pd.DataFrame): queries syntax similarity matrix  
+        seed (str): syntax seed
+            e.g., 'VB NP'   
+
+    Returns:
+        pd.Series: queries' syntax ranked in descending order of similarity to seed
+    """
+    dedup = (
+        simil_matx[simil_matx["cfg"].eq(seed)]
+        .drop_duplicates()
+        .T.drop_duplicates()
+        .T
+    )
+    sim_ranked = dedup.iloc[0, 1:].sort_values(ascending=False)
+    return sim_ranked
