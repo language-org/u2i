@@ -405,6 +405,9 @@ def to_dict_list(doc: spacy.tokens.doc.Doc):
             d["action"].append(token.text)
         if token.dep_ == "dobj":
             d["object"].append(token.text)
+    for ent in doc.ents:
+        if ent is not None:
+            d[str(ent.label_)] = ent.text
     return dict(d)
 
 
@@ -423,5 +426,11 @@ def parse_intent(cfg: pd.DataFrame) -> list:
             ]
     """
     # collect each query's ROOT and dobj
+    # for i in cfg["VP"]:
+    #     x = nlp(i)
+    #     for ent in x.ents:
+    #         if ent is not None:
+    #             print(ent.label_)
+
     return [to_dict_list(nlp(vp)) for vp in cfg["VP"]]
 

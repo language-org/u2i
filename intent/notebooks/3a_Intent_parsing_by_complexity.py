@@ -1,7 +1,12 @@
 # %% [markdown]
-## VP intent parsing
+## Intent parsing by complexity
 #
 # author: Steeve Laquitaine
+#
+# Complexity:
+#
+#   * single vs. multi-sentences
+#   * single vs. multi-clauses
 #
 # TABLE OF CONTENTS
 #
@@ -13,11 +18,12 @@ from collections import defaultdict
 
 import pandas as pd
 import spacy
+from matplotlib import pyplot as plt
 
 # %%
 proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
 os.chdir(proj_path)
-from intent.src.intent.nodes import parsing, retrieval, similarity
+from intent.src.intent.nodes import features, parsing, retrieval, similarity
 
 # %% [markdown]
 ## PATHS
@@ -25,6 +31,7 @@ from intent.src.intent.nodes import parsing, retrieval, similarity
 cfg_path = (
     proj_path + "intent/data/02_intermediate/cfg_25_02_2021_18_16_42.xlsx"
 )
+features_path = proj_path + "intent/data/04_feature/features.xlsx"
 sim_path = proj_path + "intent/data/02_intermediate/sim_matrix.xlsx"
 tag_path = proj_path + "intent/data/02_intermediate/tag.xlsx"
 # %% [markdown]
@@ -38,16 +45,18 @@ cfg = pd.read_excel(cfg_path)
 tag = pd.read_excel(tag_path)
 sim_matx = pd.read_excel(sim_path)
 # %% [markdown]
+## Detect multi-sentence queries
 # %%
-posting_list = retrieval.create_posting_list(tag)
-sim_ranked = similarity.rank_nearest_to_seed(sim_matx, seed=SEED)
-ranked = similarity.print_ranked_VPs(cfg, posting_list, sim_ranked)
-filtered = ranked[ranked["score"] >= THRES]
+counts = features.count(cfg["text"])
+cfg["sent_count"] = counts
+# %%
+fig = plt.figure(figsize=(5, 5))
+ax = cfg["sent_count"].hist(width=0.8)
+ax.grid(False)
+xl = plt.xlabel("Sentence in query (count)")
+yl = plt.ylabel("Occurrence (count)")
 # %% [markdown]
-## INTENT PARSING
-#
-# * Apply dependency parsing to each query
-# * Collect intent's action (ROOT) and object (dobj)
+## WRITE
 # %%
-intents = parsing.parse_intent(filtered)
-intents
+cfg.to_excel(features_path)
+

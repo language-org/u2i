@@ -17,7 +17,7 @@ import spacy
 # %%
 proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
 os.chdir(proj_path)
-from intent.src.intent.nodes import parsing, retrieval, similarity
+from intent.src.intent.nodes import features, parsing, retrieval, similarity
 
 # %% [markdown]
 ## PATHS
@@ -37,6 +37,12 @@ THRES = 0  # keep query syntaxes > this similarity thresh
 cfg = pd.read_excel(cfg_path)
 tag = pd.read_excel(tag_path)
 sim_matx = pd.read_excel(sim_path)
+# %% [markdown]
+## Detect multi-sentences queries
+# %% [markdown]
+## Detect Moods
+# %%
+sent_moods = features.classify_sentence_type(cfg["text"])
 # %% [markdown]
 # %%
 posting_list = retrieval.create_posting_list(tag)
