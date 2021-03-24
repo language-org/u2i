@@ -20,12 +20,11 @@
 #
 #   * So far the best parameters are:
 #
-#       SEED            = " VB NP"
-#       THRES_NUM_SENT  = 1
-#       NUM_SENT        = 1
-#       THRES_SIM_SCORE = 1
-#       FILT_MOOD       = ("ask",)
-
+#       SEED            = " VB NP" <br>
+#       THRES_NUM_SENT  = 1 <br>
+#       NUM_SENT        = 1 <br>
+#       THRES_SIM_SCORE = 1 <br>
+#       FILT_MOOD       = ("ask",) <br>
 
 # %% [markdown]
 ## PACKAGES
