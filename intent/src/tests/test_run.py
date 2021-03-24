@@ -39,9 +39,10 @@ from collections import defaultdict
 from itertools import chain
 from pathlib import Path
 
+import pandas as pd
 import pytest
 
-from intent.src.intent.nodes import parsing
+from intent.src.intent.nodes import parsing, similarity
 
 # from intent.run import ProjectContext
 
@@ -78,12 +79,37 @@ def simil_matx(simil_matx):
     assert not len(simil_matx) == 0, "similarity matrix is empty"
 
 
-def test_posting_list(posting_list, simil_matx):
-    assert len(list(chain(*posting_list.values()))) == len(
-        simil_matx
-    ), """" Some values from the index list are missing. 
-    The number of values should match the length of the similarity matrix"""
+def test_len_similarity_matx(cfg: pd.DataFrame, sim_matx: pd.DataFrame):
+    tag = parsing.from_cfg_to_constituents(cfg["cfg"])
+    assert tag.nunique() == len(
+        sim_matx
+    ), f""" Number of unique constituents in 'cfg' {tag.nunique()} must match 'len(sim_matx)' {len(
+        sim_matx)} """
 
 
-def test_print_ranked_VPs():
-    pass
+def test_rank_nearest_to_seed(sim_matx: pd.DataFrame, seed: str):
+    l_ranked = len(similarity.rank_nearest_to_seed(sim_matx, seed=seed))
+    assert l_ranked == len(
+        sim_matx
+    ), """ The length of 'rank_nearest_to_seed()''s output should match len(sim_matx) """
+
+
+def test_posting_list(posting_list: dict, sim_matx: pd.DataFrame, seed: str):
+
+    ranked = similarity.rank_nearest_to_seed(
+        sim_matx, seed=seed, verbose=False
+    )
+    assert (
+        len(set(posting_list.keys()).difference(set(ranked.index))) == 0
+    ), """ posting_list and 'rank_nearest_to_seed''s output should have the 
+    same set of constituents"""
+
+
+def test_get_posting_index(
+    cfg: pd.DataFrame, posting_list: dict, sorted_series: pd.Series
+) -> list:
+    l_index = len(similarity.get_posting_index(posting_list, sorted_series))
+    assert l_index == len(
+        cfg
+    ), f""" 'index' length {l_index} must be same as 'cfg' length {len(cfg)} """
+

@@ -1,10 +1,32 @@
 # %% [markdown]
-## VP intent parsing
+## Intent parsing
 #
 # author: Steeve Laquitaine
 #
 # TABLE OF CONTENTS
 #
+# * Packages
+# * Paths
+# * Parameters
+# * Load data
+# * Filtering
+#   * by query complexity
+#   * by grammatical mood
+#   * by syntactical similarity
+# * Parsing
+#
+#
+# Observations:
+#
+#   * So far the best parameters are:
+#
+#       SEED            = " VB NP"
+#       THRES_NUM_SENT  = 1
+#       NUM_SENT        = 1
+#       THRES_SIM_SCORE = 1
+#       FILT_MOOD       = ("ask",)
+
+
 # %% [markdown]
 ## PACKAGES
 # %%
@@ -17,7 +39,14 @@ import spacy
 # %%
 proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
 os.chdir(proj_path)
-from intent.src.intent.nodes import parsing, retrieval, similarity
+from intent.src.intent.nodes import (
+    features,
+    parsing,
+    preprocess,
+    retrieval,
+    similarity,
+)
+from intent.src.tests import test_run
 
 # %% [markdown]
 ## PATHS
@@ -26,28 +55,56 @@ cfg_path = (
     proj_path + "intent/data/02_intermediate/cfg_25_02_2021_18_16_42.xlsx"
 )
 sim_path = proj_path + "intent/data/02_intermediate/sim_matrix.xlsx"
-tag_path = proj_path + "intent/data/02_intermediate/tag.xlsx"
 # %% [markdown]
 ## PARAMETERS
 # %%
 SEED = " VB NP"  # seed for comparison
-THRES = 0  # keep query syntaxes > this similarity thresh
+THRES_NUM_SENT = 1  # keep query with max one sentence
+NUM_SENT = 1  # keep query with max one sentence
+THRES_SIM_SCORE = 1  # Keep queries syntactically similar to seed
+FILT_MOOD = ("ask",)  # ("state", "wish-or-excl", "ask")  # Keep statements
 # %% [markdown]
 # LOAD DATA
 cfg = pd.read_excel(cfg_path)
-tag = pd.read_excel(tag_path)
 sim_matx = pd.read_excel(sim_path)
+# test
+test_run.test_len_similarity_matx(cfg, sim_matx)
 # %% [markdown]
+## FILTERING
+#
+### by query complexity
+# %%
+cfg_cx = preprocess.filter_by_sent_count(cfg, THRES_NUM_SENT, verbose=True)
+# cfg_cx = preprocess.filter_n_sent_eq(cfg, NUM_SENT, verbose=True)
+# %% [markdown]
+### by grammatical mood
+# %%
+cfg_mood = preprocess.filter_in_only_mood(cfg_cx, FILT_MOOD)
+# %%
+tag = parsing.from_cfg_to_constituents(cfg_mood["cfg"])
+# %% [markdown]
+### by syntactical similarity
 # %%
 posting_list = retrieval.create_posting_list(tag)
-sim_ranked = similarity.rank_nearest_to_seed(sim_matx, seed=SEED)
-ranked = similarity.print_ranked_VPs(cfg, posting_list, sim_ranked)
-filtered = ranked[ranked["score"] >= THRES]
+sim_ranked = similarity.rank_nearest_to_seed(sim_matx, seed=SEED, verbose=True)
+ranked = similarity.print_ranked_VPs(cfg_mood, posting_list, sim_ranked)
+filtered = similarity.filter_by_similarity(ranked, THRES_SIM_SCORE)
+# test [TODO]
+test_run.test_rank_nearest_to_seed(sim_matx, seed=SEED)
+test_run.test_posting_list(posting_list, sim_matx, seed=SEED)
+test_run.test_get_posting_index(cfg_mood, posting_list, sim_ranked)
+# %%
 # %% [markdown]
-## INTENT PARSING
+## PARSING
 #
 # * Apply dependency parsing to each query
 # * Collect intent's action (ROOT) and object (dobj)
 # %%
 intents = parsing.parse_intent(filtered)
 intents
+# %%
+## OUTPUT
+#%%
+filtered["intent"] = intents
+out = cfg_mood.merge(filtered, left_index=True, right_index=True)
+out

@@ -45,7 +45,7 @@ cfg = pd.read_excel(cfg_path)
 tag = pd.read_excel(tag_path)
 sim_matx = pd.read_excel(sim_path)
 # %% [markdown]
-## Detect multi-sentence queries
+## DETECT MULTI-SENTENCE QUERY
 # %%
 counts = features.count(cfg["text"])
 cfg["sent_count"] = counts

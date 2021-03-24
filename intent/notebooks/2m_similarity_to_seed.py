@@ -63,7 +63,7 @@ test_run.sim_matx(sim_matx)
 ## Create posting list for efficient query retrieval
 # %%
 posting_list = retrieval.create_posting_list(tag)
-test_run.test_posting_list(posting_list, tag)
+test_run.test_posting_list(posting_list, tag, SEED)
 posting_list
 # %% [markdown]
 ## Similarity ranking to a Seed

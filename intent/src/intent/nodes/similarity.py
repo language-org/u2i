@@ -82,53 +82,96 @@ def calc_lcs(str1: str, str2: str) -> float:
 
 
 def print_ranked_VPs(
-    cfg: pd.DataFrame, posting_list, sorted: pd.Series
+    cfg: pd.DataFrame, posting_list, sorted_series: pd.Series
 ) -> pd.Series:
     """Rank verb phrases by syntactic similarity score
 
     Args:
         cfg (pd.DataFrame): context free grammar production rules (VP -> VB NP)
         posting_list (defauldict): list of position indices for the production right side (e.g., VB NP)
-        sorted (pd.Series): [description]
+        sorted_series (pd.Series): [description]
 
     Returns:
         pd.Series: syntactic similarity score b/w seed query and other queries
     """
-    index = list(
-        chain.from_iterable(
-            [posting_list[sorted.index[ix]] for ix in range(len(sorted))]
-        )
-    )
+
+    index = get_posting_index(posting_list, sorted_series)
+
     score = list(
         chain.from_iterable(
             [
-                list(repeat(sorted[ix], len(posting_list[sorted.index[ix]])))
-                for ix in range(len(sorted))
+                list(
+                    repeat(
+                        sorted_series[ix],
+                        len(posting_list[sorted_series.index[ix]]),
+                    )
+                )
+                for ix in range(len(sorted_series))
             ]
         )
     )
+
     ranked_vps = cfg["VP"].iloc[index]
     df = pd.DataFrame(ranked_vps, columns=["VP"])
     df["score"] = score
     return df
 
 
-def rank_nearest_to_seed(simil_matx: pd.DataFrame, seed: str) -> pd.Series:
-    """rank by similarity to seed syntax
+def get_posting_index(posting_list: dict, sorted_series: pd.Series) -> list:
+    """Get indices from constituent posting list
 
     Args:
-        simil_matx (pd.DataFrame): queries syntax similarity matrix  
+        posting_list (dict): [description]
+        sorted_series (pd.Series): [description]
+
+    Returns:
+        list: [description]
+    """
+    index = list(
+        chain.from_iterable(
+            [
+                posting_list[sorted_series.index[ix]]
+                for ix in range(len(sorted_series))
+            ]
+        )
+    )
+
+    return index
+
+
+def rank_nearest_to_seed(
+    sim_matx: pd.DataFrame, seed: str, verbose: bool = False
+) -> pd.Series:
+    """Rank verb phrase syntaxes by similarity to a 'seed' syntax
+
+    Args:
+        sim_matx (pd.DataFrame): syntax similarity matrix  
         seed (str): syntax seed
             e.g., 'VB NP'   
 
     Returns:
         pd.Series: queries' syntax ranked in descending order of similarity to seed
     """
-    dedup = (
-        simil_matx[simil_matx["cfg"].eq(seed)]
-        .drop_duplicates()
-        .T.drop_duplicates()
-        .T
-    )
-    sim_ranked = dedup.iloc[0, 1:].sort_values(ascending=False)
+    constt_set = set(sim_matx["cfg"])
+    dedup = sim_matx[sim_matx["cfg"].eq(seed)][constt_set].T[0]
+    if verbose:
+        print(
+            f"{len(sim_matx) - len(dedup)} duplicated syntaxes were dropped."
+        )
+    sim_ranked = dedup.sort_values(ascending=False)
     return sim_ranked
+
+
+def filter_by_similarity(ranked: pd.DataFrame, thresh: float) -> pd.DataFrame:
+    """Filter queries by thresholding similarity score 
+
+    Args:
+        ranked (pd.DataFrame): dataframe with "score" column containing query similarity score floats
+        thresh (float): thresholding score 
+
+    Returns:
+        pd.DataFrame: [description]
+    """
+    ranked = ranked[ranked["score"] >= thresh]
+    print(f"{len(ranked)} querie(s) is(are) left after filtering.")
+    return ranked

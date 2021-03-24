@@ -385,7 +385,7 @@ def write_cfg(cfg: pd.DataFrame) -> pd.DataFrame:
 
 
 def to_dict_list(doc: spacy.tokens.doc.Doc):
-    """Extract ROOT and dobj dependencies from a query  
+    """Extract 'ROOT', 'dobj' dependencies and 'Entities' from a query  
 
     Args:
         doc (spacy.tokens.doc.Doc): a spacy Doc object
@@ -395,16 +395,16 @@ def to_dict_list(doc: spacy.tokens.doc.Doc):
         defauldict: [description]
             e.g., 
                 [
-                    defaultdict(list, {'action': ['track'], 'object': ['card', 'me']}),
-                    defaultdict(list, {'actions': ['expecting'], 'object': ['card']})
+                    defaultdict(list, {'intent': ['track'], 'intendeed': ['card', 'me']}),
+                    defaultdict(list, {'intent': ['expecting'], 'intendeed': ['card']})
                 ]
     """
     d = defaultdict(list)
     for token in doc:
         if token.dep_ == "ROOT":
-            d["action"].append(token.text)
+            d["intent"].append(token.text)
         if token.dep_ == "dobj":
-            d["object"].append(token.text)
+            d["intendeed"].append(token.text)
     for ent in doc.ents:
         if ent is not None:
             d[str(ent.label_)] = ent.text
@@ -418,19 +418,12 @@ def parse_intent(cfg: pd.DataFrame) -> list:
         cfg (pd.DataFrame): dataframe of string queries
 
     Returns:
-        list: list of intent dictionaries with two keys: intent action and intent object
+        list: list of intent dictionaries with two keys: intent and intendeed
         e.g., 
             [
-                {'action': ['track'], 'object': ['card', 'me']},
-                {'action': ['expecting'], 'object': ['card']}
+                {'intent': ['track'], 'intendeed': ['card', 'me']},
+                {'intent': ['expecting'], 'intendeed': ['card']}
             ]
     """
-    # collect each query's ROOT and dobj
-    # for i in cfg["VP"]:
-    #     x = nlp(i)
-    #     for ent in x.ents:
-    #         if ent is not None:
-    #             print(ent.label_)
-
     return [to_dict_list(nlp(vp)) for vp in cfg["VP"]]
 

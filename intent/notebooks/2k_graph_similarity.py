@@ -3,6 +3,9 @@
 #
 # author: Steeve Laquitaine
 #
+# output:
+#   * constituent tags
+#
 # TABLE OF CONTENTS
 #
 # * Packages
