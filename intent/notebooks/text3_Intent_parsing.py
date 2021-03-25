@@ -38,9 +38,16 @@ import spacy
 # %%
 proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
 os.chdir(proj_path)
-from intent.src.intent.nodes import features, parsing, preprocess, retrieval, similarity
+from intent.src.intent.nodes import (
+    features,
+    parsing,
+    preprocess,
+    retrieval,
+    similarity,
+)
 from intent.src.tests import test_run
 
+todf = pd.DataFrame
 # %% [markdown]
 ## PATHS
 # %%
@@ -94,12 +101,19 @@ test_run.test_get_posting_index(cfg_mood, posting_list, sim_ranked)
 # * Collect intent's action (ROOT) and object (dobj)
 # %%
 intents = parsing.parse_intent(filtered)
-intents
 # %%
 ## OUTPUT
 #%%
-filtered["intent"] = intents
-out = cfg_mood.merge(filtered, left_index=True, right_index=True)
-out
 # %%
-out['t']
+# set display options
+pd.set_option("display.max_rows", None)
+pd.set_option("display.max_columns", None)
+pd.set_option("display.width", None)
+pd.set_option("display.max_colwidth", -1)
+cfg_mood.merge(
+    todf(intents, index=filtered.index), left_index=True, right_index=True
+)[["text", "intent", "intendeed"]]
+# %%
+cfg_mood.merge(
+    todf(intents, index=filtered.index), left_index=True, right_index=True
+)[["text", "intent", "intendeed"]]
