@@ -78,7 +78,7 @@ def filter_n_sent_eq(
         print(
             f"{len(query[count == n_sent])} after filtering = {n_sent} sentence queries."
         )
-    return query[count <= n_sent]
+    return query[count == n_sent]
 
 
 def filter_in_only_mood(cfg: pd.DataFrame, FILT_MOOD: str) -> pd.Series:

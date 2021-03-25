@@ -268,17 +268,20 @@ def from_cfg_to_constituents(cfg: pd.Series) -> pd.Series:
     Returns:
         pd.Series: a series of string constituents ('V NP')
     """
-
-    if isinstance(cfg.iloc[0], str):
-        constt = cfg.apply(lambda x: x.replace("VP ->", ""))
-    elif isinstance(cfg.iloc[0], nltk.grammar.Production):
-        constt = cfg.apply(lambda x: str(x).replace("VP ->", ""))
+    if not cfg.empty:
+        if isinstance(cfg.iloc[0], str):
+            constt = cfg.apply(lambda x: x.replace("VP ->", ""))
+        elif isinstance(cfg.iloc[0], nltk.grammar.Production):
+            constt = cfg.apply(lambda x: str(x).replace("VP ->", ""))
+        else:
+            raise TypeError(
+                f"""cfg entries are of type {type(cfg.iloc[0])} but must either be of type 'str' 
+                or 'nltk.grammar.Production'
+                """
+            )
     else:
-        raise TypeError(
-            f"""cfg entries are of type {type(cfg.iloc[0])} but must either be of type 'str' 
-            or 'nltk.grammar.Production'
-            """
-        )
+        raise ValueError("cfg is empty.")
+
     return constt
 
 

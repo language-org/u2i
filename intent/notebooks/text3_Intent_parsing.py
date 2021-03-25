@@ -74,8 +74,8 @@ test_run.test_len_similarity_matx(cfg, sim_matx)
 #
 ### by query complexity
 # %%
-cfg_cx = preprocess.filter_by_sent_count(cfg, THRES_NUM_SENT, verbose=True)
-# cfg_cx = preprocess.filter_n_sent_eq(cfg, NUM_SENT, verbose=True)
+# cfg_cx = preprocess.filter_by_sent_count(cfg, THRES_NUM_SENT, verbose=True)
+cfg_cx = preprocess.filter_n_sent_eq(cfg, NUM_SENT, verbose=True)
 # %% [markdown]
 ### by grammatical mood
 # %%
@@ -110,10 +110,6 @@ pd.set_option("display.max_rows", None)
 pd.set_option("display.max_columns", None)
 pd.set_option("display.width", None)
 pd.set_option("display.max_colwidth", -1)
-cfg_mood.merge(
-    todf(intents, index=filtered.index), left_index=True, right_index=True
-)[["text", "intent", "intendeed"]]
-# %%
 cfg_mood.merge(
     todf(intents, index=filtered.index), left_index=True, right_index=True
 )[["text", "intent", "intendeed"]]
