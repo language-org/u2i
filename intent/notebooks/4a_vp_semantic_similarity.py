@@ -22,7 +22,7 @@ proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
 os.chdir(proj_path)
 from nltk.corpus import wordnet as wn
 
-from intent.src.intent.nodes import inference
+from intent.src.intent.nodes import inference, preprocess
 
 # %% [markdown]
 ## DATA
@@ -48,26 +48,9 @@ DIST_THRES = 1.8
 ## PREPROCESSING
 #
 # * Mispelled: drop mispelled words [TODO]: make more efficient
+# We filter out all words not contained in Wordnet
 # %%
-misspelled = []  # The list to store misspelled words
-for query in corpus:  # loop through each word
-    query = query.split()
-    for word in query:  # loop through each word
-        if not wn.synsets(word):  # if there is no synset for this word
-            misspelled.append(word)  # add it to misspelled word list
-print(misspelled)
-
-queries = []
-for query in corpus:
-    query = query.split()
-    filtered_query = []
-    for word in query:
-        if not word in misspelled:
-            filtered_query.append(word)
-    queries.append(" ".join(filtered_query))
-filtered_corpus = tuple(queries)
-
-
+filtered_corpus = preprocess.filter_words_not_in_wordnet(corpus)
 # %% [markdown]
 ## INFERENCE
 # %%

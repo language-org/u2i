@@ -116,11 +116,15 @@ cfg_mood.merge(
     todf(intents, index=filtered.index), left_index=True, right_index=True
 )[["text", "intent", "intendeed"]]
 # %% [markdown]
+## PREPROCESSINg
+#
+# Filter out words not contained in Wordnet
+# %%
+filtered_corpus = preprocess.filter_words_not_in_wordnet(tuple(cfg_mood["VP"]))
+# %% [markdown]
 ## INFERENCE
 # %%
 # [TODO]: debug: exception handling
-labels = inference.label_queries(tuple(cfg_mood["VP"]), DIST_THRES)
+labels = inference.label_queries(filtered_corpus, DIST_THRES)
 labels
 
-
-# %%

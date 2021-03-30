@@ -102,3 +102,34 @@ def filter_in_only_mood(cfg: pd.DataFrame, FILT_MOOD: str) -> pd.Series:
     cfg_filt = cfg.iloc[ix].reset_index()
     cfg = pd.concat([cfg_filt, mood_filt], ignore_index=False, axis=1,)
     return cfg
+
+
+def filter_words_not_in_wordnet(corpus: tuple) -> tuple:
+    """Filter out mispelled words (not found in wordnet)  
+
+    Args:
+        corpus (tuple): tuple of queries  
+
+    Returns:
+        [tuple]: tuple of queries from which mispelled words have been filtered
+    """
+    # get mispelled words
+    misspelled = []
+    for query in corpus:  # loop through each word
+        query = query.split()
+        for word in query:  # loop through each word
+            if not wn.synsets(word):  # if there is no synset for this word
+                misspelled.append(word)
+
+    # filter out from corpus
+    queries = []
+    for query in corpus:
+        query = query.split()
+        filtered_query = []
+        for word in query:
+            if not word in misspelled:
+                filtered_query.append(word)
+        queries.append(" ".join(filtered_query))
+    filtered_corpus = tuple(queries)
+    return filtered_corpus
+
