@@ -14,7 +14,7 @@
 #   * by grammatical mood
 #   * by syntactical similarity
 # * Parsing
-#
+# * Inference
 #
 # Observations:
 #
@@ -38,7 +38,14 @@ import spacy
 # %%
 proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
 os.chdir(proj_path)
-from intent.src.intent.nodes import features, parsing, preprocess, retrieval, similarity
+from intent.src.intent.nodes import (
+    features,
+    inference,
+    parsing,
+    preprocess,
+    retrieval,
+    similarity,
+)
 from intent.src.tests import test_run
 
 todf = pd.DataFrame
@@ -57,6 +64,7 @@ THRES_NUM_SENT = 1  # keep query with max one sentence
 NUM_SENT = 1  # keep query with max one sentence
 THRES_SIM_SCORE = 1  # Keep queries syntactically similar to seed
 FILT_MOOD = ("ask",)  # ("state", "wish-or-excl", "ask")  # Keep statements
+DIST_THRES = 1.8  # inference threshold for clustering
 # %% [markdown]
 # LOAD DATA
 cfg = pd.read_excel(cfg_path)
@@ -107,3 +115,9 @@ pd.set_option("display.max_colwidth", -1)
 cfg_mood.merge(
     todf(intents, index=filtered.index), left_index=True, right_index=True
 )[["text", "intent", "intendeed"]]
+# %% [markdown]
+## INFERENCE
+# %%
+# [TODO]: debug: exception handling
+labels = inference.label_queries(tuple(cfg_mood["VP"]), DIST_THRES)
+labels

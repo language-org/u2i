@@ -38,13 +38,7 @@ import spacy
 # %%
 proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
 os.chdir(proj_path)
-from intent.src.intent.nodes import (
-    features,
-    parsing,
-    preprocess,
-    retrieval,
-    similarity,
-)
+from intent.src.intent.nodes import features, parsing, preprocess, retrieval, similarity
 from intent.src.tests import test_run
 
 todf = pd.DataFrame
