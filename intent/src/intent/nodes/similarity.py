@@ -212,6 +212,7 @@ class SentenceSimilarity:
     def wordSenseDisambiguation(self, sentence):
         # removing the disambiguity by getting the context
         pos = self.identifyWordsForComparison(sentence)
+        print(f"Check here: {pos}")
         sense = []
         for p in pos:
             sense.append(simple_lesk(sentence, p[0], pos=p[1][0].lower()))

@@ -3,6 +3,12 @@
 #
 # author: steeve LAQUITAINE
 #
+# * challenges:
+#   * NLTK wordnet similarity
+#       * returns "None" for adjectives so they must be filtered out (1)
+#       * returns "None" for mispelled words not in wn.synset -> for now mispelled filtered-out
+#       * returns "None" for prepositions ... which must be filtered out
+#           * WordNet only contains "open-class words": nouns, verbs, adjectives, and adverbs. Thus, excluded words include determiners, prepositions, pronouns, conjunctions, and particles.
 # %%
 import os
 from time import time
@@ -14,12 +20,14 @@ from matplotlib import pyplot as plt
 
 proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
 os.chdir(proj_path)
+from nltk.corpus import wordnet as wn
+
 from intent.src.intent.nodes import inference
 
 # %% [markdown]
 ## DATA
 # %%
-text = (
+corpus = (
     "want to drink a cup of coffee",
     "want to drink a cup of tea",
     "would like a bottle of water",
@@ -37,7 +45,34 @@ text = (
 # distance threshold t - the maximum inter-cluster distance allowed
 DIST_THRES = 1.8
 # %% [markdown]
+## PREPROCESSING
+#
+# * Mispelled: drop mispelled words [TODO]: make more efficient
+# %%
+misspelled = []  # The list to store misspelled words
+for query in corpus:  # loop through each word
+    query = query.split()
+    for word in query:  # loop through each word
+        if not wn.synsets(word):  # if there is no synset for this word
+            misspelled.append(word)  # add it to misspelled word list
+print(misspelled)
+
+queries = []
+for query in corpus:
+    query = query.split()
+    filtered_query = []
+    for word in query:
+        if not word in misspelled:
+            filtered_query.append(word)
+    queries.append(" ".join(filtered_query))
+filtered_corpus = tuple(queries)
+
+
+# %% [markdown]
 ## INFERENCE
 # %%
-df = inference.label_queries(text, DIST_THRES)
+df = inference.label_queries(filtered_corpus, DIST_THRES)
 df
+# %% [markdown]
+#
+# (1) https://stackoverflow.com/questions/13555399/nltk-wordnet-similarity-returns-none-for-adjectives

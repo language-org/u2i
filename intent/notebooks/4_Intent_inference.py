@@ -1,5 +1,5 @@
 # %% [markdown]
-## Intent parsing 0.0.0
+## Intent inference
 #
 # author: Steeve Laquitaine
 #
@@ -121,3 +121,6 @@ cfg_mood.merge(
 # [TODO]: debug: exception handling
 labels = inference.label_queries(tuple(cfg_mood["VP"]), DIST_THRES)
 labels
+
+
+# %%
