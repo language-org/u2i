@@ -64,7 +64,9 @@ THRES_NUM_SENT = 1  # keep query with max one sentence
 NUM_SENT = 1  # keep query with max one sentence
 THRES_SIM_SCORE = 1  # Keep queries syntactically similar to seed
 FILT_MOOD = ("ask",)  # ("state", "wish-or-excl", "ask")  # Keep statements
-DIST_THRES = 1.8  # inference threshold for clustering
+DIST_THRES = (
+    1.8  # inference threshold for clustering, low values -> more clusters
+)
 # %% [markdown]
 # LOAD DATA
 cfg = pd.read_excel(cfg_path)
@@ -116,7 +118,7 @@ cfg_mood.merge(
     todf(intents, index=filtered.index), left_index=True, right_index=True
 )[["text", "intent", "intendeed"]]
 # %% [markdown]
-## PREPROCESSINg
+## PREPROCESSING
 #
 # Filter out words not contained in Wordnet
 # %%
@@ -124,7 +126,6 @@ filtered_corpus = preprocess.filter_words_not_in_wordnet(tuple(cfg_mood["VP"]))
 # %% [markdown]
 ## INFERENCE
 # %%
-# [TODO]: debug: exception handling
 labels = inference.label_queries(filtered_corpus, DIST_THRES)
-labels
-
+# %%
+labels.sort_values(by=["label"])

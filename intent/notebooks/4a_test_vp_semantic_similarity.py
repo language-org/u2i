@@ -16,23 +16,20 @@ from intent.src.intent.nodes import similarity
 ## DATA
 # %%
 text = (
-    "want to drink a cup of coffee",
-    "want to drink a cup of tea",
-    "would like a bottle of water",
-    "want to track my credit card",
-    "want to change my card password",
-    "want to obtain a loan from the bank",
-    "want to travel in a novel country",
-    "want to book a trip to canada",
-    "want to fly around the world",
+    "drink coffee",
+    "drink tea",
+    "drink water",
+    "travel to France",
+    "journey to Italy",
+    "buy a house",
+    "buy a building",
 )
 # %% [markdown]
 ## PARAMETERS
 #
 # distance threshold t - the maximum inter-cluster distance allowed
 # %%
-DIST_THRES = 1.8
-
+DIST_THRES = 1.2
 #%%
 clusters = similarity.get_semantic_clusters(text, DIST_THRES, verbose=True)
-clusters
+clusters.sort_values(by=["cluster"])

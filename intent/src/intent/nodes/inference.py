@@ -16,7 +16,7 @@ from intent.src.intent.nodes import similarity
 
 
 def label_queries(
-    text: tuple, DIST_THRES: float, verbose: bool = True
+    text: tuple, DIST_THRES: float, verbose: bool = False
 ) -> pd.DataFrame:
     """Label text queries using semantic similarity-based hierarchical clustering
 
@@ -25,7 +25,7 @@ def label_queries(
         DIST_THRES (float): 
             hierarchical clustering thresholding parameter
             distance threshold t - the maximum inter-cluster distance allowed
-        verbose (bool, optional): print or not. Defaults to True.
+        verbose (bool, optional): print or not. Defaults to False.
 
     Returns:
         pd.DataFrame: dataframe of queries with their cluster label
@@ -41,8 +41,6 @@ def label_queries(
     """
     t0 = time()
     sim_mtx = similarity.get_semantic_similarity_matrix(text)
-    if verbose:
-        print(f"{round(time() - t0, 2)} secs")
     sim_mtx = pd.DataFrame(sim_mtx)
 
     # patch weird values with -1
@@ -57,6 +55,9 @@ def label_queries(
         cmap="vlag",
     )
     label = fcluster(row_linkage, t=DIST_THRES, criterion="distance")
+    if verbose:
+        print(f"{round(time() - t0, 2)} secs")
+
     return pd.DataFrame([text, label]).T.rename(
         columns={0: "query", 1: "label"}
     )
