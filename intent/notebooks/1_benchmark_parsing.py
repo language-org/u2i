@@ -8,29 +8,29 @@
 # %%
 import os
 
-proj_path = "/Users/steeve_laquitaine/Desktop/CodeHub/intent/intent"
+proj_path = "/Users/steeve_laquitaine/Desktop/CodeHub/intent/"
 os.chdir(proj_path)
-
-import pandas as pd
-import time
-import numpy as np
-from time import time
-
-# visualization
-from matplotlib import pyplot as plt
-
-# preprocessing
-import spacy
-from spacy import tokenizer
-from spacy.lang.en import English
 
 # exploration
 import re
+import time
+from time import time
+
+import allennlp
+import numpy as np
+import pandas as pd
+
+# preprocessing
+import spacy
 from ipywidgets import interact
 
+# visualization
+from matplotlib import pyplot as plt
+from spacy import tokenizer
+from spacy.lang.en import English
+
 # nlp
-from src.intent.nodes import parsing
-import allennlp
+from intent.src.intent.nodes import parsing
 
 # display
 pd.set_option("display.max_colwidth", 100)
@@ -50,7 +50,8 @@ sample = train_data["text"].iloc[0]
 # ## ALLENLP
 # %%
 tic = time()
-allen_predictor = parsing.instantiate_allennlp_constituency_parser()
+# allen_predictor = parsing.instantiate_allennlp_constituency_parser()
+allen_predictor = parsing.init_allen_parser()
 print(f"(Instantiation) took {round(time()-tic,2)} secs")
 # %%
 tic = time()
