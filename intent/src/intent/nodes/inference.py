@@ -47,13 +47,14 @@ def label_queries(
     sim_mtx[np.logical_or(sim_mtx < 0, sim_mtx > 1)] = -0.1
     sim_mtx[sim_mtx.isnull()] = -1
     row_linkage = hierarchy.linkage(distance.pdist(sim_mtx), method="average")
-    sns.clustermap(
-        sim_mtx,
-        row_linkage=row_linkage,
-        method="average",
-        figsize=(13, 13),
-        cmap="vlag",
-    )
+    if verbose:
+        sns.clustermap(
+            sim_mtx,
+            row_linkage=row_linkage,
+            method="average",
+            figsize=(13, 13),
+            cmap="vlag",
+        )
     label = fcluster(row_linkage, t=DIST_THRES, criterion="distance")
     if verbose:
         print(f"{round(time() - t0, 2)} secs")

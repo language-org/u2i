@@ -2,11 +2,11 @@
 
 from difflib import SequenceMatcher
 from itertools import chain, repeat
+from logging import debug
 
 import networkx as nx
 import nltk
 import numpy as np
-import numpy as no
 import pandas as pd
 from pywsd.lesk import simple_lesk
 
@@ -19,11 +19,13 @@ nltk.download(
 from time import time
 
 import seaborn as sns
+import spacy
 from nltk.corpus import wordnet as wn
 from scipy.cluster import hierarchy
 from scipy.cluster.hierarchy import fcluster
 from scipy.spatial import distance
 
+nlp = spacy.load("en_core_web_sm")
 
 # graph edit distance's cost functions
 def node_subst_cost(node1, node2):
@@ -169,13 +171,11 @@ def rank_nearest_to_seed(
     Returns:
         pd.Series: queries' syntax ranked in descending order of similarity to seed
     """
-    constt_set = set(sim_matx["cfg"])
-    dedup = sim_matx[sim_matx["cfg"].eq(seed)][constt_set].T[0]
+    constt_set = set(sim_matx.index)
+    dedup = sim_matx[sim_matx.index == seed][constt_set].T
     if verbose:
-        print(
-            f"{len(sim_matx) - len(dedup)} duplicated syntaxes were dropped."
-        )
-    sim_ranked = dedup.sort_values(ascending=False)
+        print(f"{len(sim_matx) - len(dedup)} duplicated cfgs were dropped.")
+    sim_ranked = dedup.squeeze().sort_values(ascending=False)
     return sim_ranked
 
 
@@ -204,8 +204,12 @@ class SentenceSimilarity:
 
     def identifyWordsForComparison(self, sentence):
         # Taking out Noun and Verb for comparison word based
-        tokens = nltk.word_tokenize(sentence)
-        pos = nltk.pos_tag(tokens)
+        # tokens = nltk.word_tokenize(sentence)
+        # pos = nltk.pos_tag(tokens)
+        # pos = [p for p in pos if p[1].startswith("N") or p[1].startswith("V")]
+        # [TODO]: speed up
+        doc = nlp(sentence)
+        pos = [(token.text, token.tag_) for token in doc]
         pos = [p for p in pos if p[1].startswith("N") or p[1].startswith("V")]
         return pos
 

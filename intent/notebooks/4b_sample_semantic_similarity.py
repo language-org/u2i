@@ -59,3 +59,4 @@ df
 # %% [markdown]
 #
 # (1) https://stackoverflow.com/questions/13555399/nltk-wordnet-similarity-returns-none-for-adjectives
+

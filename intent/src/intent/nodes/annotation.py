@@ -1,18 +1,18 @@
+# author: steeve LAQUITAINE
+
 import os
 from datetime import datetime
 
 import numpy as np
 import pandas as pd
-from pigeon import annotate
 
 
-def get_annotation(catalog, prms, data):
-    """Load annotation file
+def get_annotation(catalog, prms):
+    """Load an annotation file
 
     Args:
         catalog ([type]): [description]
         prms ([type]): [description]
-        data ([type]): [description]
 
     Returns:
         [type]: [description]
@@ -33,15 +33,15 @@ def get_annotation(catalog, prms, data):
 
 
 def index_annots(prms, sample, annots):
-    """Map annotations to initial data observations indices
+    """Index annotations with raw data indices
 
     Args:
         prms ([type]): [description]
-        sample ([type]): [description]
+        sample (pd.DataFrame): [description]
         annots ([type]): [description]
 
     Returns:
-        [type]: [description]
+        pd.DataFrame: [description]
     """
     if prms["annotation"] == "do":
         indexed_annots = [
@@ -62,14 +62,14 @@ def write_annotation(
     Args:
         catalog ([type]): [description]
         prms ([type]): [description]
-        annots_df ([type]): [description]
+        annots_df (pd.DataFrame): [description]
         myfile ([type]): [description]
         myext ([type]): [description]
 
     Returns:
         [type]: [description]
     """
-    # add current time to filename
+    # flag with current time
     now = (
         datetime.now()
         .strftime("%d/%m/%Y %H:%M:%S")
@@ -80,6 +80,8 @@ def write_annotation(
     if prms["annotation"] == "do" and not os.path.isfile(catalog["annots"]):
         annots_df.to_excel(f"{myfile}_{now}{myext}", index=False)
     else:
-        print("WARNING: Annots was not written. To write, delete existing and rerun.")
+        print(
+            "WARNING: Annots was not written. To write, delete existing and rerun."
+        )
 
     return annots_df

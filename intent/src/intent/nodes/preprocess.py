@@ -1,6 +1,8 @@
+from logging import debug
+
 import pandas as pd
 import yaml
-from numpy.lib.twodim_base import triu_indices
+from nltk.corpus import wordnet as wn
 
 from . import features
 
@@ -16,12 +18,14 @@ def sample(tr_data: pd.DataFrame) -> pd.DataFrame:
     """sample dataset rows
 
     Args:
-        tr_data ([type]): [description]
+        tr_data (pd.DataFrame): corpus of queries
 
     Returns:
-        [type]: [description]
+        pd.DataFrame: [description]
     """
-    data = tr_data[tr_data["category"].eq(prms["intent_class"])]
+
+    # data = tr_data[tr_data["category"].eq(prms["intent_class"])]
+    data = tr_data[tr_data["category"].isin(prms["intent_class"])]
     if len(data) > prms["sampling"]["sample"]:
         sample = data.sample(
             prms["sampling"]["sample"],
@@ -105,7 +109,7 @@ def filter_in_only_mood(cfg: pd.DataFrame, FILT_MOOD: str) -> pd.Series:
 
 
 def filter_words_not_in_wordnet(corpus: tuple) -> tuple:
-    """Filter out mispelled words (not found in wordnet)  
+    """Filter mispelled words (absent from wordnet)  
 
     Args:
         corpus (tuple): tuple of queries  
@@ -113,23 +117,36 @@ def filter_words_not_in_wordnet(corpus: tuple) -> tuple:
     Returns:
         [tuple]: tuple of queries from which mispelled words have been filtered
     """
-    # get mispelled words
+    # find mispelled words
     misspelled = []
-    for query in corpus:  # loop through each word
-        query = query.split()
-        for word in query:  # loop through each word
-            if not wn.synsets(word):  # if there is no synset for this word
+    for query in corpus:
+        if query:
+            query = query.split()
+        for word in query:
+            if not wn.synsets(word):
                 misspelled.append(word)
 
-    # filter out from corpus
+    # filter them from corpus
     queries = []
     for query in corpus:
-        query = query.split()
-        filtered_query = []
+        if query:
+            query = query.split()
+        filtered = []
         for word in query:
             if not word in misspelled:
-                filtered_query.append(word)
-        queries.append(" ".join(filtered_query))
-    filtered_corpus = tuple(queries)
-    return filtered_corpus
+                filtered.append(word)
+        queries.append(" ".join(filtered))
+    return tuple(queries)
+
+
+def filter_empty_queries(corpus: tuple) -> tuple:
+    """Filter empty queries out of corpus
+
+    Args:
+        corpus (tuple): corpus of string queries
+
+    Returns:
+        tuple: corpus of string queries without empty queries  
+    """
+    return tuple(filter(None, corpus))
 

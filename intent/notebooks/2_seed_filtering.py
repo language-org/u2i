@@ -38,7 +38,7 @@ os.chdir(proj_path)
 
 
 # in root
-from intent.src.intent.nodes import annotation, mood, parsing, preprocess
+from intent.src.intent.nodes import annotation, parsing, preprocess
 from intent.src.tests import test_run
 
 # dataframe display

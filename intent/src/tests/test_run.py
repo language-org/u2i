@@ -72,6 +72,12 @@ def test_extract_VP(al_prdctor):
     ), "VP is Empty"
 
 
+def test_annots_df(annots_df: pd.DataFrame):
+    assert set(annots_df.columns).issuperset(
+        {"index", "VP", "annots"}
+    ), """ "index", "VP", "annots" columns are missing" """
+
+
 def simil_matx(simil_matx):
     assert (
         simil_matx.shape[0] + 1 == simil_matx.shape[1]
@@ -81,6 +87,7 @@ def simil_matx(simil_matx):
 
 def test_len_similarity_matx(cfg: pd.DataFrame, sim_matx: pd.DataFrame):
     tag = parsing.from_cfg_to_constituents(cfg["cfg"])
+
     assert tag.nunique() == len(
         sim_matx
     ), f""" Number of unique constituents in 'cfg' {tag.nunique()} must match 'len(sim_matx)' {len(

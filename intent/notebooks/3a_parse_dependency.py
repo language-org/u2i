@@ -9,7 +9,7 @@ from spacy import displacy
 
 nlp = spacy.load("en_core_web_sm")
 # %%
-sample = "track the card you sent me?"
+sample = "track the card you sent me yesterday night?"
 # %%
 # parse
 doc = nlp(sample)
@@ -17,3 +17,6 @@ doc = nlp(sample)
 # %%
 # plot dependency tree
 displacy.serve(doc, style="dep", minify=True)
+# %%
+# plot entities
+displacy.serve(doc, style="ent", minify=True)

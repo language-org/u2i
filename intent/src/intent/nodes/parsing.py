@@ -33,6 +33,7 @@ with open(proj_path + "conf/base/catalog.yml") as file:
     catalog = yaml.load(file)
 
 # load dependency parsing model
+# [TODO]: import only once for entire project?
 nlp = spacy.load("en_core_web_sm")
 
 os.chdir(proj_path)
@@ -192,7 +193,7 @@ def extract_all_VPs(data: pd.DataFrame, predictor):
 
 
 def make_VPs_readable(VPs) -> list:
-    """[summary]
+    """Convert verb phrases to list of strings of terminals
 
     Args:
         VPs ([type]): [description]
@@ -269,6 +270,7 @@ def from_cfg_to_constituents(cfg: pd.Series) -> pd.Series:
         pd.Series: a series of string constituents ('V NP')
     """
     if not cfg.empty:
+        cfg[cfg.isnull()] = ""
         if isinstance(cfg.iloc[0], str):
             constt = cfg.apply(lambda x: x.replace("VP ->", ""))
         elif isinstance(cfg.iloc[0], nltk.grammar.Production):

@@ -1,10 +1,8 @@
-# Here you can define all your data sets by using simple YAML syntax.
-#
-# Documentation for this file format can be found in "The Data Catalog"
-# Link: https://kedro.readthedocs.io/en/stable/04_user_guide/04_data_catalog.html
 
+# author: steeve LAQUITAINE
 
 parsed: "/Users/steeve_laquitaine/desktop/CodeHub/intent/intent/data/02_intermediate/parsed.xlsx"
 annots: "/Users/steeve_laquitaine/desktop/CodeHub/intent/intent/data/02_intermediate/annots.xlsx"
-cfg: "/Users/steeve_laquitaine/desktop/CodeHub/intent/intent/data/02_intermediate/cfg.xlsx"
+cfg: "/Users/steeve_laquitaine/desktop/CodeHub/intent/intent/data/02_intermediate/cfg_02_04_2021_17_13_20.xlsx"
 cfg_productions: "/Users/steeve_laquitaine/desktop/CodeHub/intent/intent/data/02_intermediate/cfg"
+sim: "/Users/steeve_laquitaine/Desktop/CodeHub/intent/intent/data/02_intermediate/sim_matrix.xlsx"
