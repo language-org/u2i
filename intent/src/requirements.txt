@@ -4,116 +4,115 @@
 #
 #    pip-compile /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
 #
-anyconfig==0.9.11         
-appdirs==1.4.4            # via black
-appnope==0.1.0            # via ipykernel, ipython
-arrow==0.15.7             # via jinja2-time
-attrs==19.3.0             # via black, jsonschema, pytest
-backcall==0.2.0           # via ipython
-binaryornot==0.4.4        # via cookiecutter
-black==v19.10b0           # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
-bleach==3.1.5             # via nbconvert
-cachetools==4.1.1         
-certifi==2020.6.20        # via requests
-chardet==3.0.4            # via binaryornot, requests
-click==7.1.2              # via black, cookiecutter, kedro, pip-tools
-cookiecutter==1.6.0       
-coverage==5.1             # via pytest-cov
-decorator==4.4.2          # via ipython, traitlets
-defusedxml==0.6.0         # via nbconvert
-entrypoints==0.3          # via nbconvert
-flake8==3.8.3             # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
-fsspec==0.6.3             
-future==0.18.2            # via cookiecutter
-idna==2.10                # via requests
-importlib-metadata==1.7.0  # via flake8, jsonschema, pluggy, pytest
-ipykernel==5.3.0          # via ipywidgets, jupyter, jupyter-console, notebook, qtconsole
-ipython-genutils==0.2.0   # via jupyterlab, nbformat, notebook, qtconsole, traitlets
-ipython==7.16.1           # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in, ipykernel, ipywidgets, jupyter-console
-ipywidgets==7.5.1         # via jupyter
-isort==4.3.21             # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
-jedi==0.17.1              # via ipython
-jinja2-time==0.2.0        # via cookiecutter
-jinja2==2.11.2            # via cookiecutter, jinja2-time, nbconvert, notebook
-jmespath==0.10.0          
-jsonschema==3.2.0         # via jupyterlab-launcher, nbformat
-jupyter-client==5.3.5     # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in, ipykernel, jupyter-console, kedro, notebook, qtconsole
-jupyter-console==6.1.0    # via jupyter
-jupyter-core==4.6.3       # via jupyter-client, nbconvert, nbformat, notebook, qtconsole
-jupyter==1.0.0            # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
-jupyterlab-launcher==0.10.5  # via jupyterlab
-jupyterlab==0.31.1        # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
-kedro==0.16.2             # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
-markupsafe==1.1.1         # via jinja2
-mccabe==0.6.1             # via flake8
-mistune==0.8.4            # via nbconvert
-more-itertools==8.4.0     # via pytest
-nbconvert==5.6.1          # via jupyter, notebook
-nbformat==5.0.7           # via ipywidgets, nbconvert, nbstripout, notebook
-nbstripout==0.3.3         # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
-notebook==6.0.3           # via jupyter, jupyterlab, jupyterlab-launcher, widgetsnbextension
-packaging==20.4           # via bleach, pytest
-pandocfilters==1.4.2      # via nbconvert
-parso==0.7.0              # via jedi
-pathspec==0.8.0           # via black
-pexpect==4.8.0            # via ipython
-pickleshare==0.7.5        # via ipython
-pip-tools==5.2.1          
-pluggy==0.13.1            
-poyo==0.5.0               # via cookiecutter
-prometheus-client==0.8.0  # via notebook
-prompt-toolkit==3.0.5     # via ipython, jupyter-console
-ptyprocess==0.6.0         # via pexpect, terminado
-py==1.9.0                 # via pytest
-pycodestyle==2.6.0        # via flake8
-pyflakes==2.2.0           # via flake8
-pygments==2.6.1           # via ipython, jupyter-console, nbconvert, qtconsole
-pyparsing==2.4.7          # via packaging
-pyrsistent==0.16.0        # via jsonschema
-pytest-cov==2.10.0        # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
-pytest-mock==1.13.0       # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
-pytest==5.4.3             # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in, pytest-cov, pytest-mock
-python-dateutil==2.8.1    # via jupyter-client
-python-json-logger==0.1.11  
-pyyaml==5.3.1             
-pyzmq==19.0.1             # via jupyter-client, notebook, qtconsole
-qtconsole==4.7.5          # via jupyter
-qtpy==1.9.0               # via qtconsole
-regex==2020.6.8           # via black
-requests==2.24.0          # via cookiecutter
-send2trash==1.5.0         # via notebook
-six==1.15.0               # via bleach, jsonschema, packaging, pip-tools, python-dateutil, traitlets
-terminado==0.8.3          # via notebook
-testpath==0.4.4           # via nbconvert
-toml==0.10.1              # via black
-toposort==1.5             
-tornado==6.0.4            # via ipykernel, jupyter-client, notebook, terminado
-traitlets==4.3.3          # via ipykernel, ipython, ipywidgets, jupyter-client, jupyter-core, nbconvert, nbformat, notebook, qtconsole
-typed-ast==1.4.1          # via black
-urllib3==1.25.9           # via requests
-wcwidth==0.2.5            # via prompt-toolkit, pytest
-webencodings==0.5.1       # via bleach
-wheel==0.32.2             # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
-whichcraft==0.6.1         # via cookiecutter
-widgetsnbextension==3.5.1 # via ipywidgets
-zipp==3.1.0               # via importlib-metadata
+anyconfig         
+appdirs           # via black
+appnope           # via ipykernel, ipython
+arrow             # via jinja2-time
+attrs             # via black, jsonschema, pytest
+backcall          # via ipython
+binaryornot       # via cookiecutter
+blackb0           # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+bleach            # via nbconvert
+cachetools        
+certifi           # via requests
+chardet           # via binaryornot, requests
+click             # via black, cookiecutter, kedro, pip-tools
+cookiecutter      
+coverage          # via pytest-cov
+decorator         # via ipython, traitlets
+defusedxml        # via nbconvert
+entrypoints       # via nbconvert
+flake8            # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+fsspec            
+future            # via cookiecutter
+idna              # via requests
+importlib-metadata # via flake8, jsonschema, pluggy, pytest
+ipykernel         # via ipywidgets, jupyter, jupyter-console, notebook, qtconsole
+ipython-genutils  # via jupyterlab, nbformat, notebook, qtconsole, traitlets
+ipython           # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in, ipykernel, ipywidgets, jupyter-console
+ipywidgets        # via jupyter
+isort             # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+jedi              # via ipython
+jinja2-time       # via cookiecutter
+jinja2            # via cookiecutter, jinja2-time, nbconvert, notebook
+jmespath          
+jsonschema        # via jupyterlab-launcher, nbformat
+jupyter-client    # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in, ipykernel, jupyter-console, kedro, notebook, qtconsole
+jupyter-console   # via jupyter
+jupyter-core      # via jupyter-client, nbconvert, nbformat, notebook, qtconsole
+jupyter           # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+jupyterlab-launcher  # via jupyterlab
+jupyterlab        # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+kedro             # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+markupsafe        # via jinja2
+mccabe            # via flake8
+mistune           # via nbconvert
+more-itertools    # via pytest
+nbconvert         # via jupyter, notebook
+nbformat          # via ipywidgets, nbconvert, nbstripout, notebook
+nbstripout        # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+notebook          # via jupyter, jupyterlab, jupyterlab-launcher, widgetsnbextension
+packaging         # via bleach, pytest
+pandocfilters     # via nbconvert
+parso             # via jedi
+pathspec          # via black
+pexpect           # via ipython
+pickleshare       # via ipython
+pip-tools         
+pluggy            
+poyo              # via cookiecutter
+prometheus-client # via notebook
+prompt-toolkit    # via ipython, jupyter-console
+ptyprocess        # via pexpect, terminado
+py                # via pytest
+pycodestyle       # via flake8
+pyflakes          # via flake8
+pygments          # via ipython, jupyter-console, nbconvert, qtconsole
+pyparsing         # via packaging
+pyrsistent        # via jsonschema
+pytest-cov        # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+pytest-mock       # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+pytest            # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in, pytest-cov, pytest-mock
+python-dateutil   # via jupyter-client
+python-json-logger  
+pyyaml            
+pyzmq             # via jupyter-client, notebook, qtconsole
+qtconsole         # via jupyter
+qtpy              # via qtconsole
+regex.8           # via black
+requests          # via cookiecutter
+send2trash        # via notebook
+six               # via bleach, jsonschema, packaging, pip-tools, python-dateutil, traitlets
+terminado         # via notebook
+testpath          # via nbconvert
+toml              # via black
+toposort          
+tornado           # via ipykernel, jupyter-client, notebook, terminado
+traitlets         # via ipykernel, ipython, ipywidgets, jupyter-client, jupyter-core, nbconvert, nbformat, notebook, qtconsole
+typed-ast         # via black
+urllib3           # via requests
+wcwidth           # via prompt-toolkit, pytest
+webencodings      # via bleach
+wheel             # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+whichcraft        # via cookiecutter
+widgetsnbextension# via ipywidgets
+zipp              # via importlib-metadata
 autopep8
 conda
 scikit-learn               # machine learning
 matplotlib                 # data visualisation
 spacy                      # nlp
 nltk                       # nlp
-allennlp==1.0.0            # nlp
-allennlp-models==1.0.0     # nlp
-stanza==1.1.1              # nlp
-nltk_tgrep==1.0.6          # nlp
-tensorflow==1.14.0         # machine learning
-pyyaml==5.3.1              # config
-radon== 4.3.2              # code metrics  
-rope==0.18.0               # refactoring
-nbconvert==5.6.1           # convert to report
-torch==1.5.1
-numpy==1.19.5
-nltk_tgrep==1.0.6          # search grammar tree
-scikit-network==0.22.0     # graphs
-cdlib==0.2.0               # graph clustering  
+allennlp           # nlp
+allennlp-models    # nlp
+stanza             # nlp
+nltk_tgrep         # nlp
+tensorflow         # machine learning
+pyyaml             # config
+radon              # code metrics  
+rope               # refactoring
+nbconvert          # convert to report
+torchnumpy
+nltk_tgrep         # search grammar tree
+scikit-network     # graphs
+cdlib              # graph clustering  

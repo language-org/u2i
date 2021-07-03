@@ -1,0 +1,126 @@
+
+name: intent
+dependencies:
+  - pandas
+  - seaborn
+  - networkx
+  - pyyaml
+  - jupyter
+  - black
+  - nltk                       # nlp  
+  - nbconvert                  # convert to report
+  - scikit-learn               # machine learning
+  - matplotlib                 # data visualisation
+  - stanza                     # nlp
+  - tensorflow                 # machine learning
+  - pyyaml                     # config
+  - radon                      # code metrics  
+  - rope                       # refactoring
+  # - flake8            # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+  # - ipykernel         # via ipywidgets, jupyter, jupyter-console, notebook, qtconsole
+  # - kedro             # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+
+  # - anyconfig
+  # - appdirs           # via black
+  # - appnope           # via ipykernel, ipython
+  # - arrow             # via jinja2-time
+  # - attrs             # via black, jsonschema, pytest
+  # - backcall          # via ipython
+  # - binaryornot       # via cookiecutter
+  # - bleach            # via nbconvert
+  # - cachetools        
+  # - chardet           # via binaryornot, requests
+  # - click             # via black, cookiecutter, kedro, pip-tools
+  # - cookiecutter      
+  # - coverage          # via pytest-cov
+  # - decorator         # via ipython, traitlets
+  # - defusedxml        # via nbconvert
+  # - entrypoints       # via nbconvert
+  # - fsspec            
+  # - future            # via cookiecutter
+  # - idna              # via requests
+  # - importlib-metadata # via flake8, jsonschema, pluggy, pytest
+  # - ipython           # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in, ipykernel, ipywidgets, jupyter-console
+  # - ipywidgets        # via jupyter
+  # - isort             # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+  # - jedi              # via ipython
+  # - jinja2-time       # via cookiecutter
+  # - jinja2            # via cookiecutter, jinja2-time, nbconvert, notebook
+  # - jmespath          
+  # - jsonschema        # via jupyterlab-launcher, nbformat
+  # - jupyterlab        # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+  # - markupsafe        # via jinja2
+  # - mccabe            # via flake8
+  # - mistune           # via nbconvert
+  # - more-itertools    # via pytest
+  # - nbconvert         # via jupyter, notebook
+  # - nbformat          # via ipywidgets, nbconvert, nbstripout, notebook
+  # - nbstripout        # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+  # - notebook          # via jupyter, jupyterlab, jupyterlab-launcher, widgetsnbextension
+  # - packaging         # via bleach, pytest
+  # - pandocfilters     # via nbconvert
+  # - parso             # via jedi
+  # - pathspec          # via black
+  # - pexpect           # via ipython
+  # - pickleshare       # via ipython
+  # - pip-tools         
+  # - pluggy            
+  # - poyo              # via cookiecutter
+  # - prompt-toolkit    # via ipython, jupyter-console
+  # - ptyprocess        # via pexpect, terminado
+  # - py                # via pytest
+  # - pycodestyle       # via flake8
+  # - pyflakes          # via flake8
+  # - pygments          # via ipython, jupyter-console, nbconvert, qtconsole
+  # - pyparsing         # via packaging
+  # - pyrsistent        # via jsonschema
+  # - pytest-cov        # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+  # - pytest-mock       # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+  # - pytest            # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in, pytest-cov, pytest-mock
+  # - python-dateutil   # via jupyter-client
+  # - python-json-logger  
+  # - pyzmq             # via jupyter-client, notebook, qtconsole
+  # - qtconsole         # via jupyter
+  # - qtpy              # via qtconsole
+  # - requests          # via cookiecutter
+  # - send2trash        # via notebook
+  # - six               # via bleach, jsonschema, packaging, pip-tools, python-dateutil, traitlets
+  # - terminado         # via notebook
+  # - testpath          # via nbconvert
+  # - toml              # via black
+  # - toposort          
+  # - tornado           # via ipykernel, jupyter-client, notebook, terminado
+  # - traitlets         # via ipykernel, ipython, ipywidgets, jupyter-client, jupyter-core, nbconvert, nbformat, notebook, qtconsole
+  # - typed-ast         # via black
+  # - urllib3           # via requests
+  # - wcwidth           # via prompt-toolkit, pytest
+  # - webencodings      # via bleach
+  # - wheel             # via -r /Users/steeve_laquitaine/Desktop/intent/intent/src/requirements.in
+  # - whichcraft        # via cookiecutter
+  # - widgetsnbextension# via ipywidgets
+  # - zipp              # via importlib-metadata
+  # - autopep8
+  # - conda
+  - pip:    
+    - wn==0.0.23              # wordnet
+    - pywsd    
+    - spacy==2.2              # nlp (2.2 needed for en_core_web_sm-2.2.0)
+    - https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz    
+    - allennlp-models    
+    - nltk_tgrep
+    - scikit-network
+    - black
+    - allennlp
+    - regex  
+    - pigeon-jupyter
+    - openpyxl
+  #   - jupyter-client
+  #   - certifi
+  #   - cdlib
+  #   - ipython-genutils
+  #   - jupyter-console
+  #   - jupyterlab-launcher
+  #   - jupyter-core
+  #   - prometheus-client
+  # #   - torch==1.5.1
+  

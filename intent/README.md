@@ -1,6 +1,22 @@
-# intent
+
+# INTENT
+
+author: steeve LAQUITAINE  
+
+
+## Clone codebase
+
+```
+git clone https://github.com/slq0/intent.git
+```
+
+## Setup conda environment
 
 ```bash
-$ kedro packae
-$ pip install src/dist/intent-0.1-py3-none-any.whl
+conda env create -f intent/src/environment.yml
+```
+
+* update conda environment
+```bash
+conda env update -f intent/src/environment.yml --prune
 ```
