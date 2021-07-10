@@ -133,9 +133,6 @@ test_run.test_len_similarity_matx(cfg_mood, similarity_matrix)
 # %%
 sim_ranked = similarity.rank_nearest_to_seed(similarity_matrix, seed=SEED, verbose=True)
 posting_list = retrieval.create_posting_list(tag)
-# posting_list = retrieval.create_posting_list_from_raw_indices(
-#     tuple(tag), tuple(cfg_mood["index"])
-# )
 ranked = similarity.print_ranked_VPs(cfg_mood, posting_list, sim_ranked)
 filtered = similarity.filter_by_similarity(ranked, THRES_SIM_SCORE)
 # test [TODO]
@@ -157,9 +154,6 @@ filtered_raw_ix = raw_ix.values[filtered.index.values]
 intents = parsing.parse_intent(filtered)
 # %%
 # show (intent, intendeed)
-# cfg_mood.merge(todf(intents, index=filtered.index), left_index=True, right_index=True)[
-#     ["text", "intent", "intendeed"]
-# ]
 cfg_mood.index = cfg_mood["index"]
 cfg_mood.merge(todf(intents, index=filtered_raw_ix), left_index=True, right_index=True)[
     ["index", "text", "intent", "intendeed"]
@@ -170,19 +164,16 @@ cfg_mood.merge(todf(intents, index=filtered_raw_ix), left_index=True, right_inde
 # 1. Filter words not in Wordnet
 # 2. Apply verb phrase hierarchical clustering
 # %%
-# filtered_corpus = preprocess.filter_words_not_in_wordnet(tuple(cfg_mood["VP"]))
 filtered_corpus = preprocess.filter_words(cfg_mood["VP"], "not_in_wordnet")
 # %%
-# filtered_corpus = preprocess.filter_empty_queries(tuple(filtered_corpus))
 filtered_corpus = preprocess.drop_empty_queries(filtered_corpus)
 # %%
 # [warning] this is very slow
 tic = time()
-# filtered_corpus = preprocess.filter_ambiguous_postag(filtered_corpus)
 labels = inference.label_queries(tuple(filtered_corpus), DIST_THRES)
 # %%
 labels.index = filtered_corpus.index
 print(f"{round(time() - tic, 2)} secs")
 print(f"Total: {round(time() - t0, 2)} secs")
 labelled_and_sorted = labels.sort_values(by=["label"])
-labelled_and_sorted.head()
+labelled_and_sorted
