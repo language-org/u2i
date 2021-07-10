@@ -51,6 +51,7 @@
 # # PACKAGES
 # %%
 # set project path
+from inspect import TPFLAGS_IS_ABSTRACT
 import os
 from collections import defaultdict
 
@@ -178,40 +179,49 @@ labels = inference.label_queries(tuple(filtered_corpus), DIST_THRES)
 labels.index = filtered_corpus.index
 print(f"{round(time() - tic, 2)} secs")
 print(f"Total: {round(time() - t0, 2)} secs")
-labelled_and_sorted = labels.sort_values(by=["label"])
+labelled = labels.sort_values(by=["label"])
 
 # %% [markdown]
 ## EVALUATION
 # %% [markdown]
 ### Map cluster with True label for evaluation
 # %%
-true_labels = corpus.loc[labelled_and_sorted.index]["category"]
-labelled_and_sorted["true_labels"] = true_labels
-labelled_and_sorted
+true_labels = corpus.loc[labelled.index]["category"]
+labelled["true_labels"] = true_labels
+labelled
 # %%
 # assign the most likely label to each cluster
 # %%
-unique_labels = labelled_and_sorted["label"].unique()
+unique_labels = labelled["label"].unique()
 predicted_labels_all = []
 proba_predicted_all = []
+n_labelled = len(labelled)
 
 # for each cluster, assign its most likely true label as the predicted label
 for ix, this_label in enumerate(unique_labels):
 
     # find indices of this cluster intents
-    this_label_ix = np.where(labelled_and_sorted == this_label)[0]
+    this_label_ix = np.where(labelled == this_label)[0]
     nb_label = len(this_label_ix)
 
     # find its most frequent true label
     predicted = Counter(
-        labelled_and_sorted["true_labels"].iloc[this_label_ix].tolist()
+        labelled["true_labels"].iloc[this_label_ix].tolist()
     ).most_common()[0]
 
     # assign this true label as predicted label and its conditional proba
     # as proba of predicted
     predicted_labels_all += [predicted[0]] * nb_label
-    proba_predicted_all += [predicted[1] / len(labelled_and_sorted)] * nb_label
-labelled_and_sorted["predicted"] = predicted_labels_all
-labelled_and_sorted["proba_predicted (ratio)"] = proba_predicted_all
-labelled_and_sorted
+    proba_predicted_all += [predicted[1] / n_labelled] * nb_label
+labelled["predicted"] = predicted_labels_all
+labelled["proba_predicted (ratio)"] = proba_predicted_all
+labelled
+# %% [markdown]
+### Calculate performance metrics
 # %%
+nb_TP = sum(labelled["predicted"] == labelled["true_labels"])
+accuracy = nb_TP / n_labelled
+print("Task info:")
+print("- number of classes:", labelled["true_labels"].nunique())
+print("\nMetrics:")
+print("- accuracy:", accuracy)
