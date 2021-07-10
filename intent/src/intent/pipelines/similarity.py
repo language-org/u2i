@@ -28,24 +28,93 @@ to_series = pd.Series
 
 
 class Lcs:
-    """Similarity based on longest common subsequence 
+    """longest common subsequence class
+    - calculate intent syntax similarity
     """
 
     def __init__(self, verbose: bool = False):
-        """ Instantiate Lcs
+        """Instantiates
+        [TODO]: Add cfg file path as input - currently confusing
         """
         self.sim_path = catalog["sim"]
         try:
+            # load intents' syntactical features (cfg)
             self.cfg = pd.read_excel(catalog["cfg"])
         except:
-            raise FileNotFoundError(
-                "The specified cfg file path does not exist."
-            )
+            raise FileNotFoundError("(Lcs) The file path was not found.")
         if verbose:
             print(f"(Lcs) The loaded cfg path is: {self.sim_path}")
 
-    def do(self, verbose: bool = False) -> pd.DataFrame:
-        """Calculate corpus similarity matrix
+    # def do(self, verbose: bool = False) -> pd.DataFrame:
+    #     """Calculate intent similarity matrix
+
+    #     Args:
+    #         verbose (bool, optional): [description]. Defaults to False.
+
+    #     Returns:
+    #         pd.DataFrame: [description]
+    #     """
+
+    #     # convert each Verb Phrase to a graph
+    #     tag = parsing.from_cfg_to_constituents(self.cfg["cfg"])
+
+    #     # [TODO]: implement "suffix tree algo", it is more efficient
+    #     # instead of currently used dynamic programming
+    #     # calculate intent syntax' similarity matrix
+    #     n_query = len(tag)
+    #     lcs = np.zeros((n_query, n_query))
+    #     for ix in range(n_query):
+    #         for jx in range(n_query):
+    #             lcs[ix, jx] = similarity.calc_lcs(tag[ix], tag[jx])
+    #     lcs_df = to_df(lcs, index=tag, columns=tag)
+
+    #     from ipdb import set_trace
+
+    #     set_trace()
+
+    #     if verbose:
+
+    #         # show sample clustered verb phrase cfg
+    #         # (hierar. clustering)
+    #         fig = plt.figure(figsize=(10, 10))
+    #         n_sample = 20
+    #         sample = pd.DataFrame(
+    #             lcs[:n_sample, :n_sample],
+    #             index=tag[:n_sample],
+    #             columns=tag[:n_sample],
+    #         )
+
+    #         cm = sns.clustermap(
+    #             sample,
+    #             row_cluster=False,
+    #             method="average",
+    #             linewidths=0.15,
+    #             figsize=(12, 13),
+    #             cmap="YlOrBr",
+    #             annot=lcs_df[:n_sample, :n_sample],
+    #         )
+
+    #         # Cluster verb phrases' cfg (hierar. clustering)
+    #         fig = plt.figure(figsize=(10, 10))
+    #         cm = sns.clustermap(
+    #             lcs_df,
+    #             row_cluster=False,
+    #             method="average",
+    #             linewidths=0.15,
+    #             figsize=(12, 13),
+    #             cmap="vlag",
+    #         )
+
+    #     # drop syntax duplicates (duplicated indices and columns)
+    #     sim = lcs_df[~lcs_df.index.duplicated(keep="first")]
+    #     sim = sim.loc[:, ~sim.columns.duplicated()]
+
+    #     # write
+    #     sim.to_excel(self.sim_path)
+    #     return sim
+
+    def do(self, cfg: pd.DataFrame, verbose: bool = False) -> pd.DataFrame:
+        """Calculate intent similarity matrix
 
         Args:
             verbose (bool, optional): [description]. Defaults to False.
@@ -55,11 +124,11 @@ class Lcs:
         """
 
         # convert each Verb Phrase to a graph
-        tag = parsing.from_cfg_to_constituents(self.cfg["cfg"])
+        tag = parsing.from_cfg_to_constituents(cfg["cfg"])
 
-        # [TODO]: implement the efficient suffix tree algo
-        # instead of dynamic programming
-        # calculate similarity matrix
+        # [TODO]: implement "suffix tree algo", it is more efficient
+        # instead of currently used dynamic programming
+        # calculate intent syntax' similarity matrix
         n_query = len(tag)
         lcs = np.zeros((n_query, n_query))
         for ix in range(n_query):
@@ -100,8 +169,9 @@ class Lcs:
                 cmap="vlag",
             )
 
-        # drop duplicates
-        sim = lcs_df.drop_duplicates().T.drop_duplicates()
+        # drop syntax duplicates (duplicated indices and columns)
+        sim = lcs_df[~lcs_df.index.duplicated(keep="first")]
+        sim = sim.loc[:, ~sim.columns.duplicated()]
 
         # write
         sim.to_excel(self.sim_path)
@@ -109,8 +179,7 @@ class Lcs:
 
 
 class Ged:
-    """Similarity based on graph edit distance
-    """
+    """Similarity based on graph edit distance"""
 
     def __init__(self):
         self.sim_path = catalog["sim"]
@@ -121,9 +190,7 @@ class Ged:
         # convert each verb phrase to a graph
         tag = parsing.from_cfg_to_constituents(self.cfg["cfg"])
         vp_graph = [
-            graphs.from_text_to_graph(
-                to_series(vp), isdirected=True, isweighted=True
-            )
+            graphs.from_text_to_graph(to_series(vp), isdirected=True, isweighted=True)
             for vp in tag.to_list()
         ]
 
@@ -133,7 +200,6 @@ class Ged:
 
 
 class Jaccard:
-    """Jaccard similarity
-    """
+    """Jaccard similarity"""
 
     pass

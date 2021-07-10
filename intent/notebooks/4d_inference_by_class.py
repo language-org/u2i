@@ -1,8 +1,19 @@
 # %% [markdown]
-#
 # # Intent inference
 #
+# %% [markdown]
+#
 # author: Steeve Laquitaine
+# purpose: predict intent class
+# approach:
+#   - preprocessing
+#       - Constituency parsing
+#       - Filtering
+#           - complexity: keep intents w/ N sentences
+#           - mood
+#           - syntax similarity
+#   - inference
+#       - cluster and add labels
 #
 # TABLE OF CONTENTS
 #
@@ -33,7 +44,7 @@
 #       FILT_MOOD       = ("ask",) <br>
 
 # %% [markdown]
-## PACKAGES
+# # PACKAGES
 # %%
 # set project path
 import os
@@ -92,8 +103,10 @@ corpus = pd.read_csv(corpus_path)
 cfg = Cfg(corpus, prms).do()
 # %% [markdown]
 ## FILTERING
-#
+# %% [markdown]
 ### by complexity
+# %% [markdown]
+# We kept intents with N sentences
 # %%
 cfg_cx = preprocess.filter_n_sent_eq(cfg, NUM_SENT, verbose=True)
 # %% [markdown]
@@ -106,13 +119,13 @@ tag = parsing.from_cfg_to_constituents(cfg_mood["cfg"])
 ### by syntactical similarity
 # %%
 # calculate similarity
-similarity_matrix = Lcs().do()
-test_run.test_len_similarity_matx(cfg, similarity_matrix)
+similarity_matrix = Lcs().do(cfg_mood)
+test_run.test_len_similarity_matx(cfg_mood, similarity_matrix)
+# %%
 sim_ranked = similarity.rank_nearest_to_seed(similarity_matrix, seed=SEED, verbose=True)
 posting_list = retrieval.create_posting_list(tag)
 ranked = similarity.print_ranked_VPs(cfg_mood, posting_list, sim_ranked)
 filtered = similarity.filter_by_similarity(ranked, THRES_SIM_SCORE)
-
 # test [TODO]
 test_run.test_rank_nearest_to_seed(similarity_matrix, seed=SEED)
 test_run.test_posting_list(posting_list, similarity_matrix, seed=SEED)

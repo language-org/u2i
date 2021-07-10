@@ -67,9 +67,7 @@ def test_extract_all_VPs(VPs, data, prm):
 
 
 def test_extract_VP(al_prdctor):
-    assert (
-        len(parsing.extract_VP(al_prdctor, "I want coffee")) > 0
-    ), "VP is Empty"
+    assert len(parsing.extract_VP(al_prdctor, "I want coffee")) > 0, "VP is Empty"
 
 
 def test_annots_df(annots_df: pd.DataFrame):
@@ -103,9 +101,7 @@ def test_rank_nearest_to_seed(sim_matx: pd.DataFrame, seed: str):
 
 def test_posting_list(posting_list: dict, sim_matx: pd.DataFrame, seed: str):
 
-    ranked = similarity.rank_nearest_to_seed(
-        sim_matx, seed=seed, verbose=False
-    )
+    ranked = similarity.rank_nearest_to_seed(sim_matx, seed=seed, verbose=False)
     assert (
         len(set(posting_list.keys()).difference(set(ranked.index))) == 0
     ), """ posting_list and 'rank_nearest_to_seed''s output should have the 
@@ -119,4 +115,3 @@ def test_get_posting_index(
     assert l_index == len(
         cfg
     ), f""" 'index' length {l_index} must be same as 'cfg' length {len(cfg)} """
-
