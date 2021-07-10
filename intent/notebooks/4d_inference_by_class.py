@@ -63,6 +63,9 @@ from time import time
 import pandas as pd
 import spacy
 import yaml
+from collections import Counter
+import numpy as np
+
 
 # import custom nodes
 from intent.src.intent.nodes import (
@@ -176,4 +179,39 @@ labels.index = filtered_corpus.index
 print(f"{round(time() - tic, 2)} secs")
 print(f"Total: {round(time() - t0, 2)} secs")
 labelled_and_sorted = labels.sort_values(by=["label"])
+
+# %% [markdown]
+## EVALUATION
+# %% [markdown]
+### Map cluster with True label for evaluation
+# %%
+true_labels = corpus.loc[labelled_and_sorted.index]["category"]
+labelled_and_sorted["true_labels"] = true_labels
 labelled_and_sorted
+# %%
+# assign the most likely label to each cluster
+# %%
+unique_labels = labelled_and_sorted["label"].unique()
+predicted_labels_all = []
+proba_predicted_all = []
+
+# for each cluster, assign its most likely true label as the predicted label
+for ix, this_label in enumerate(unique_labels):
+
+    # find indices of this cluster intents
+    this_label_ix = np.where(labelled_and_sorted == this_label)[0]
+    nb_label = len(this_label_ix)
+
+    # find its most frequent true label
+    predicted = Counter(
+        labelled_and_sorted["true_labels"].iloc[this_label_ix].tolist()
+    ).most_common()[0]
+
+    # assign this true label as predicted label and its conditional proba
+    # as proba of predicted
+    predicted_labels_all += [predicted[0]] * nb_label
+    proba_predicted_all += [predicted[1] / len(labelled_and_sorted)] * nb_label
+labelled_and_sorted["predicted"] = predicted_labels_all
+labelled_and_sorted["proba_predicted (ratio)"] = proba_predicted_all
+labelled_and_sorted
+# %%
