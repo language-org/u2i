@@ -30,12 +30,10 @@ with open(proj_path + "intent/conf/base/catalog.yml") as file:
 
 
 class Cfg:
-    """Context free grammar class
-    """
+    """Context free grammar class"""
 
     def __init__(self, corpus, prms):
-        """Instantiate Cfg 
-        """
+        """Instantiate Cfg"""
         self.corpus = corpus
         self.predictor = parsing.init_allen_parser()
         self.prms = prms
@@ -59,14 +57,10 @@ class Cfg:
         if verbose:
             print(f"Parsed sample:\n{parsed_txt}")
 
-        # test
-        test_run.test_extract_VP(self.predictor)
-
         # retrieve verb phrases
         VP_info = parsing.extract_all_VPs(sample, self.predictor)
 
         # test
-        test_run.test_extract_all_VPs(VP_info, sample, self.prms)
         VPs = parsing.make_VPs_readable(VP_info)
 
         # retrieve cfg
@@ -84,23 +78,20 @@ class Cfg:
         if self.prms["annotation"] == "do":
             annots = annotate(sample["VP"], options=["yes", "no"])
         elif self.prms["annotation"] == "load":
-            annots, myfile, myext = annotation.get_annotation(
-                catalog, self.prms
-            )
+            annots, myfile, myext = annotation.get_annotation(catalog, self.prms)
         else:
             annots = pd.concat(
-                [sample, to_df({"annots": [None] * len(sample)}),], axis=1,
+                [
+                    sample,
+                    to_df({"annots": [None] * len(sample)}),
+                ],
+                axis=1,
             )
         annots_df = annotation.index_annots(self.prms, sample, annots)
 
-        # test
-        test_run.test_annots_df(annots_df)
-
         # write annotation-augmented corpus
         if self.prms["annotation"] in ["do", "load"]:
-            annotation.write_annotation(
-                catalog, self.prms, annots_df, myfile, myext
-            )
+            annotation.write_annotation(catalog, self.prms, annots_df, myfile, myext)
 
         # replace failed verb phrase parsing with empty string
         annots_df["annots"][annots_df["VP"].isnull()] = np.nan

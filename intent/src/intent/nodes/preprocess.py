@@ -45,9 +45,9 @@ def filter_by_sent_count(
     """Filter queries dataset, keep query rows w/ N <= thresh sentences
 
     Args:
-        query (pd.DataFrame): dataset of queries in column 'text' each made 
+        query (pd.DataFrame): dataset of queries in column 'text' each made
             of 1 to N sentences
-        threshold (int): max number of sentences per query allowed in filtered dataset  
+        threshold (int): max number of sentences per query allowed in filtered dataset
         verbose: (bool)
 
     Returns:
@@ -68,9 +68,9 @@ def filter_n_sent_eq(
     """Filter queries dataset, keep query rows w/ N = n_sent sentences
 
     Args:
-        query (pd.DataFrame): dataset of queries in column 'text' each made 
+        query (pd.DataFrame): dataset of queries in column 'text' each made
             of 1 to N sentences
-        threshold (int): number of sentences per query allowed in filtered dataset  
+        threshold (int): number of sentences per query allowed in filtered dataset
         verbose: (bool)
 
     Returns:
@@ -104,15 +104,19 @@ def filter_in_only_mood(cfg: pd.DataFrame, FILT_MOOD: str) -> pd.Series:
     mood_filt.columns = [f"mood_{i}" for i in range(len(mood_filt.columns))]
 
     cfg_filt = cfg.iloc[ix].reset_index()
-    cfg = pd.concat([cfg_filt, mood_filt], ignore_index=False, axis=1,)
+    cfg = pd.concat(
+        [cfg_filt, mood_filt],
+        ignore_index=False,
+        axis=1,
+    )
     return cfg
 
 
 def filter_words_not_in_wordnet(corpus: tuple) -> tuple:
-    """Filter mispelled words (absent from wordnet)  
+    """Filter mispelled words (absent from wordnet)
 
     Args:
-        corpus (tuple): tuple of queries  
+        corpus (tuple): tuple of queries
 
     Returns:
         [tuple]: tuple of queries from which mispelled words have been filtered
@@ -139,6 +143,41 @@ def filter_words_not_in_wordnet(corpus: tuple) -> tuple:
     return tuple(queries)
 
 
+def filter_words(corpus: pd.Series, how: str) -> tuple:
+    """Filter mispelled words (absent from wordnet)
+    [DEPRECATED]
+
+    Args:
+        corpus (tuple): tuple of queries
+        how (str):
+            "not_in_wordnet": remove words not in wordnet
+    Returns:
+        [tuple]: tuple of queries from which mispelled words have been filtered
+    """
+    if how == "not_in_wordnet":
+
+        # find mispelled words
+        misspelled = []
+        for query in corpus:
+            if query:
+                query = query.split()
+            for word in query:
+                if not wn.synsets(word):
+                    misspelled.append(word)
+
+        # filter them from corpus
+        queries = []
+        for query in corpus:
+            if query:
+                query = query.split()
+            filtered = []
+            for word in query:
+                if not word in misspelled:
+                    filtered.append(word)
+            queries.append(" ".join(filtered))
+    return pd.Series(queries, index=corpus.index)
+
+
 def filter_empty_queries(corpus: tuple) -> tuple:
     """Filter empty queries out of corpus
 
@@ -146,7 +185,18 @@ def filter_empty_queries(corpus: tuple) -> tuple:
         corpus (tuple): corpus of string queries
 
     Returns:
-        tuple: corpus of string queries without empty queries  
+        tuple: corpus of string queries without empty queries
     """
     return tuple(filter(None, corpus))
 
+
+def drop_empty_queries(corpus: pd.Series) -> tuple:
+    """Filter empty queries out of corpus
+
+    Args:
+        corpus (pd.Series): corpus of string queries
+
+    Returns:
+        pd.Series: corpus of string queries without empty queries
+    """
+    return corpus[~corpus.isin(["", None])]

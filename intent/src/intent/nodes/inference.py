@@ -21,8 +21,8 @@ def label_queries(
     """Label text queries using semantic similarity-based hierarchical clustering
 
     Args:
-        text (tuple): tuples of text queries  
-        DIST_THRES (float): 
+        text (tuple): tuples of text queries
+        DIST_THRES (float):
             hierarchical clustering thresholding parameter
             distance threshold t - the maximum inter-cluster distance allowed
         verbose (bool, optional): print or not. Defaults to False.
@@ -37,7 +37,7 @@ def label_queries(
         "would like a bottle of water",
         "want to track my credit card"
         )
-        df = label_queries(text, 1.8)  
+        df = label_queries(text, 1.8)
     """
     t0 = time()
     sim_mtx = similarity.get_semantic_similarity_matrix(text)
@@ -59,6 +59,4 @@ def label_queries(
     if verbose:
         print(f"{round(time() - t0, 2)} secs")
 
-    return pd.DataFrame([text, label]).T.rename(
-        columns={0: "query", 1: "label"}
-    )
+    return pd.DataFrame([text, label]).T.rename(columns={0: "query", 1: "label"})
