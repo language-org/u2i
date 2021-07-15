@@ -46,6 +46,8 @@
 # [TODO]:
 #  - refactor and abstract pipeline
 #  - link raw dataset with inference dataset with an index (primary key)
+#  - Constituency parsing:
+#       - Allennlp produces warning when no internet connection: "Connection error occurred while trying to fetch ETag for https://storage.googleapis.com/allennlp-public-models/elmo-constituency-parser-2020.02.10.tar.gz. Will attempt to use latest cached version of resource"
 
 # %% [markdown]
 # # PACKAGES
@@ -96,7 +98,7 @@ SEED = " VB NP"  # seed for comparison
 NUM_SENT = 1  # keep query with max one sentence
 THRES_SIM_SCORE = 1  # Keep queries syntactically similar to seed
 FILT_MOOD = ("ask",)  # ("state", "wish-or-excl", "ask")  # Keep statements
-DIST_THRES = 5  # inference threshold for clustering, low values -> more clusters
+DIST_THRES = 2  # inference threshold for clustering, low values -> more clusters
 with open(proj_path + "intent/conf/base/parameters.yml") as file:
     prms = yaml.load(file)
 # %% [markdown]
@@ -184,7 +186,19 @@ labelled = labels.sort_values(by=["label"])
 # %% [markdown]
 ## EVALUATION
 # %% [markdown]
-### Map cluster with True label for evaluation
+### Metric method 1: map cluster with True label for evaluation
+# %% [markdown]
+# pros:
+#
+#   - easy to implement
+#
+# cons:
+#
+#   - wrong in some cases:
+#
+#       - when there are as many clusters as instances, there will be 100% accuracy
+#           because each instance will take the true label as its predicted label.
+#
 # %%
 true_labels = corpus.loc[labelled.index]["category"]
 labelled["true_labels"] = true_labels
