@@ -184,10 +184,8 @@ print(f"Total: {round(time() - t0, 2)} secs")
 labelled = labels.sort_values(by=["label"])
 
 # %% [markdown]
-## EVALUATION
-# %% [markdown]
-### Metric method 1: map cluster with True label for evaluation
-# %% [markdown]
+### Method 1: map cluster with True label for evaluation
+# %%
 # pros:
 #
 #   - easy to implement
@@ -230,6 +228,10 @@ for ix, this_label in enumerate(unique_labels):
 labelled["predicted"] = predicted_labels_all
 labelled["proba_predicted (ratio)"] = proba_predicted_all
 labelled
+
+# %% [markdown]
+## EVALUATION
+# %% [markdown]
 # %% [markdown]
 ### Calculate performance metrics
 # %%

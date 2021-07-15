@@ -11,11 +11,9 @@ proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
 with open(proj_path + "intent/conf/base/parameters.yml") as file:
     prms = yaml.load(file)
 
-todf = pd.DataFrame
-
 
 def sample(tr_data: pd.DataFrame) -> pd.DataFrame:
-    """sample dataset rows
+    """Sample queries
 
     Args:
         tr_data (pd.DataFrame): corpus of queries
@@ -42,7 +40,7 @@ def sample(tr_data: pd.DataFrame) -> pd.DataFrame:
 def filter_by_sent_count(
     query: pd.DataFrame, thresh: int, verbose: bool = False
 ) -> pd.Series:
-    """Filter queries dataset, keep query rows w/ N <= thresh sentences
+    """Filter queries with a number of sentences above a threshold
 
     Args:
         query (pd.DataFrame): dataset of queries in column 'text' each made
@@ -86,21 +84,46 @@ def filter_n_sent_eq(
 
 
 def filter_in_only_mood(cfg: pd.DataFrame, FILT_MOOD: str) -> pd.Series:
+    """Filter queries by their mood
+
+    Args:
+        cfg (pd.DataFrame): queries' context-free-grammar
+        FILT_MOOD (str or tuple): selected mood(s)
+
+    Returns:
+        pd.Series: [description]
+    """
 
     mood_set = ("ask", "state", "wish-or-excl")
-    to_drop = set(mood_set).difference(set(FILT_MOOD))
+
+    # convert FILT_MOOD to set
+    if isinstance(FILT_MOOD, str):
+        FILT_MOOD = {FILT_MOOD}
+    elif isinstance(FILT_MOOD, tuple):
+        FILT_MOOD = set(FILT_MOOD)
+
+    # detect the mood(s) to drop
+    try:
+        to_drop = set(mood_set).difference(FILT_MOOD)
+    except:
+        raise (
+            ValueError(
+                "(filter_in_only_mood) FILT_MOOD arg is not set. Please set for processing"
+            )
+        )
+
+    # classify sentence types (state, ask, ..)
     query_moods = features.classify_sentence_type(cfg["text"])
 
     # filter indices
     ix = [
         ix
         for ix, mood in enumerate(query_moods)
-        if not set(mood).isdisjoint(set(FILT_MOOD))
-        and set(mood).isdisjoint(set(to_drop))
+        if not set(mood).isdisjoint(FILT_MOOD) and set(mood).isdisjoint(set(to_drop))
     ]
 
     # add moods to data
-    mood_filt = todf(query_moods).iloc[ix].reset_index()
+    mood_filt = pd.DataFrame(query_moods).iloc[ix].reset_index()
     mood_filt.columns = [f"mood_{i}" for i in range(len(mood_filt.columns))]
 
     cfg_filt = cfg.iloc[ix].reset_index()
@@ -114,6 +137,8 @@ def filter_in_only_mood(cfg: pd.DataFrame, FILT_MOOD: str) -> pd.Series:
 
 def filter_words_not_in_wordnet(corpus: tuple) -> tuple:
     """Filter mispelled words (absent from wordnet)
+
+    [TO BE DEPRECATED]
 
     Args:
         corpus (tuple): tuple of queries
@@ -145,7 +170,8 @@ def filter_words_not_in_wordnet(corpus: tuple) -> tuple:
 
 def filter_words(corpus: pd.Series, how: str) -> tuple:
     """Filter mispelled words (absent from wordnet)
-    [DEPRECATED]
+
+    [TO BE DEPRECATED]
 
     Args:
         corpus (tuple): tuple of queries
@@ -179,7 +205,9 @@ def filter_words(corpus: pd.Series, how: str) -> tuple:
 
 
 def filter_empty_queries(corpus: tuple) -> tuple:
-    """Filter empty queries out of corpus
+    """Filter out empty queries
+
+    [TO BE DEPRECATED]
 
     Args:
         corpus (tuple): corpus of string queries
@@ -191,7 +219,7 @@ def filter_empty_queries(corpus: tuple) -> tuple:
 
 
 def drop_empty_queries(corpus: pd.Series) -> tuple:
-    """Filter empty queries out of corpus
+    """Filter out empty queries
 
     Args:
         corpus (pd.Series): corpus of string queries

@@ -60,7 +60,7 @@ def calc_ged(graphs_of_VPs: list):
     """Calculate graph edit distance
 
     Args:
-        graphs_of_VPs (list): list of networkx graphs  
+        graphs_of_VPs (list): list of networkx graphs
 
     Returns:
         [np.array]: matrix of pairwise graph edit distances
@@ -148,10 +148,7 @@ def get_posting_index(posting_list: dict, sorted_series: pd.Series) -> list:
     """
     index = list(
         chain.from_iterable(
-            [
-                posting_list[sorted_series.index[ix]]
-                for ix in range(len(sorted_series))
-            ]
+            [posting_list[sorted_series.index[ix]] for ix in range(len(sorted_series))]
         )
     )
 
@@ -164,9 +161,9 @@ def rank_nearest_to_seed(
     """Rank verb phrase syntaxes by similarity to a 'seed' syntax
 
     Args:
-        sim_matx (pd.DataFrame): syntax similarity matrix  
+        sim_matx (pd.DataFrame): syntax similarity matrix
         seed (str): syntax seed
-            e.g., 'VB NP'   
+            e.g., 'VB NP'
 
     Returns:
         pd.Series: queries' syntax ranked in descending order of similarity to seed
@@ -175,16 +172,16 @@ def rank_nearest_to_seed(
     dedup = sim_matx[sim_matx.index == seed][constt_set].T
     if verbose:
         print(f"{len(sim_matx) - len(dedup)} duplicated cfgs were dropped.")
-    sim_ranked = dedup.squeeze().sort_values(ascending=False)
+    sim_ranked = dedup.squeeze().sort_index(ascending=False)
     return sim_ranked
 
 
 def filter_by_similarity(ranked: pd.DataFrame, thresh: float) -> pd.DataFrame:
-    """Filter queries by thresholding similarity score 
+    """Filter queries by thresholding similarity score
 
     Args:
         ranked (pd.DataFrame): dataframe with "score" column containing query similarity score floats
-        thresh (float): thresholding score 
+        thresh (float): thresholding score
 
     Returns:
         pd.DataFrame: [description]
@@ -196,7 +193,7 @@ def filter_by_similarity(ranked: pd.DataFrame, thresh: float) -> pd.DataFrame:
 
 class SentenceSimilarity:
     """
-        https://github.com/nihitsaxena95/sentence-similarity-wordnet-sementic/blob/master/SentenceSimilarity.py
+    https://github.com/nihitsaxena95/sentence-similarity-wordnet-sementic/blob/master/SentenceSimilarity.py
     """
 
     def __init__(self):
@@ -228,9 +225,7 @@ class SentenceSimilarity:
         for i, a1 in enumerate(arr1):
             all_similarityIndex = []
             for a2 in arr2:
-                similarity = wn.synset(a1.name()).wup_similarity(
-                    wn.synset(a2.name())
-                )
+                similarity = wn.synset(a1.name()).wup_similarity(wn.synset(a2.name()))
                 if similarity != None:
                     all_similarityIndex.append(similarity)
                 else:
@@ -282,10 +277,8 @@ def get_semantic_similarity_matrix(text: tuple):
     return matx_all
 
 
-def get_semantic_clusters(
-    text: list, DIST_THRES: float, verbose: bool
-) -> pd.DataFrame:
-    """get semantic clusters  
+def get_semantic_clusters(text: list, DIST_THRES: float, verbose: bool) -> pd.DataFrame:
+    """get semantic clusters
 
     Args:
         text (list): list of queries
@@ -305,9 +298,7 @@ def get_semantic_clusters(
     sem_sim_matx[np.logical_or(sem_sim_matx < 0, sem_sim_matx > 1)] = -0.1
     sem_sim_matx[sem_sim_matx.isnull()] = -1
 
-    row_linkage = hierarchy.linkage(
-        distance.pdist(sem_sim_matx), method="average"
-    )
+    row_linkage = hierarchy.linkage(distance.pdist(sem_sim_matx), method="average")
     sns.clustermap(
         sem_sim_matx,
         row_linkage=row_linkage,
@@ -319,4 +310,3 @@ def get_semantic_clusters(
     clust = pd.DataFrame([text, label]).T
     clust.columns = ["text", "cluster"]
     return clust
-
