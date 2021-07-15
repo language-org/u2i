@@ -28,22 +28,20 @@ to_series = pd.Series
 
 
 class Lcs:
-    """longest common subsequence class
-    - calculate intent syntax similarity
+    """Longest common subsequence calculation class
+    Calculates the similarity of syntax between query pairs
     """
 
     def __init__(self, verbose: bool = False):
-        """Instantiates
-        [TODO]: Add cfg file path as input - currently confusing
-        """
+        """Instantiates class"""
         self.sim_path = catalog["sim"]
-        try:
-            # load intents' syntactical features (cfg)
-            self.cfg = pd.read_excel(catalog["cfg"])
-        except:
-            raise FileNotFoundError("(Lcs) The file path was not found.")
-        if verbose:
-            print(f"(Lcs) The loaded cfg path is: {self.sim_path}")
+        # try:
+        #     # load intents' syntactical features (cfg)
+        #     self.cfg = pd.read_excel(catalog["cfg"])
+        # except:
+        #     raise FileNotFoundError("(Lcs) The file path was not found.")
+        # if verbose:
+        #     print(f"(Lcs) The loaded cfg path is: {self.sim_path}")
 
     # def do(self, verbose: bool = False) -> pd.DataFrame:
     #     """Calculate intent similarity matrix
@@ -114,7 +112,7 @@ class Lcs:
     #     return sim
 
     def do(self, cfg: pd.DataFrame, verbose: bool = False) -> pd.DataFrame:
-        """Calculate intent similarity matrix
+        """Calculate similarity matrix
 
         Args:
             verbose (bool, optional): [description]. Defaults to False.

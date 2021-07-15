@@ -11,6 +11,11 @@
 #
 # approach:
 #
+#   - annotation:
+#
+#       - "yes": well-formed intents
+#       - "no": ill-formed
+#
 #   - preprocessing:
 #
 #       - Constituency parsing
@@ -129,3 +134,5 @@ with_predictions = Prediction(method=prms["PREDICT_METHOD"]).run(corpus, cluster
 accuracy = calculate_accuracy(
     with_predictions["true_labels"], with_predictions["predicted"]
 )
+
+# %%
