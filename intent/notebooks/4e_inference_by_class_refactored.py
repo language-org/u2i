@@ -58,32 +58,36 @@
 # %%
 # set project path
 from inspect import TPFLAGS_IS_ABSTRACT
+from intent.src.intent.nodes.config import load_parameters
 import os
 from collections import defaultdict
 from time import time
+from collections import Counter
+from mlflow import tracking
+from mlflow.tracking.utils import _TRACKING_URI_ENV_VAR
 
 proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
 os.chdir(proj_path)
 
 # import packages
 import pandas as pd
-import spacy
-import yaml
-from collections import Counter
 import numpy as np
+import spacy
+
+
+# model tracking
+import mlflow
 
 # import custom packages
-from intent.src.intent.nodes import (
-    model,
-)
+from intent.src.intent.nodes import model, config
 from intent.src.intent.nodes.processing import Processing
 from intent.src.intent.nodes.inference import Prediction
-from intent.src.intent.nodes.evaluation import calculate_accuracy
+from intent.src.intent.nodes.evaluation import Metrics, Description
 
 from intent.src.intent.pipelines.similarity import Lcs
 from intent.src.tests import test_run
 from intent.src.tests import test_run
-from intent.src.intent.nodes.evaluation import calculate_accuracy
+
 
 # %% [markdown]
 # ## Display
@@ -100,8 +104,26 @@ pd.set_option(
 # %% [markdown]
 ## Parameters
 # %%
-with open(proj_path + "intent/conf/base/parameters.yml") as file:
-    prms = yaml.load(file)
+prms = config.load_parameters(proj_path)
+# %% [markdown]
+## Setup experiment
+# %%
+# Create an experiment name, which must be unique and case sensitive
+# mlflow.set_tracking_uri(prms["tracking_uri"])
+# mlflow.set_tracking_uri("http://localhost:5000/")
+# mlflow.set_tracking_uri("file:/Users/steeve_laquitaine/desktop/CodeHub/intent/intent/")
+mlflow.set_tracking_uri(prms["mlflow"]["tracking_uri"])
+experiment_id = mlflow.set_experiment(prms["mlflow"]["experiment_name"])
+# with mlflow.start_run():
+#     mlflow.log_param("a", 1)
+#     mlflow.log_metric("b", 2)
+
+# %%
+# print("Artifact Location: {}".format(experiment.artifact_location))
+# print("Tags: {}".format(experiment.tags))
+# print("Lifecycle_stage: {}".format(experiment.lifecycle_stage))
+
+# %%
 # %% [markdown]
 ## Loading data
 # %%
@@ -131,8 +153,30 @@ with_predictions = Prediction(method=prms["PREDICT_METHOD"]).run(corpus, cluster
 # %% [markdown]
 ## Evaluation
 # %%
-accuracy = calculate_accuracy(
-    with_predictions["true_labels"], with_predictions["predicted"]
-)
-
+# candidate metrics
+# - most likely true label in cluster
+# - Rand index
+# - Adjusted Rand index
 # %%
+custom_metrics = Metrics(
+    ("accuracy",),
+    predictions=with_predictions["predicted"],
+    true_labels=with_predictions["true_labels"],
+).run()
+custom_metrics
+# %%
+metrics = Metrics(
+    ("rand_index", "mutual_info"),
+    predictions=with_predictions["cluster_labels"],
+    true_labels=with_predictions["true_labels"],
+).run()
+metrics
+# %% [markdown]
+## Interpretation
+# %%
+# contingency table
+contingency_matrix = Description(
+    graphics=("contingency_table",),
+    predictions=with_predictions["cluster_labels"],
+    true_labels=with_predictions["true_labels"],
+).run()
