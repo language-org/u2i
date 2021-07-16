@@ -16,7 +16,7 @@ dependencies:
   - pyyaml                     # config
   - radon                      # code metrics  
   - rope                       # refactoring
-
+  - mlflow
   - pip:    
     - wn==0.0.23              # wordnet
     - pywsd    

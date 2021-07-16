@@ -1,12 +1,27 @@
+from mlflow.tracking.client import MlflowClient
 import pandas as pd
 import os
 
 proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
 os.chdir(proj_path)
 
+# custom packages
 from intent.src.intent.pipelines.parsing import Cfg
-from intent.src.intent.nodes import preprocess, similarity, parsing, retrieval
+from intent.src.intent.nodes import config, preprocess, similarity, parsing, retrieval
 from intent.src.intent.pipelines.similarity import Lcs  # [move to node]
+
+# experiment tracking
+import mlflow
+from urllib.parse import urlparse
+
+# logging
+import logging
+
+logging.basicConfig(level=logging.WARN)
+logger = logging.getLogger(__name__)
+
+# load parameters
+PARAMS = config.load_parameters(proj_path)
 
 
 class Processing:
@@ -36,13 +51,22 @@ class Processing:
         self._print_params()
 
     def _print_params(self):
-        """Print pipeline parameters"""
+        """Print and log Processing parameters"""
 
+        # print parameters
         print("\n(Processing) Processing parameters\n")
         print("(Processing) Number of sentences per query: ", self.NUM_SENT)
         print("(Processing) Mood: ", self.FILT_MOOD)
         print("(Processing) Threshold similarity score: ", self.THRES_SIM_SCORE)
         print("(Processing) Seed: ", self.SEED)
+
+        # log parameters
+        # run = mlflow.active_run()
+        # with mlflow.start_run(run_id=run.info.run_id, nested=False):
+        mlflow.log_param("nb_sentences", self.NUM_SENT)
+        mlflow.log_param("mood", self.FILT_MOOD)
+        mlflow.log_param("similarity threshold", self.THRES_SIM_SCORE)
+        mlflow.log_param("seed", self.SEED)
 
     def run(self, corpus) -> pd.DataFrame:
         """Run instantiated processing pipeline

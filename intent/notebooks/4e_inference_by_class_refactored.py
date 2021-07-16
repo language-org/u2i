@@ -58,7 +58,6 @@
 # %%
 # set project path
 from inspect import TPFLAGS_IS_ABSTRACT
-from intent.src.intent.nodes.config import load_parameters
 import os
 from collections import defaultdict
 from time import time
@@ -73,7 +72,6 @@ os.chdir(proj_path)
 import pandas as pd
 import numpy as np
 import spacy
-
 
 # model tracking
 import mlflow
@@ -106,24 +104,9 @@ pd.set_option(
 # %%
 prms = config.load_parameters(proj_path)
 # %% [markdown]
-## Setup experiment
+## Experiment & runs tracking
 # %%
-# Create an experiment name, which must be unique and case sensitive
-# mlflow.set_tracking_uri(prms["tracking_uri"])
-# mlflow.set_tracking_uri("http://localhost:5000/")
-# mlflow.set_tracking_uri("file:/Users/steeve_laquitaine/desktop/CodeHub/intent/intent/")
-mlflow.set_tracking_uri(prms["mlflow"]["tracking_uri"])
-experiment_id = mlflow.set_experiment(prms["mlflow"]["experiment_name"])
-# with mlflow.start_run():
-#     mlflow.log_param("a", 1)
-#     mlflow.log_metric("b", 2)
-
-# %%
-# print("Artifact Location: {}".format(experiment.artifact_location))
-# print("Tags: {}".format(experiment.tags))
-# print("Lifecycle_stage: {}".format(experiment.lifecycle_stage))
-
-# %%
+config.config_mflow(prms)
 # %% [markdown]
 ## Loading data
 # %%

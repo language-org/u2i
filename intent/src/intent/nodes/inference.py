@@ -62,7 +62,9 @@ def label_queries(
     if verbose:
         print(f"{round(time() - t0, 2)} secs")
 
-    return pd.DataFrame([text, label]).T.rename(columns={0: "query", 1: "label"})
+    return pd.DataFrame([text, label]).T.rename(
+        columns={0: "query", 1: "cluster_labels"}
+    )
 
 
 class Prediction:
@@ -96,7 +98,7 @@ class Prediction:
         clustered
 
         # assign the most likely label to each cluster
-        unique_labels = clustered["label"].unique()
+        unique_labels = clustered["cluster_labels"].unique()
         predicted_labels_all = []
         proba_predicted_all = []
         n_clustered = len(clustered)

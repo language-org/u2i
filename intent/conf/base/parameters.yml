@@ -6,11 +6,17 @@ sampling:
   sample: 100
 intent_class: ["card_arrival", "exchange_via_app"]  # good parsing performance
 
+# mlflow tracking parameters  
+# - tracking_uri must end with mlruns/  
+mlflow:
+  experiment_name: unsup_intent_recog
+  tracking_uri: file:///Users/steeve_laquitaine/Desktop/CodeHub/intent/intent/mlruns/
+  
 
 SEED: " VB NP"  # seed for comparison
 NUM_SENT: 1  # keep query with max one sentence
 THRES_SIM_SCORE: 1  # Keep queries syntactically similar to seed
 FILT_MOOD: "ask"  # ("state", "wish-or-excl", "ask")  # Keep statements
-DIST_THRES: 2  # inference threshold for clustering, low values -> more clusters
+DIST_THRES: 3  # inference threshold for clustering, low values -> more clusters
 HCL_METHOD: "average"
 PREDICT_METHOD: "cluster_label_mode"

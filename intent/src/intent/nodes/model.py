@@ -70,13 +70,13 @@ def cluster_queries(
 
     # convert to dataframe
     labelled = pd.DataFrame([text_tuple, label]).T.rename(
-        columns={0: "query", 1: "label"}
+        columns={0: "query", 1: "cluster_labels"}
     )
 
     # keep corpus indices
     labelled.index = text.index
 
     # sort by label
-    labelled_sorted = labelled.sort_values(by=["label"])
+    labelled_sorted = labelled.sort_values(by=["cluster_labels"])
 
     return labelled_sorted
