@@ -106,60 +106,57 @@ prms = config.load_parameters(proj_path)
 # %% [markdown]
 ## Experiment & runs tracking
 # %%
-config.config_mflow(prms)
-# %% [markdown]
-## Loading data
+# config.config_mflow(prms)
+mlflow.set_tracking_uri(prms["mlflow"]["tracking_uri"])
+mlflow.set_experiment(prms["mlflow"]["experiment_name"])
 # %%
-t0 = time()
-corpus_path = proj_path + "intent/data/01_raw/banking77/train.csv"
-corpus = pd.read_csv(corpus_path)
-# %% [markdown]
-# # Processing
-# %%
-processed = Processing(
-    params=prms,
-    num_sent=prms["NUM_SENT"],
-    filt_mood=prms["FILT_MOOD"],
-    thres_sim_score=prms["THRES_SIM_SCORE"],
-    seed=prms["SEED"],
-).run(corpus)
-# %% [markdown]
-## Modeling
-# %%
-clustered = model.cluster_queries(
-    processed, dist_thresh=prms["DIST_THRES"], hcl_method=prms["HCL_METHOD"]
-)
-# %% [markdown]
-## Inference
-# %%
-with_predictions = Prediction(method=prms["PREDICT_METHOD"]).run(corpus, clustered)
-# %% [markdown]
-## Evaluation
-# %%
-# candidate metrics
-# - most likely true label in cluster
-# - Rand index
-# - Adjusted Rand index
-# %%
-custom_metrics = Metrics(
-    ("accuracy",),
-    predictions=with_predictions["predicted"],
-    true_labels=with_predictions["true_labels"],
-).run()
-custom_metrics
-# %%
-metrics = Metrics(
-    ("rand_index", "mutual_info"),
-    predictions=with_predictions["cluster_labels"],
-    true_labels=with_predictions["true_labels"],
-).run()
-metrics
-# %% [markdown]
-## Interpretation
-# %%
-# contingency table
-contingency_matrix = Description(
-    graphics=("contingency_table",),
-    predictions=with_predictions["cluster_labels"],
-    true_labels=with_predictions["true_labels"],
-).run()
+with mlflow.start_run():
+
+    ## Loading data
+    t0 = time()
+    corpus_path = proj_path + "intent/data/01_raw/banking77/train.csv"
+    corpus = pd.read_csv(corpus_path)
+
+    # # Processing
+    processed = Processing(
+        params=prms,
+        num_sent=prms["NUM_SENT"],
+        filt_mood=prms["FILT_MOOD"],
+        thres_sim_score=prms["THRES_SIM_SCORE"],
+        seed=prms["SEED"],
+    ).run(corpus)
+
+    ## Modeling
+    clustered = model.cluster_queries(
+        processed, dist_thresh=prms["DIST_THRES"], hcl_method=prms["HCL_METHOD"]
+    )
+
+    ## Inference
+    with_predictions = Prediction(method=prms["PREDICT_METHOD"]).run(corpus, clustered)
+
+    ## Evaluation
+    # candidate metrics
+    # - most likely true label in cluster
+    # - Rand index
+    # - Adjusted Rand index
+    custom_metrics = Metrics(
+        ("accuracy",),
+        predictions=with_predictions["predicted"],
+        true_labels=with_predictions["true_labels"],
+    ).run()
+    custom_metrics
+
+    metrics = Metrics(
+        ("rand_index", "mutual_info"),
+        predictions=with_predictions["cluster_labels"],
+        true_labels=with_predictions["true_labels"],
+    ).run()
+    metrics
+
+    ## Interpretation
+    # contingency table
+    contingency_matrix = Description(
+        graphics=("contingency_table",),
+        predictions=with_predictions["cluster_labels"],
+        true_labels=with_predictions["true_labels"],
+    ).run()
