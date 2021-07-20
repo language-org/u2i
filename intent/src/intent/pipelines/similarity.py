@@ -29,7 +29,7 @@ to_series = pd.Series
 
 class Lcs:
     """Longest common subsequence calculation class
-    Calculates the similarity of syntax between query pairs
+    Calculates the similarity of context-free grammar syntax between query pairs
     """
 
     def __init__(self, verbose: bool = False):

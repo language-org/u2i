@@ -28,7 +28,7 @@ class Processing:
     """Intent Processing class"""
 
     def __init__(
-        self, params, num_sent=None, filt_mood=None, thres_sim_score=None, seed=None
+        self, params, num_sent=int, filt_mood=None, thres_sim_score=float, seed=str, denoising:str
     ):
         """Instantiate processing class
 
@@ -46,27 +46,28 @@ class Processing:
         self.NUM_SENT = num_sent
         self.FILT_MOOD = filt_mood
         self.THRES_SIM_SCORE = thres_sim_score
+        self.DENOISING = denoising
         self.SEED = seed
 
+        # print and log processing pipeline parameters
         self._print_params()
 
     def _print_params(self):
-        """Print and log Processing parameters"""
+        """Print and log processing pipeline parameters"""
 
-        # print parameters
+        # print
         print("\n(Processing) Processing parameters\n")
         print("(Processing) Number of sentences per query: ", self.NUM_SENT)
         print("(Processing) Mood: ", self.FILT_MOOD)
         print("(Processing) Threshold similarity score: ", self.THRES_SIM_SCORE)
         print("(Processing) Seed: ", self.SEED)
 
-        # log parameters
-        # run = mlflow.active_run()
-        # with mlflow.start_run(run_id=run.info.run_id, nested=False):
+        # log
         mlflow.log_param("nb_sentences", self.NUM_SENT)
         mlflow.log_param("mood", self.FILT_MOOD)
-        mlflow.log_param("similarity threshold", self.THRES_SIM_SCORE)
+        mlflow.log_param("denoising", self.DENOISING)
         mlflow.log_param("seed", self.SEED)
+        mlflow.log_param("similarity threshold", self.THRES_SIM_SCORE)
 
     def run(self, corpus) -> pd.DataFrame:
         """Run instantiated processing pipeline

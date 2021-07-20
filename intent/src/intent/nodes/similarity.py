@@ -177,11 +177,11 @@ def rank_nearest_to_seed(
 
 
 def filter_by_similarity(ranked: pd.DataFrame, thresh: float) -> pd.DataFrame:
-    """Filter queries by thresholding similarity score
+    """Filter queries by thresholding their syntax similarity score to a seed syntax
 
     Args:
         ranked (pd.DataFrame): dataframe with "score" column containing query similarity score floats
-        thresh (float): thresholding score
+        thresh (float): thresholding score. We keep queries with scores above seed-similarity threshold.
 
     Returns:
         pd.DataFrame: [description]

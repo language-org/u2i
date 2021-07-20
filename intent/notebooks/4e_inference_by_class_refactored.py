@@ -123,7 +123,8 @@ with mlflow.start_run():
         num_sent=prms["NUM_SENT"],
         filt_mood=prms["FILT_MOOD"],
         thres_sim_score=prms["THRES_SIM_SCORE"],
-        seed=prms["SEED"],
+        seed=prms["DENOISING"]["SEED"],
+        denoising=prms["DENOISING"]["FILTERING_METHOD"],
     ).run(corpus)
 
     ## Modeling
@@ -154,7 +155,6 @@ with mlflow.start_run():
     metrics
 
     ## Interpretation
-    # contingency table
     contingency_matrix = Description(
         graphics=("contingency_table",),
         predictions=with_predictions["cluster_labels"],
