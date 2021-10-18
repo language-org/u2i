@@ -28,7 +28,13 @@ class Processing:
     """Intent Processing class"""
 
     def __init__(
-        self, params, num_sent=int, filt_mood=None, thres_sim_score=float, seed=str, denoising:str
+        self,
+        params: dict,
+        num_sent: int,
+        filt_mood: tuple,
+        thres_sim_score: float,
+        seed: str,
+        denoising: str,
     ):
         """Instantiate processing class
 

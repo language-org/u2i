@@ -7,3 +7,7 @@ file: business_analysis.md
   * evaluate model performance
   * improve model performance
   * model selection
+
+* plan:
+
+[TODO]
