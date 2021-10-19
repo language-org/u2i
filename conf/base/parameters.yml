@@ -1,0 +1,19 @@
+# author: steeve LAQUITAINE
+
+annotation: None # 'do', 'load'
+sampling:
+  random_state: 0
+  sample: 30 #100
+intent_class: ["card_arrival", "exchange_via_app"]
+mlflow:
+  experiment_name: u2i
+  tracking_uri: mlruns/
+DENOISING:
+  SEED: " VB NP"
+  FILTERING_METHOD: lcs
+DIST_THRES: 3   
+NUM_SENT: 1     
+INTENT_SCORE: 0.1         # 1
+FILT_MOOD: "ask"          # ("state", "wish-or-excl", "ask")
+HCL_METHOD: "average"
+PREDICT_METHOD: "cluster_label_mode"

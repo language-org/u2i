@@ -1,4 +1,0 @@
-annotators = tokenize,ssplit,pos,lemma,parse,depparse,coref
-
-outputFormat = serialized
-

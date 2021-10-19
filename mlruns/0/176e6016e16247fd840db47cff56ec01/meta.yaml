@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/steeve_laquitaine/Desktop/CodeHub/u2i/mlruns/0/176e6016e16247fd840db47cff56ec01/artifacts
+end_time: 1634666968283
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: 176e6016e16247fd840db47cff56ec01
+run_uuid: 176e6016e16247fd840db47cff56ec01
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1634666832778
+status: 3
+tags: []
+user_id: steeve_laquitaine
