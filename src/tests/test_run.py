@@ -21,9 +21,8 @@ class TestProjectContext:
 
 
 def test_extract_all_VPs(VPs, data, prm):
-    assert (
-        len(VPs) == len(data) or len(VPs) == prm["sample"]
-    ), '''VP's length does not match "data"'''
+    assert len(VPs) == len(data) or len(VPs) == prm["sample"]
+    , '''VP's length does not match "data"'''
 
 
 def test_extract_VP(al_prdctor):

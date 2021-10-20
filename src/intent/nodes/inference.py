@@ -1,6 +1,6 @@
 from collections import Counter
 from time import time
-
+import os
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -10,6 +10,8 @@ from scipy.spatial import distance
 from src.intent.nodes import similarity
 from src.intent.nodes.utils import del_null
 import json
+
+PROJ_PATH = os.getenv("PROJ_PATH")
 
 
 def label_queries(
@@ -168,14 +170,25 @@ def write_preds(corpus, intents, pred):
     parsed = [del_null(query) for query in parsed]
 
     # write predictions
-    with open("predicted.json", "w") as outfile:
+    file_path = os.path.join(
+        PROJ_PATH, "data/07_model_output/predicted.json"
+    )
+    with open(file_path, "w") as outfile:
         json.dump(parsed, outfile, indent=4)
 
 
 def write_metrics(metrics, contingency_df):
 
     # write metrics
-    with open("metrics.json", "w") as outfile:
+    file_path = os.path.join(
+        PROJ_PATH, "data/07_model_output/metrics.json"
+    )
+    with open(file_path, "w") as outfile:
         json.dump(metrics, outfile, indent=4)
-    contingency_df.to_csv("contingency.csv")
+
+    # write contingency
+    file_path = os.path.join(
+        PROJ_PATH, "data/07_model_output/contingency.csv"
+    )
+    contingency_df.to_csv(file_path)
 

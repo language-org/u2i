@@ -23,7 +23,9 @@ PROJ_PATH = os.getenv("PROJ_PATH")
 from src.intent.nodes import parsing, preprocess, setup
 
 # configurate logging
-logging_path = os.path.join(PROJ_PATH + "/conf/base/logging.yml")
+logging_path = os.path.join(
+    PROJ_PATH + "/conf/base/logging.yml"
+)
 with open(logging_path, "r") as f:
     LOG_CONF = yaml.load(f, Loader=yaml.FullLoader)
 logging.config.dictConfig(LOG_CONF)
@@ -33,7 +35,9 @@ params = setup.get_params()
 paths = setup.get_paths()
 
 # load paths
-catalog_path = os.path.join(PROJ_PATH, "conf/base/catalog.yml")
+catalog_path = os.path.join(
+    PROJ_PATH, "conf/base/catalog.yml"
+)
 with open(catalog_path) as file:
     catalog = yaml.load(file)
 
@@ -51,8 +55,12 @@ def init_allen_parser():
     - takes: ~0.4 s per sentence (slow)
     """
     tic = time()
-    out = Predictor.from_path(paths["path_constituency_parser"])
-    logger.info(f"(Instantiation) took {round(time()-tic,2)} secs")
+    out = Predictor.from_path(
+        paths["path_constituency_parser"]
+    )
+    logger.info(
+        f"(Instantiation) took {round(time()-tic,2)} secs"
+    )
 
     return out
 
@@ -96,7 +104,9 @@ def setup_stanza():
         logger.info("(setup_stanza) Installing CoreNLP ...")
         stanza.install_corenlp(dir=paths["coreNLP_path"])
     else:
-        logger.info("(setup_stanza) CoreNLP already exists.")
+        logger.info(
+            "(setup_stanza) CoreNLP already exists."
+        )
 
     (status, model_file) = is_exist_model()
     if status:
@@ -104,14 +114,18 @@ def setup_stanza():
             "(setup_stanza) CoreNLP model already exists. The model is: {model_file}"
         )
     else:
-        logger.info("(setup_stanza) Downloading CoreNLP model ...")
+        logger.info(
+            "(setup_stanza) Downloading CoreNLP model ..."
+        )
         stanza.download_corenlp_models(
             model=params["corenlp_model"]["lang"],
             version=params["corenlp_model"]["version"],
             dir=paths["coreNLP_path"],
         )
 
-    logger.info("(setup_stanza) Setting up Environment variables ...")
+    logger.info(
+        "(setup_stanza) Setting up Environment variables ..."
+    )
     os.environ["CORENLP_HOME"] = paths["coreNLP_path"]
 
 
@@ -180,7 +194,9 @@ def extract_all_VPs(data: pd.DataFrame, predictor):
     dur = []
     for ix in range(len(data)):
         t0 = time()
-        VP = parsing.extract_VP(predictor, data["text"].iloc[ix])
+        VP = parsing.extract_VP(
+            predictor, data["text"].iloc[ix]
+        )
         if VP["terminals"] is not None:
             VPs.append(VP)
         else:
@@ -231,7 +247,9 @@ def get_CFGs(VP_info: list) -> list:
     """
     for ix in range(len(VP_info)):
         if not len(VP_info[ix]) == 0:
-            VP_info[ix]["cfg"] = parsing.get_CFG(VP_info[ix])
+            VP_info[ix]["cfg"] = parsing.get_CFG(
+                VP_info[ix]
+            )
     return VP_info
 
 
@@ -255,7 +273,10 @@ def from_text_to_cfg(
     VPs = parsing.make_VPs_readable(VP_info)
     data["VP"] = np.asarray(VPs)
     data["cfg"] = np.asarray(
-        [VP["cfg"] if not len(VP) == 0 else None for VP in VP_info]
+        [
+            VP["cfg"] if not len(VP) == 0 else None
+            for VP in VP_info
+        ]
     )
     return data
 
@@ -279,11 +300,17 @@ def from_cfg_to_constituents(cfg: pd.Series) -> pd.Series:
 
         # case values are string, drop irrelevant component
         if isinstance(cfg.iloc[0], str):
-            constt = cfg.apply(lambda x: x.replace("VP ->", ""))
+            constt = cfg.apply(
+                lambda x: x.replace("VP ->", "")
+            )
 
         # case values are nltk production objects, drop irrelevant component
-        elif isinstance(cfg.iloc[0], nltk.grammar.Production):
-            constt = cfg.apply(lambda x: str(x).replace("VP ->", ""))
+        elif isinstance(
+            cfg.iloc[0], nltk.grammar.Production
+        ):
+            constt = cfg.apply(
+                lambda x: str(x).replace("VP ->", "")
+            )
 
         # else request a known value type
         else:
@@ -323,7 +350,10 @@ def from_text_to_constituents(
 
 
 def run_parsing_pipe(
-    data: pd.DataFrame, predictor: object, prm: dict, verbose: bool = True,
+    data: pd.DataFrame,
+    predictor: object,
+    prm: dict,
+    verbose: bool = True,
 ) -> pd.DataFrame:
     """[summary]
 
@@ -340,8 +370,12 @@ def run_parsing_pipe(
     t0 = time()
 
     # select data for an input class
-    data_c = data[data["category"].isin(prm["intent_class"])]
-    sample = data_c["text"].iloc[0]  # get first VPs, others often variants
+    data_c = data[
+        data["category"].isin(prm["intent_class"])
+    ]
+    sample = data_c["text"].iloc[
+        0
+    ]  # get first VPs, others often variants
 
     # PARSING
     tic = time()
@@ -358,7 +392,8 @@ def run_parsing_pipe(
 
     # test
     assert (
-        len(parsing.extract_VP(predictor, "I want coffee")) > 0
+        len(parsing.extract_VP(predictor, "I want coffee"))
+        > 0
     ), "VP is Empty\n"
 
     # Speed up (1 hour / 10K queries)
@@ -379,7 +414,9 @@ def run_parsing_pipe(
     assert data_c.category.nunique() == len(
         prm["intent_class"]
     ), """The intent classes in the parsed_data does not match input data's"""
-    logger.info(f"(run_parsing_pipe) took {round(time()-tic,2)} secs\n")
+    logger.info(
+        f"(run_parsing_pipe) took {round(time()-tic,2)} secs\n"
+    )
     return data_c
 
 
