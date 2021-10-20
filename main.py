@@ -13,11 +13,13 @@ os.environ["NLTK_DATA"] = os.path.join(
 
 import logging
 import logging.config
-
 import pandas as pd
 import yaml
-
 from src.intent.nodes import config
+from src.intent.nodes.inference import (
+    write_preds,
+    write_metrics,
+)
 from src.intent.nodes import evaluation as evaln
 from src.intent.nodes.model import U2iModel
 
@@ -29,6 +31,7 @@ with open(logging_path, "r") as f:
     LOG_CONF = yaml.load(f, Loader=yaml.FullLoader)
 logging.config.dictConfig(LOG_CONF)
 logger = logging.getLogger(__name__)
+
 
 if __name__ == "__main__":
     """Entry point
@@ -73,17 +76,22 @@ if __name__ == "__main__":
     ).run()
     logger.info(f"Metrics: {metrics}")
 
-    contingency_matrix = evaln.Description(
+    contingency = evaln.Description(
         ("contingency_table",),
         pred["cluster_labels"],
         pred["true_labels"],
     ).run()
-    logger.info(contingency_matrix)
+    true_labels = pred["true_labels"].unique()
+    contingency_df = pd.DataFrame(
+        contingency, index=true_labels.tolist()
+    )
+
+    # write predictions and metrics
+    write_preds(corpus, intents, pred)
+    write_metrics(metrics, contingency_df)
+    logger.info("Precictions & metrics have been written")
     logger.info(f"Pipeline took {time()-t0} secs")
 
-    print("============== RESULTS ==============")
-    print(pred.head(30))
-    print(intents.head(30))
-
+    # save metrics
     # clean up caches
     os.system("rm -f ~/.allenlp")

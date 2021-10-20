@@ -1,4 +1,3 @@
-import os
 from collections import Counter
 from time import time
 
@@ -9,6 +8,8 @@ from scipy.cluster import hierarchy
 from scipy.cluster.hierarchy import fcluster
 from scipy.spatial import distance
 from src.intent.nodes import similarity
+from src.intent.nodes.utils import del_null
+import json
 
 
 def label_queries(
@@ -146,3 +147,35 @@ class Prediction:
                 "(Prediction.run)'method' arg is not implemented, change prediction method"
             )
         return predictions
+
+
+def write_preds(corpus, intents, pred):
+    raw_query = corpus.loc[intents.index]
+    intents.insert(
+        0, column="query", value=raw_query["text"]
+    )
+    intents.insert(
+        1,
+        column="class_proba",
+        value=pred["proba_predicted (ratio)"],
+    )
+    intents["True label"] = raw_query["category"]
+    intents = intents.sort_values(
+        by="class_proba", ascending=False
+    )
+    intents_json = intents.to_json(orient="records")
+    parsed = json.loads(intents_json)
+    parsed = [del_null(query) for query in parsed]
+
+    # write predictions
+    with open("predicted.json", "w") as outfile:
+        json.dump(parsed, outfile, indent=4)
+
+
+def write_metrics(metrics, contingency_df):
+
+    # write metrics
+    with open("metrics.json", "w") as outfile:
+        json.dump(metrics, outfile, indent=4)
+    contingency_df.to_csv("contingency.csv")
+

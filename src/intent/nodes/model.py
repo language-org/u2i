@@ -39,6 +39,7 @@ class U2iModel(object):
             X,
             dist_thresh=self.dist_thresh,
             hcl_method=self.hcl_method,
+            params=self.prms,
         )
         return X, intents
 
