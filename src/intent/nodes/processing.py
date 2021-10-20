@@ -5,7 +5,7 @@ import pandas as pd
 PROJ_PATH = os.getenv("PROJ_PATH")
 
 import logging
-
+from time import time
 import mlflow
 import numpy as np
 from src.intent.nodes import (
@@ -36,15 +36,17 @@ class Processing:
         intent_score: float,
         seed: str,
         denoising: str,
+        inspect: bool,
     ):
         """Instantiate processing class
 
         Args:
-            params ([type]): [description]
-            num_sent ([type], optional): [description]. Defaults to None.
-            filt_mood ([type], optional): [description]. Defaults to None.
-            INTENT_SCORE ([type], optional): [description]. Defaults to None.
-            seed ([type], optional): [description]. Defaults to None.
+            params (dict): [description]
+            num_sent (int, optional): [description]. Defaults to None.
+            filt_mood (str, optional): [description]. Defaults to None.
+            INTENT_SCORE (float, optional): [description]. Defaults to None.
+            seed (str, optional): [description]. Defaults to None.
+            inspect (bool, optional): [description]. Defaults to None.
         Returns:
             Instance of Processing class
 
@@ -55,6 +57,7 @@ class Processing:
         self.INTENT_SCORE = intent_score
         self.DENOISING = denoising
         self.SEED = seed
+        self.inspect = inspect
 
         # print and log processing pipeline parameters
         self._print_params()
@@ -64,13 +67,13 @@ class Processing:
 
         # print
         logger.info("-------- PROCESSING ------------")
-        logger.info("Parameters:\n")
-        logger.info(f" Sentences/query: {self.NUM_SENT}")
-        logger.info(f" Mood: {self.FILT_MOOD}")
+        logger.info("Parameters:")
+        logger.info(f"- Sentences/query: {self.NUM_SENT}")
+        logger.info(f"- Mood: {self.FILT_MOOD}")
         logger.info(
             f" Threshold similarity score:  {self.INTENT_SCORE}"
         )
-        logger.info(f" Seed: {self.SEED}")
+        logger.info(f"- Seed: {self.SEED}")
 
         # log
         mlflow.log_param("nb_sentences", self.NUM_SENT)
@@ -90,32 +93,52 @@ class Processing:
         Returns:
             pd.DataFrame: [description]
         """
+        introsp = corpus["text"].to_frame()
+
+        from ipdb import set_trace
+
+        set_trace()
 
         # parse constituents
+        t_cfg = time()
         cfg = Cfg(corpus, self.params).do()
         logger.info("Parsing constituents")
-        logger.info(f"N={len(cfg)} queries")
+        logger.info(f"N={len(cfg)} queries left")
+        logger.info(f"took {time()-t_cfg} secs")
+        if self.inspect:
+            introsp["VP"] = None
+            introsp["cfg"] = None
+            introsp["VP"].loc[cfg["index"]] = cfg["VP"]
+            introsp["cfg"].loc[cfg["index"]] = cfg["cfg"]
 
-        # drop complex queries
+        # filter complexity
+        t_cx = time()
         cfg_cx = preprocess.filter_n_sent_eq(
             cfg, self.NUM_SENT, verbose=True
         )
         logger.info("Filtering complex queries")
-        logger.info(f"N={len(cfg_cx)} queries")
+        logger.info(f"N={len(cfg_cx)} queries left")
+        logger.info(f"took {time()-t_cx} secs")
+        if self.inspect:
+            introsp["filt_cplxity"] = None
+            introsp["filt_cplxity"].loc[cfg["index"]] = 0
+            introsp["filt_cplxity"].loc[cfg_cx["index"]] = 1
 
-        # drop moods
+        # filter mood
+        t_mood = time()
         cfg_mood = preprocess.filter_in_only_mood(
             cfg_cx, self.FILT_MOOD
         )
         logger.info("Filtering moods")
-        logger.info(f"N={len(cfg_mood)} queries")
-
+        logger.info(f"N={len(cfg_mood)} queries left")
+        logger.info(f"took {time()-t_mood} secs")
         # get constituents
         tag = parsing.from_cfg_to_constituents(
             cfg_mood["cfg"]
         )
 
-        # filter dissimilar syntax
+        # filter syntax
+        t_sx = time()
         similarity_matrix = Lcs().do(cfg_mood)
         sim_ranked = similarity.rank_nearest_to_seed(
             similarity_matrix, seed=self.SEED, verbose=True
@@ -127,10 +150,11 @@ class Processing:
         filtered = similarity.filter_by_similarity(
             ranked, self.INTENT_SCORE
         )
-        logger.info("Filtering non-intent syntax")
-        logger.info(f"N={len(filtered)} queries")
+        logger.info("Filtering 'not-intent' syntax")
+        logger.info(f"N={len(filtered)} queries left")
+        logger.info(f"took {time()-t_sx} secs")
 
-        # index queries
+        # index
         raw_ix = cfg_mood["index"]
         filtered_raw_ix = raw_ix.values[
             filtered.index.values
@@ -172,4 +196,19 @@ class Processing:
         ) = preprocess.drop_empty_queries(wordnet_filtered)
         raw_ix = wordnet_filtered.index[not_empty]
         intents = intents_df.loc[raw_ix]
+
+        # write representations
+        # rep flow
+        file_path = os.path.join(
+            PROJ_PATH,
+            "data/08_introspection/representations.csv",
+        )
+        introsp.to_csv(file_path)
+
+        # syntax similarity
+        file_path = os.path.join(
+            PROJ_PATH,
+            "data/08_introspection/syntax_similarity.csv",
+        )
+        similarity_matrix.to_csv(file_path)
         return (processed, intents)

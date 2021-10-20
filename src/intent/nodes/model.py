@@ -33,7 +33,7 @@ class U2iModel(object):
                 "FILTERING_METHOD"
             ],
         ).run(corpus)
-
+    
         # clustering layer
         X = cluster_queries(
             X,
