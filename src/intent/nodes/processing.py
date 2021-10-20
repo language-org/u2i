@@ -8,7 +8,13 @@ import logging
 
 import mlflow
 import numpy as np
-from src.intent.nodes import config, parsing, preprocess, retrieval, similarity
+from src.intent.nodes import (
+    config,
+    parsing,
+    preprocess,
+    retrieval,
+    similarity,
+)
 from src.intent.pipelines.parsing import Cfg
 from src.intent.pipelines.similarity import Lcs
 
@@ -138,11 +144,21 @@ class Processing:
 
         # display (intent, intendeed)
         cfg_mood.index = cfg_mood["index"]
-        cfg_mood.merge(
-            pd.DataFrame(intents, index=filtered_raw_ix),
-            left_index=True,
-            right_index=True,
-        )[["index", "text", "intent", "intendeed"]]
+        intents_df = pd.DataFrame(
+            intents, index=filtered_raw_ix
+        )
+        cfg_mood = cfg_mood.merge(
+            intents_df, left_index=True, right_index=True,
+        )[
+            [
+                "index",
+                "VP",
+                "text",
+                "intent",
+                "intendeed",
+                "mood_1",
+            ]
+        ]
 
         # drop words not in wordnet
         wordnet_filtered = preprocess.filter_words(
@@ -154,6 +170,6 @@ class Processing:
             processed,
             not_empty,
         ) = preprocess.drop_empty_queries(wordnet_filtered)
-        loc_kept = np.where(not_empty == True)[0]
-        intents = pd.DataFrame(intents).loc[loc_kept]
+        raw_ix = wordnet_filtered.index[not_empty]
+        intents = intents_df.loc[raw_ix]
         return (processed, intents)

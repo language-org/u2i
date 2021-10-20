@@ -3,7 +3,7 @@
 annotation: None # 'do', 'load'
 sampling:
   random_state: 0
-  sample: 30 #100
+  sample: 100 #100
 intent_class: ["card_arrival", "exchange_via_app"]
 mlflow:
   experiment_name: u2i

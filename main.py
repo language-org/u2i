@@ -82,8 +82,8 @@ if __name__ == "__main__":
     logger.info(f"Pipeline took {time()-t0} secs")
 
     print("============== RESULTS ==============")
-    print(pred.head())
-    print(intents.head())
+    print(pred.head(30))
+    print(intents.head(30))
 
     # clean up caches
     os.system("rm -f ~/.allenlp")
