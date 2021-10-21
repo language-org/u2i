@@ -139,28 +139,6 @@
         "True label": "card_arrival"
     },
     {
-        "query": "How can I track my card's delivery?",
-        "class_proba": 0.4230769231,
-        "intent": [
-            "track"
-        ],
-        "intendeed": [
-            "delivery"
-        ],
-        "True label": "card_arrival"
-    },
-    {
-        "query": "How can I periodically check the delivery of the card you sent?",
-        "class_proba": 0.4230769231,
-        "intent": [
-            "check"
-        ],
-        "intendeed": [
-            "delivery"
-        ],
-        "True label": "card_arrival"
-    },
-    {
         "query": "Can I get an update on my replacement card?",
         "class_proba": 0.4230769231,
         "intent": [
@@ -195,7 +173,7 @@
     },
     {
         "query": "Do you have a tracking number for the card I was sent?",
-        "class_proba": 0.2692307692,
+        "class_proba": 0.3461538462,
         "intent": [
             "have"
         ],
@@ -206,7 +184,7 @@
     },
     {
         "query": "How do I track the card you sent me?",
-        "class_proba": 0.2692307692,
+        "class_proba": 0.3461538462,
         "intent": [
             "track"
         ],
@@ -218,7 +196,7 @@
     },
     {
         "query": "Can I track the card that you sent me in the mail?",
-        "class_proba": 0.2692307692,
+        "class_proba": 0.3461538462,
         "intent": [
             "track"
         ],
@@ -230,7 +208,7 @@
     },
     {
         "query": "Can I track the card that was just sent to me?",
-        "class_proba": 0.2692307692,
+        "class_proba": 0.3461538462,
         "intent": [
             "track"
         ],
@@ -240,8 +218,19 @@
         "True label": "card_arrival"
     },
     {
+        "query": "How can I track my card's delivery?",
+        "class_proba": 0.3461538462,
+        "intent": [
+            "track"
+        ],
+        "intendeed": [
+            "delivery"
+        ],
+        "True label": "card_arrival"
+    },
+    {
         "query": "How can I see the progress of delivery of the card that was sent?",
-        "class_proba": 0.2692307692,
+        "class_proba": 0.3461538462,
         "intent": [
             "see"
         ],
@@ -252,7 +241,7 @@
     },
     {
         "query": "Can I track the card you sent to me?",
-        "class_proba": 0.2692307692,
+        "class_proba": 0.3461538462,
         "intent": [
             "track"
         ],
@@ -262,8 +251,19 @@
         "True label": "card_arrival"
     },
     {
+        "query": "How can I periodically check the delivery of the card you sent?",
+        "class_proba": 0.3461538462,
+        "intent": [
+            "check"
+        ],
+        "intendeed": [
+            "delivery"
+        ],
+        "True label": "card_arrival"
+    },
+    {
         "query": "How do I track the card you sent to me?",
-        "class_proba": 0.2692307692,
+        "class_proba": 0.3461538462,
         "intent": [
             "track"
         ],

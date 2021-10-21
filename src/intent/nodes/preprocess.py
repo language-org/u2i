@@ -134,10 +134,6 @@ def filter_mood(
             )
         )
 
-    from ipdb import set_trace
-
-    set_trace()
-
     # classify sentence types (state, ask, ..)
     query_moods = features.classify_mood(cfg["text"])
 
@@ -153,10 +149,10 @@ def filter_mood(
     mood_filt = (
         pd.DataFrame(query_moods).iloc[ix].reset_index()
     )
-    mood_filt.columns = [
-        f"mood_{i}" for i in range(len(mood_filt.columns))
+    nb_moods = len(mood_filt.columns) - 1
+    mood_filt.columns = ["ix"] + [
+        f"mood_{i}" for i in range(nb_moods)
     ]
-
     cfg_filt = cfg.iloc[ix].reset_index()
     cfg = pd.concat(
         [cfg_filt, mood_filt], ignore_index=False, axis=1,

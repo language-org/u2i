@@ -7,7 +7,6 @@ PROJ_PATH = os.getenv("PROJ_PATH")
 import logging
 from time import time
 import mlflow
-import numpy as np
 from src.intent.nodes import (
     config,
     parsing,
@@ -17,6 +16,7 @@ from src.intent.nodes import (
 )
 from src.intent.pipelines.parsing import Cfg
 from src.intent.pipelines.similarity import Lcs
+from typing import Dict, Any
 
 # prep logging
 logger = logging.getLogger()
@@ -105,78 +105,72 @@ class Processing:
         # choose mood
         data = self.filter_mood(data)
 
-        # get constituents
+        # parse intents
         (
             introsp,
             similarity_matrix,
             intents_df,
-        ) = self.parse_intent_and_slots(data)
+        ) = self.parse_intents(data)
 
-        # display (intent, intendeed)
-        cfg_mood.index = cfg_mood["index"]
-        cfg_mood = cfg_mood.merge(
-            intents_df, left_index=True, right_index=True,
-        )[
-            [
-                "index",
-                "VP",
-                "text",
-                "intent",
-                "intendeed",
-                "mood_1",
-            ]
-        ]
-
-        # drop words not in wordnet
-        wordnet_filtered = preprocess.filter_words(
-            cfg_mood["VP"], "not_in_wordnet"
+        # filter unknown words
+        processed, intents = self.filter_unknown(
+            data, intents_df
         )
 
-        # drop empty queries
+        # write representations
+        self.write_internal_rep(introsp)
+        self.write_syntx_sim(similarity_matrix)
+        return (processed, intents)
+
+    def filter_unknown(self, data, intents_df):
+        vp = data["data"].merge(
+            intents_df, left_on="index", right_index=True
+        )["VP"]
+        wordnet_filtered = preprocess.filter_words(
+            vp, "not_in_wordnet"
+        )
+        wordnet_filtered.index = intents_df.index
+
+        # filter empty queries
         (
             processed,
             not_empty,
         ) = preprocess.drop_empty_queries(wordnet_filtered)
         raw_ix = wordnet_filtered.index[not_empty]
         intents = intents_df.loc[raw_ix]
+        return processed, intents
 
-        # write representations
-        # rep flow
-        self.write_internal_rep(introsp)
+    def parse_intents(self, data):
 
-        # syntax similarity
-        self.write_syntx_sim(similarity_matrix)
-        return (processed, intents)
+        # filter not-intent syntax
+        data = self.filter_syntax(data)
 
-    def parse_intent_and_slots(self, data):
-        (
-            similarity_matrix,
-            filtered,
-            filtered_raw_ix,
-        ) = self.filter_syntax(data)
+        # get data
+        introsp = data["introsp"]
+        sim_mx = data["sim_mx"]
+        raw_index = data["raw_ix"]
+        data = data["data"]
 
         # Inference & slot filling
-        intents = parsing.parse_intent(filtered)
-        intents_df = pd.DataFrame(
-            intents, index=filtered_raw_ix
-        )
+        intents = parsing.parse_intent(data)
+        intents_df = pd.DataFrame(intents, index=raw_index)
 
         # inspect
         if self.inspect:
             introsp = self._inspect_intent(
                 introsp, intents_df
             )
+        return introsp, sim_mx, intents_df
 
-        return introsp, similarity_matrix, intents_df
+    def filter_syntax(self, data: Dict[str, Any]):
 
-    def filter_syntax(self, data):
-        tag = parsing.chunk_cfg(data["data"]["cfg"])
+        introsp = data["introsp"]
+        data = data["data"]
+        tag = parsing.chunk_cfg(data["cfg"])
 
         # filter syntax
         t_sx = time()
-        similarity_matrix, filtered = self._filter_syntax(
-            data["data"], tag
-        )
+        sim_mx, filtered = self._filter_syntax(data, tag)
         self._log_syntax(t_sx, filtered)
 
         # inspect
@@ -185,13 +179,15 @@ class Processing:
                 introsp, filtered
             )
 
-        # index
-        raw_ix = data["data"]["index"]
-        filtered_raw_ix = raw_ix.values[
-            filtered.index.values
-        ]
-
-        return similarity_matrix, filtered, filtered_raw_ix
+        # index in raw corpus
+        raw_ix = data["index"]
+        index = raw_ix.values[filtered.index.values]
+        return {
+            "data": filtered,
+            "introsp": introsp,
+            "sim_mx": sim_mx,
+            "raw_ix": index,
+        }
 
     def filter_mood(self, data):
         """Choose mood
@@ -275,12 +271,14 @@ class Processing:
             [type]: [description]
         """
         t_cfg = time()
+        # slow [bottleneck]
         cfg = Cfg(corpus, self.params).do()
         self._log_cfg(t_cfg, cfg)
 
         # inspect
         if self.inspect:
             introsp = self._inspect_cfg(introsp, cfg)
+        cfg = cfg.reset_index(drop=True)
         return {"data": cfg, "introsp": introsp}
 
     def _filter_syntax(self, cfg_mood, tag):
@@ -415,6 +413,7 @@ class Processing:
         """
         introsp["VP"] = None
         introsp["cfg"] = None
+        cfg.index = cfg["index"]
         introsp["VP"].loc[cfg["index"]] = cfg["VP"]
         introsp["cfg"].loc[cfg["index"]] = cfg["cfg"]
         return introsp
