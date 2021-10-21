@@ -18,7 +18,7 @@ def create_posting_list(constituents: pd.Series) -> dict:
     return posting_list
 
 
-def create_posting_list_from_raw_indices(
+def create_posting_list_from_raw_ix(
     constituents: tuple, raw_indices: tuple
 ) -> dict:
     """Create a posting list with key:value made of constituents:index in dataframe

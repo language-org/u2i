@@ -113,16 +113,19 @@ class Processing:
         ) = self.parse_intents(data)
 
         # filter unknown words
-        processed, intents = self.filter_unknown(
-            data, intents_df
-        )
+        data = self.filter_unknown(data, intents_df)
 
         # write representations
-        self.write_internal_rep(introsp)
+        self.write_internal_rep(data["introsp"])
         self.write_syntx_sim(similarity_matrix)
-        return (processed, intents)
+        return (data["data"], data["intents"])
 
     def filter_unknown(self, data, intents_df):
+        # get data
+        introsp = data["introsp"]
+
+        # check that verb phrase words are known
+        data["data"] = data["data"].drop(columns="index")
         vp = data["data"].merge(
             intents_df, left_on="index", right_index=True
         )["VP"]
@@ -137,8 +140,20 @@ class Processing:
             not_empty,
         ) = preprocess.drop_empty_queries(wordnet_filtered)
         raw_ix = wordnet_filtered.index[not_empty]
+
+        # inspect
+        if self.inspect:
+            introsp["known_words"] = None
+            introsp["known_words"].loc[
+                wordnet_filtered.index
+            ] = 0
+            introsp["known_words"].loc[raw_ix] = 1
         intents = intents_df.loc[raw_ix]
-        return processed, intents
+        return {
+            "data": processed,
+            "intents": intents,
+            "introsp": introsp,
+        }
 
     def parse_intents(self, data):
 
@@ -148,25 +163,26 @@ class Processing:
         # get data
         introsp = data["introsp"]
         sim_mx = data["sim_mx"]
-        raw_index = data["raw_ix"]
         data = data["data"]
 
         # Inference & slot filling
         intents = parsing.parse_intent(data)
-        intents_df = pd.DataFrame(intents, index=raw_index)
+        intents = pd.DataFrame(intents, index=data.index)
 
         # inspect
         if self.inspect:
-            introsp = self._inspect_intent(
-                introsp, intents_df
-            )
-        return introsp, sim_mx, intents_df
+            introsp = self._inspect_intent(introsp, intents)
+        return introsp, sim_mx, intents
 
     def filter_syntax(self, data: Dict[str, Any]):
 
+        # get data
         introsp = data["introsp"]
         data = data["data"]
+
+        # get components
         tag = parsing.chunk_cfg(data["cfg"])
+        tag.index = data["index"]
 
         # filter syntax
         t_sx = time()
@@ -176,17 +192,13 @@ class Processing:
         # inspect
         if self.inspect:
             introsp = self._inspect_syntax(
-                introsp, filtered["data"]
+                introsp, filtered
             )
-
-        # index in raw corpus
-        raw_ix = data["index"]
-        index = raw_ix.values[filtered["data"].index.values]
         return {
             "data": filtered["data"],
             "introsp": introsp,
             "sim_mx": filtered["sim_mx"],
-            "raw_ix": index,
+            "raw_ix": data.index,
         }
 
     def filter_mood(self, data):
@@ -209,8 +221,6 @@ class Processing:
         # inspect
         if self.inspect:
             introsp["good_mood"] = None
-            kept = introsp.iloc[:, -2].notnull()
-            introsp["good_mood"].loc[kept] = 0
             introsp["good_mood"].loc[cfg_mood["index"]] = 1
         return {"data": cfg_mood, "introsp": introsp}
 
@@ -281,7 +291,7 @@ class Processing:
         cfg = cfg.reset_index(drop=True)
         return {"data": cfg, "introsp": introsp}
 
-    def _filter_syntax(self, cfg_mood, tag):
+    def _filter_syntax(self, data, tag):
         """Process syntax
 
         Args:
@@ -291,13 +301,23 @@ class Processing:
         Returns:
             [Dict]: [description]
         """
-        sim_mx = Lcs().do(cfg_mood)
+
+        # [TODO]: tag and data["text"] should sync their
+        # indices
+        sim_mx = Lcs().do(data)
         sim_ranked = similarity.rank_nearest_to_seed(
             sim_mx, seed=self.SEED, verbose=True
         )
-        posting_list = retrieval.create_posting_list(tag)
-        ranked = similarity.print_ranked_VPs(
-            cfg_mood, posting_list, sim_ranked
+
+        # posting_list = retrieval.create_posting_list(tag)
+        posting_list = retrieval.create_posting_list_from_raw_ix(
+            tag, data["index"]
+        )
+        # ranked = similarity.print_ranked_VPs(
+        # data, posting_list, sim_ranked
+        # )
+        ranked = similarity.print_ranked_VPs_on_raw_ix(
+            data, posting_list, sim_ranked
         )
         data = similarity.filter_by_similarity(
             ranked, self.INTENT_SCORE
@@ -381,19 +401,20 @@ class Processing:
         Returns:
             [type]: [description]
         """
+
         # tape score
         introsp["syntx_score"] = None
-        kept = introsp["good_cplx"].notnull()
-        introsp["syntx_score"].loc[kept] = 0
-        introsp["syntx_score"].loc[data.index] = data[
-            "score"
-        ]
+        introsp["syntx_score"].loc[
+            data["score"].index
+        ] = data["score"]
 
         # tape filtered syntax
         introsp["good_intent_syntx"] = None
         kept = introsp["good_cplx"].notnull()
         introsp["good_intent_syntx"].loc[kept] = 0
-        introsp["good_intent_syntx"].loc[data.index] = 1
+        introsp["good_intent_syntx"].loc[
+            data["data"].index
+        ] = 1
         return introsp
 
     def _inspect_cplx(self, introsp, cfg, cfg_cx):

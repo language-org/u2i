@@ -26,4 +26,4 @@ if __name__ == "__main__":
             """This is not implented: Use $python main.py train_predict"""
         )
     # clean up caches
-    os.system("rm -f ~/.allenlp")
+    # os.system("rm -f ~/.allenlp")

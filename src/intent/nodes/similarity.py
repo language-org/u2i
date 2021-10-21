@@ -5,7 +5,6 @@ from itertools import chain, repeat
 from time import time
 
 import networkx as nx
-import nltk
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -15,6 +14,9 @@ from pywsd.lesk import simple_lesk
 from scipy.cluster import hierarchy
 from scipy.cluster.hierarchy import fcluster
 from scipy.spatial import distance
+import logging
+
+logger = logging.getLogger()
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -133,6 +135,57 @@ def print_ranked_VPs(
     return df
 
 
+def print_ranked_VPs_on_raw_ix(
+    cfg: pd.DataFrame,
+    posting_list,
+    sorted_series: pd.Series,
+) -> pd.Series:
+    """Rank verb phrases by syntactic similarity score
+
+    Args:
+        cfg (pd.DataFrame): 
+            context free grammar production rules (VP -> VB NP)
+        posting_list (defauldict): 
+            list of production's right side indices (e.g., VB NP)
+        sorted_series (pd.Series): [description]
+
+    Returns:
+        pd.Series: 
+            syntactic similarity b/w seed & queries
+    """
+    # flatten posting list into a list of queries of raw
+    # indices in original corpus
+    index = get_posting_index_on_raw_ix(
+        posting_list, sorted_series
+    )
+
+    # list production's right side score of similarity
+    # with seed
+    score = list(
+        chain.from_iterable(
+            [
+                list(
+                    repeat(
+                        sorted_series[ix],
+                        len(
+                            posting_list[
+                                sorted_series.index[ix]
+                            ]
+                        ),
+                    )
+                )
+                for ix in range(len(sorted_series))
+            ]
+        )
+    )
+    # get verb phrases via raw index
+    cfg.index = cfg["index"]
+    ranked_vps = cfg["VP"].loc[index]
+    df = pd.DataFrame(ranked_vps, columns=["VP"])
+    df["score"] = score
+    return df
+
+
 def get_posting_index(
     posting_list: dict, sorted_series: pd.Series
 ) -> list:
@@ -153,7 +206,31 @@ def get_posting_index(
             ]
         )
     )
+    return index
 
+
+def get_posting_index_on_raw_ix(
+    posting_list: dict, sorted_series: pd.Series
+) -> list:
+    """Get indices from constituent posting list
+
+    Args:
+        posting_list (dict): [description]
+        sorted_series (pd.Series): [description]
+
+    Returns:
+        list: [description]
+    """
+    # flatten posting list into a list of queries of raw
+    # indices in original corpus
+    index = list(
+        chain.from_iterable(
+            [
+                posting_list[sorted_series.index[ix]]
+                for ix in range(len(sorted_series))
+            ]
+        )
+    )
     return index
 
 
@@ -195,7 +272,9 @@ def filter_by_similarity(
         pd.DataFrame: [description]
     """
     ranked = ranked[ranked["score"] >= thresh]
-    print(f"{len(ranked)} querie(s) left after filtering.")
+    logger.info(
+        f"{len(ranked)} querie(s) left after filtering."
+    )
     return ranked
 
 
