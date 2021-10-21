@@ -170,22 +170,22 @@ class Processing:
 
         # filter syntax
         t_sx = time()
-        sim_mx, filtered = self._filter_syntax(data, tag)
-        self._log_syntax(t_sx, filtered)
+        filtered = self._filter_syntax(data, tag)
+        self._log_syntax(t_sx, filtered["data"])
 
         # inspect
         if self.inspect:
             introsp = self._inspect_syntax(
-                introsp, filtered
+                introsp, filtered["data"]
             )
 
         # index in raw corpus
         raw_ix = data["index"]
-        index = raw_ix.values[filtered.index.values]
+        index = raw_ix.values[filtered["data"].index.values]
         return {
-            "data": filtered,
+            "data": filtered["data"],
             "introsp": introsp,
-            "sim_mx": sim_mx,
+            "sim_mx": filtered["sim_mx"],
             "raw_ix": index,
         }
 
@@ -289,21 +289,24 @@ class Processing:
             tag ([type]): [description]
 
         Returns:
-            [type]: [description]
+            [Dict]: [description]
         """
-        similarity_matrix = Lcs().do(cfg_mood)
+        sim_mx = Lcs().do(cfg_mood)
         sim_ranked = similarity.rank_nearest_to_seed(
-            similarity_matrix, seed=self.SEED, verbose=True
+            sim_mx, seed=self.SEED, verbose=True
         )
         posting_list = retrieval.create_posting_list(tag)
         ranked = similarity.print_ranked_VPs(
             cfg_mood, posting_list, sim_ranked
         )
-        filtered = similarity.filter_by_similarity(
+        data = similarity.filter_by_similarity(
             ranked, self.INTENT_SCORE
         )
-
-        return similarity_matrix, filtered
+        return {
+            "data": data,
+            "sim_mx": sim_mx,
+            "score": ranked["score"],
+        }
 
     def _log_syntax(self, t_sx, filtered):
         """Log syntax processing
@@ -359,7 +362,6 @@ class Processing:
         Returns:
             [type]: [description]
         """
-
         kept = introsp["good_intent_syntx"].notnull()
         for col in intents_df.columns:
             introsp[col] = None
@@ -369,20 +371,29 @@ class Processing:
             ]
         return introsp
 
-    def _inspect_syntax(self, introsp, filtered):
+    def _inspect_syntax(self, introsp, data):
         """Inspect processed syntax 
 
         Args:
             introsp ([type]): [description]
-            filtered ([type]): [description]
+            data ([type]): [description]
 
         Returns:
             [type]: [description]
         """
+        # tape score
+        introsp["syntx_score"] = None
+        kept = introsp["good_cplx"].notnull()
+        introsp["syntx_score"].loc[kept] = 0
+        introsp["syntx_score"].loc[data.index] = data[
+            "score"
+        ]
+
+        # tape filtered syntax
         introsp["good_intent_syntx"] = None
         kept = introsp["good_cplx"].notnull()
         introsp["good_intent_syntx"].loc[kept] = 0
-        introsp["good_intent_syntx"].loc[filtered.index] = 1
+        introsp["good_intent_syntx"].loc[data.index] = 1
         return introsp
 
     def _inspect_cplx(self, introsp, cfg, cfg_cx):

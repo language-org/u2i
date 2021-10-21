@@ -3,25 +3,22 @@
 
 author: steeve LAQUITAINE  
 
+* description:
+  * `deployment pattern`: currently batch only
 
-## Clone codebase
+
+## Setup & run
 
 ```
 git clone https://github.com/slq0/intent.git
 ```
-
-## Setup & run
 
 ```bash
 bash setup.sh
 ```
 
 ```bash
-python main.py train
-```
-
-```bash
-python main.py infer
+python main.py train_predict
 ```
 
 ## APPENDIX 
