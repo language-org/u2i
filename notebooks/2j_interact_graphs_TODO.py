@@ -27,10 +27,15 @@ from intent.src.intent.nodes import graphs, parsing
 # %% [markdown]
 ## LOAD DATA
 # %%
-proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
-raw_data_path = proj_path + "intent/data/01_raw/banking77/train.csv"
+proj_path = (
+    "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
+)
+raw_data_path = (
+    proj_path + "intent/data/01_raw/banking77/train.csv"
+)
 cfg_data_path = (
-    proj_path + "intent/data/02_intermediate/cfg_25_02_2021_18_16_42.xlsx"
+    proj_path
+    + "intent/data/02_intermediate/cfg_25_02_2021_18_16_42.xlsx"
 )
 data = pd.read_csv(raw_data_path)
 cfg = pd.read_excel(cfg_data_path)
@@ -44,7 +49,9 @@ size_window = 2  # bigrams
 ## QUERIES TO VERB PHRASES
 # %%
 al_prdctor = parsing.init_allen_parser()
-verb_phrases_str = parsing.from_text_to_constituents(data, al_prdctor)
+verb_phrases_str = parsing.from_text_to_constituents(
+    data, al_prdctor
+)
 # %% [markdown]
 ## VERB PHRASES TO GRAPH
 # %%
@@ -82,7 +89,10 @@ nx.draw(
 # %%
 undirected_graph = graph.to_undirected()
 communities = algorithms.louvain(
-    undirected_graph, weight="weight", resolution=1.0, randomize=False
+    undirected_graph,
+    weight="weight",
+    resolution=1.0,
+    randomize=False,
 )
 # %%
 # assign colors to clusters
@@ -111,14 +121,20 @@ nx.draw(
 ## Well-formed intents graph
 # %%
 def draw_subgraph(graph, pos, cfg, color: str):
-    series_of_constt = parsing.from_cfg_to_constituents(cfg)
+    series_of_constt = parsing.chunk_cfg(cfg)
     list_of_constt = list(
         chain.from_iterable(
-            series_of_constt.apply(lambda x: x.split()).to_list()
+            series_of_constt.apply(
+                lambda x: x.split()
+            ).to_list()
         )
     )
     graph = graph.subgraph(list_of_constt)
-    pos = {key: pos[key] for key in pos if key in list_of_constt}
+    pos = {
+        key: pos[key]
+        for key in pos
+        if key in list_of_constt
+    }
 
     # plot
     fig = plt.figure(figsize=(10, 10))
@@ -136,13 +152,17 @@ def draw_subgraph(graph, pos, cfg, color: str):
 
 
 # %%
-well_formed = cfg[["VP", "cfg", "annots"]][cfg["annots"].eq("yes")]
+well_formed = cfg[["VP", "cfg", "annots"]][
+    cfg["annots"].eq("yes")
+]
 draw_subgraph(graph, pos, well_formed["cfg"], "red")
 # %% [markdown]
 ## Ill-formed intents graph
 # %%
 # select subgraph of well-formed intents (annotated)
-ill_formed = cfg[["VP", "cfg", "annots"]][cfg["annots"].eq("no")]
+ill_formed = cfg[["VP", "cfg", "annots"]][
+    cfg["annots"].eq("no")
+]
 draw_subgraph(graph, pos, ill_formed["cfg"], "white")
 
 # %% [markdown]

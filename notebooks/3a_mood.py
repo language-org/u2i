@@ -42,7 +42,7 @@ sim_matx = pd.read_excel(sim_path)
 # %% [markdown]
 ## Detect Moods
 # %%
-sent_moods = features.classify_sentence_type(cfg["text"])
+sent_moods = features.classify_mood(cfg["text"])
 # %% [markdown]
 # %%
 posting_list = retrieval.create_posting_list(tag)

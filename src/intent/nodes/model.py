@@ -32,8 +32,9 @@ class U2iModel(object):
             denoising=self.prms["DENOISING"][
                 "FILTERING_METHOD"
             ],
+            inspect=self.prms["INSPECT"],
         ).run(corpus)
-    
+
         # clustering layer
         X = cluster_queries(
             X,

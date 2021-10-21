@@ -102,7 +102,7 @@ def filter_n_sent_eq(
     return query[count == n_sent]
 
 
-def filter_in_only_mood(
+def filter_mood(
     cfg: pd.DataFrame, FILT_MOOD: str
 ) -> pd.Series:
     """Filter queries by their mood
@@ -129,14 +129,17 @@ def filter_in_only_mood(
     except:
         raise (
             ValueError(
-                "(filter_in_only_mood) FILT_MOOD arg is not set. Please set for processing"
+                """(filter_mood) Please set FILT_MOOD. 
+                """
             )
         )
 
+    from ipdb import set_trace
+
+    set_trace()
+
     # classify sentence types (state, ask, ..)
-    query_moods = features.classify_sentence_type(
-        cfg["text"]
-    )
+    query_moods = features.classify_mood(cfg["text"])
 
     # filter indices
     ix = [

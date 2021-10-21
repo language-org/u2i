@@ -183,7 +183,7 @@ def rank_nearest_to_seed(
 def filter_by_similarity(
     ranked: pd.DataFrame, thresh: float
 ) -> pd.DataFrame:
-    """Filter queries dissimilar to the chosen intent syntax
+    """Filter queries dissimilar to intent seed syntax
 
     Args:
         ranked (pd.DataFrame): 

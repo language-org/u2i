@@ -93,79 +93,24 @@ class Processing:
         Returns:
             pd.DataFrame: [description]
         """
+        # tape queries
         introsp = corpus["text"].to_frame()
 
-        from ipdb import set_trace
+        # parse structure (bottleneck)
+        data = self.parse_struct(corpus, introsp)
 
-        set_trace()
+        # choose complexity
+        data = self.filter_cplx(data)
 
-        # parse constituents
-        t_cfg = time()
-        cfg = Cfg(corpus, self.params).do()
-        self._log_cfg(t_cfg, cfg)
-
-        # inspect
-        if self.inspect:
-            introsp = self._inspect_cfg(introsp, cfg)
-
-        # filter complexity
-        t_cx = time()
-        cfg_cx = preprocess.filter_n_sent_eq(
-            cfg, self.NUM_SENT, verbose=True
-        )
-        self._log_cpx(t_cx, cfg_cx)
-
-        # inspect
-        if self.inspect:
-            introsp = self._inspect_cplx(
-                introsp, cfg, cfg_cx
-            )
-
-        # filter mood
-        t_mood = time()
-        cfg_mood = preprocess.filter_mood(
-            cfg_cx, self.FILT_MOOD
-        )
-        self._log_mood(t_mood, cfg_mood)
+        # choose mood
+        data = self.filter_mood(data)
 
         # get constituents
-        tag = parsing.from_cfg_to_constituents(
-            cfg_mood["cfg"]
-        )
-
-        # filter syntax
-        t_sx = time()
-        similarity_matrix, filtered = self._filter_syntax(
-            cfg_mood, tag
-        )
-        self._log_syntax(t_sx, filtered)
-
-        # inspect
-        if self.inspect:
-            introsp = self._inspect_syntax(
-                introsp, filtered
-            )
-
-        # index
-        raw_ix = cfg_mood["index"]
-        filtered_raw_ix = raw_ix.values[
-            filtered.index.values
-        ]
-
-        # Inference & slot filling
-        intents = parsing.parse_intent(filtered)
-        intents_df = pd.DataFrame(
-            intents, index=filtered_raw_ix
-        )
-
-        # inspect
-        if self.inspect:
-            introsp = self._inspect_intent(
-                introsp, intents_df
-            )
-        from ipdb import set_trace
-
-        set_trace()
+        (
+            introsp,
+            similarity_matrix,
+            intents_df,
+        ) = self.parse_intent_and_slots(data)
 
         # display (intent, intendeed)
         cfg_mood.index = cfg_mood["index"]
@@ -197,19 +142,146 @@ class Processing:
 
         # write representations
         # rep flow
+        self.write_internal_rep(introsp)
+
+        # syntax similarity
+        self.write_syntx_sim(similarity_matrix)
+        return (processed, intents)
+
+    def parse_intent_and_slots(self, data):
+        (
+            similarity_matrix,
+            filtered,
+            filtered_raw_ix,
+        ) = self.filter_syntax(data)
+
+        # Inference & slot filling
+        intents = parsing.parse_intent(filtered)
+        intents_df = pd.DataFrame(
+            intents, index=filtered_raw_ix
+        )
+
+        # inspect
+        if self.inspect:
+            introsp = self._inspect_intent(
+                introsp, intents_df
+            )
+
+        return introsp, similarity_matrix, intents_df
+
+    def filter_syntax(self, data):
+        tag = parsing.chunk_cfg(data["data"]["cfg"])
+
+        # filter syntax
+        t_sx = time()
+        similarity_matrix, filtered = self._filter_syntax(
+            data["data"], tag
+        )
+        self._log_syntax(t_sx, filtered)
+
+        # inspect
+        if self.inspect:
+            introsp = self._inspect_syntax(
+                introsp, filtered
+            )
+
+        # index
+        raw_ix = data["data"]["index"]
+        filtered_raw_ix = raw_ix.values[
+            filtered.index.values
+        ]
+
+        return similarity_matrix, filtered, filtered_raw_ix
+
+    def filter_mood(self, data):
+        """Choose mood
+
+        Args:
+            data ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
+        t_mood = time()
+        introsp = data["introsp"]
+        data = data["data"]
+        cfg_mood = preprocess.filter_mood(
+            data, self.FILT_MOOD
+        )
+        self._log_mood(t_mood, cfg_mood)
+
+        # inspect
+        if self.inspect:
+            introsp["good_mood"] = None
+            kept = introsp.iloc[:, -2].notnull()
+            introsp["good_mood"].loc[kept] = 0
+            introsp["good_mood"].loc[cfg_mood["index"]] = 1
+        return {"data": cfg_mood, "introsp": introsp}
+
+    def write_syntx_sim(self, similarity_matrix):
+        file_path = os.path.join(
+            PROJ_PATH,
+            "data/08_introspection/syntax_similarity.csv",
+        )
+        similarity_matrix.to_csv(file_path)
+
+    def write_internal_rep(self, introsp):
         file_path = os.path.join(
             PROJ_PATH,
             "data/08_introspection/representations.csv",
         )
         introsp.to_csv(file_path)
 
-        # syntax similarity
-        file_path = os.path.join(
-            PROJ_PATH,
-            "data/08_introspection/syntax_similarity.csv",
+    def filter_cplx(self, data):
+        """Choose level of complexity
+
+        Args:
+            data (Dict[str, Any]): 
+                "data":
+                    data 
+                "introsp":
+                    taped internal representations
+
+        Returns:
+            Dict[str, Any]: [description]
+                "data": 
+                    filtered data
+                "introsp" (pd.DataFrame):
+                    taped internal representations
+        """
+        t_cx = time()
+        introsp = data["introsp"]
+        data = data["data"]
+        cfg_cx = preprocess.filter_n_sent_eq(
+            data, self.NUM_SENT, verbose=True
         )
-        similarity_matrix.to_csv(file_path)
-        return (processed, intents)
+        self._log_cpx(t_cx, cfg_cx)
+
+        # inspect
+        if self.inspect:
+            introsp = self._inspect_cplx(
+                introsp, data, cfg_cx
+            )
+        return {"data": data, "introsp": introsp}
+
+    def parse_struct(self, corpus, introsp):
+        """parse queries structure
+
+        Args:
+            corpus ([type]): [description]
+            introsp ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
+        t_cfg = time()
+        cfg = Cfg(corpus, self.params).do()
+        self._log_cfg(t_cfg, cfg)
+
+        # inspect
+        if self.inspect:
+            introsp = self._inspect_cfg(introsp, cfg)
+        return {"data": cfg, "introsp": introsp}
 
     def _filter_syntax(self, cfg_mood, tag):
         """Process syntax
@@ -290,7 +362,7 @@ class Processing:
             [type]: [description]
         """
 
-        kept = introsp["filt_not_intent_sx"].notnull()
+        kept = introsp["good_intent_syntx"].notnull()
         for col in intents_df.columns:
             introsp[col] = None
             introsp[col].loc[kept] = 0
@@ -309,12 +381,10 @@ class Processing:
         Returns:
             [type]: [description]
         """
-        introsp["filt_not_intent_sx"] = None
-        kept = introsp["filt_cplxity"].notnull()
-        introsp["filt_not_intent_sx"].loc[kept] = 0
-        introsp["filt_not_intent_sx"].loc[
-            filtered.index
-        ] = 1
+        introsp["good_intent_syntx"] = None
+        kept = introsp["good_cplx"].notnull()
+        introsp["good_intent_syntx"].loc[kept] = 0
+        introsp["good_intent_syntx"].loc[filtered.index] = 1
         return introsp
 
     def _inspect_cplx(self, introsp, cfg, cfg_cx):
@@ -328,9 +398,9 @@ class Processing:
         Returns:
             [type]: [description]
         """
-        introsp["filt_cplxity"] = None
-        introsp["filt_cplxity"].loc[cfg["index"]] = 0
-        introsp["filt_cplxity"].loc[cfg_cx["index"]] = 1
+        introsp["good_cplx"] = None
+        introsp["good_cplx"].loc[cfg["index"]] = 0
+        introsp["good_cplx"].loc[cfg_cx["index"]] = 1
         return introsp
 
     def _inspect_cfg(self, introsp, cfg):

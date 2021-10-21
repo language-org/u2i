@@ -28,7 +28,7 @@ size_window = 2  # bigrams
 # %% [markdown]
 ## EXTRACT VP CFG right side production
 # %%
-constituents = parsing.from_cfg_to_constituents(data["cfg"])
+constituents = parsing.chunk_cfg(data["cfg"])
 # %% [markdown]
 ## TEXT TO GRAPH
 # %%

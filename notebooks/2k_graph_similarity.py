@@ -30,9 +30,15 @@ import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
 
-proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
+proj_path = (
+    "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
+)
 os.chdir(proj_path)
-from intent.src.intent.nodes import graphs, parsing, similarity
+from intent.src.intent.nodes import (
+    graphs,
+    parsing,
+    similarity,
+)
 
 to_df = pd.DataFrame
 to_series = pd.Series
@@ -40,10 +46,16 @@ to_series = pd.Series
 ## PATHS
 # %%
 cfg_path = (
-    proj_path + "intent/data/02_intermediate/cfg_25_02_2021_18_16_42.xlsx"
+    proj_path
+    + "intent/data/02_intermediate/cfg_25_02_2021_18_16_42.xlsx"
 )
-sim_path = proj_path + "intent/data/02_intermediate/sim_matrix.xlsx"
-tag_path = proj_path + "intent/data/02_intermediate/tag.xlsx"
+sim_path = (
+    proj_path
+    + "intent/data/02_intermediate/sim_matrix.xlsx"
+)
+tag_path = (
+    proj_path + "intent/data/02_intermediate/tag.xlsx"
+)
 # load dataset containing context free grammar productions
 cfg = pd.read_excel(cfg_path)
 
@@ -51,9 +63,11 @@ cfg = pd.read_excel(cfg_path)
 ## TEXT TO GRAPH
 # %%
 # convert each Verb Phrase to a single graph
-tag = parsing.from_cfg_to_constituents(cfg["cfg"])
+tag = parsing.chunk_cfg(cfg["cfg"])
 vp_graph = [
-    graphs.from_text_to_graph(to_series(vp), isdirected=True, isweighted=True)
+    graphs.from_text_to_graph(
+        to_series(vp), isdirected=True, isweighted=True
+    )
     for vp in tag.to_list()
 ]
 # %% [markdown]
@@ -70,7 +84,9 @@ ged = similarity.calc_ged(vp_graph)
 fig = plt.figure(figsize=(10, 10))
 n_sample = 20
 sample_ged_df = pd.DataFrame(
-    ged[:n_sample, :n_sample], index=tag[:n_sample], columns=tag[:n_sample],
+    ged[:n_sample, :n_sample],
+    index=tag[:n_sample],
+    columns=tag[:n_sample],
 )
 cm = sns.clustermap(
     sample_ged_df,
@@ -120,7 +136,9 @@ n_query = len(tag)
 lcs_sim = np.zeros((n_query, n_query))
 for ix in range(n_query):
     for jx in range(n_query):
-        lcs_sim[ix, jx] = similarity.calc_lcs(tag[ix], tag[jx])
+        lcs_sim[ix, jx] = similarity.calc_lcs(
+            tag[ix], tag[jx]
+        )
 
 # %%
 # preview sample cluster VP productions (hierar. clustering)
@@ -156,7 +174,9 @@ cm = sns.clustermap(
 # Write output
 # [TODO] better design
 # %%
-lcs_sim_df.drop_duplicates().T.drop_duplicates().to_excel(sim_path)
+lcs_sim_df.drop_duplicates().T.drop_duplicates().to_excel(
+    sim_path
+)
 tag.to_excel(tag_path)
 # %% [markdown]
 ## References

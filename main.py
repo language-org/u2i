@@ -21,8 +21,9 @@ if __name__ == "__main__":
     """
     if sys.argv[1] == "train_predict":
         train_predict.run()
-    elif sys.argv[1] == "inspect":
-        pass
-
+    else:
+        raise NotImplementedError(
+            """This is not implented: Use $python main.py train_predict"""
+        )
     # clean up caches
     os.system("rm -f ~/.allenlp")

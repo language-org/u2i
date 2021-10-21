@@ -8,7 +8,7 @@ import pandas as pd
 SENT_TYPE_PATTN = re.compile(r"[\?\!\.]")
 
 
-def classify_sentence_type(sentences: pd.Series) -> list:
+def classify_mood(sentences: pd.Series) -> list:
     """Classify sentence type: ask, state, wish-or-excl,..
 
     Args:

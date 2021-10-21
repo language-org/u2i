@@ -50,7 +50,7 @@ def simil_matx(simil_matx):
 def test_len_similarity_matx(
     cfg: pd.DataFrame, sim_matx: pd.DataFrame
 ):
-    tag = parsing.from_cfg_to_constituents(cfg["cfg"])
+    tag = parsing.chunk_cfg(cfg["cfg"])
 
     assert tag.nunique() == len(
         sim_matx

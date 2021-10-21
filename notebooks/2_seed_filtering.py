@@ -117,7 +117,7 @@ joblib.dump(sample, catalog["parsed"])
 # %% [markdown]
 ### FOCUS ON THE CLASS WELL PARSED
 #
-# moods = mood.classify_sentence_type(data["text"])
+# moods = mood.classify_mood(data["text"])
 # moods
 #
 #### ANNOTATE

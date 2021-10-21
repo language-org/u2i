@@ -15,7 +15,9 @@ PROJ_PATH = os.getenv("PROJ_PATH")
 from src.intent.nodes import graphs, parsing, similarity
 
 # catalog
-catalog_path = os.path.join(PROJ_PATH, "conf/base/catalog.yml")
+catalog_path = os.path.join(
+    PROJ_PATH, "conf/base/catalog.yml"
+)
 with open(catalog_path) as file:
     catalog = yaml.load(file)
 
@@ -33,7 +35,9 @@ class Lcs:
         """Instantiates class"""
         self.sim_path = catalog["sim"]
 
-    def do(self, cfg: pd.DataFrame, verbose: bool = False) -> pd.DataFrame:
+    def do(
+        self, cfg: pd.DataFrame, verbose: bool = False
+    ) -> pd.DataFrame:
         """Calculate similarity matrix
 
         Args:
@@ -44,7 +48,7 @@ class Lcs:
         """
 
         # convert each Verb Phrase to a graph
-        tag = parsing.from_cfg_to_constituents(cfg["cfg"])
+        tag = parsing.chunk_cfg(cfg["cfg"])
 
         # [TODO]: implement "suffix tree algo", it is more efficient
         # instead of currently used dynamic programming
@@ -53,7 +57,9 @@ class Lcs:
         lcs = np.zeros((n_query, n_query))
         for ix in range(n_query):
             for jx in range(n_query):
-                lcs[ix, jx] = similarity.calc_lcs(tag[ix], tag[jx])
+                lcs[ix, jx] = similarity.calc_lcs(
+                    tag[ix], tag[jx]
+                )
         lcs_df = to_df(lcs, index=tag, columns=tag)
 
         if verbose:
@@ -108,10 +114,12 @@ class Ged:
     def do(self):
 
         # convert each verb phrase to a graph
-        tag = parsing.from_cfg_to_constituents(self.cfg["cfg"])
+        tag = parsing.chunk_cfg(self.cfg["cfg"])
         vp_graph = [
             graphs.from_text_to_graph(
-                to_series(vp), isdirected=True, isweighted=True,
+                to_series(vp),
+                isdirected=True,
+                isweighted=True,
             )
             for vp in tag.to_list()
         ]

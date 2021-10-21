@@ -281,7 +281,7 @@ def from_text_to_cfg(
     return data
 
 
-def from_cfg_to_constituents(cfg: pd.Series) -> pd.Series:
+def chunk_cfg(cfg: pd.Series) -> pd.Series:
     """Convert a series of string VP production rules ('VP -> V NP') to
     a series of string constituents ('V NP')
 
@@ -315,14 +315,17 @@ def from_cfg_to_constituents(cfg: pd.Series) -> pd.Series:
         # else request a known value type
         else:
             raise TypeError(
-                f"""cfg entries are of type {type(cfg.iloc[0])} but must either be of type 'str' 
+                f"""(chunk_cfg) cfg entries 
+                are of type {type(cfg.iloc[0])}. 
+                Please use type 'str' 
                 or 'nltk.grammar.Production'
                 """
             )
     # else
     else:
         raise ValueError(
-            "cfg is empty. Check that your filtering parameters are not too restrictive"
+            """"(chunk_cfg) cfg is empty. 
+            Please relax your parameters"""
         )
 
     return constt
@@ -345,7 +348,7 @@ def from_text_to_constituents(
     """
 
     data = parsing.from_text_to_cfg(data, al_prdctor)
-    constt = parsing.from_cfg_to_constituents(data["cfg"])
+    constt = parsing.chunk_cfg(data["cfg"])
     return constt
 
 

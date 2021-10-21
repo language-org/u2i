@@ -6,7 +6,7 @@ import re
 SENT_TYPE_PATTN = re.compile(r"[\?\!\.]")
 
 
-def classify_sentence_type(sentences):
+def classify_mood(sentences):
     """
     Classify sentence type
     args:

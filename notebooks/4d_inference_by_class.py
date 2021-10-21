@@ -57,7 +57,9 @@ from inspect import TPFLAGS_IS_ABSTRACT
 import os
 from collections import defaultdict
 
-proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
+proj_path = (
+    "/Users/steeve_laquitaine/desktop/CodeHub/intent/"
+)
 os.chdir(proj_path)
 
 from time import time
@@ -96,10 +98,16 @@ pd.set_option("display.max_colwidth", None)
 # %%
 SEED = " VB NP"  # seed for comparison
 NUM_SENT = 1  # keep query with max one sentence
-THRES_SIM_SCORE = 1  # Keep queries syntactically similar to seed
-FILT_MOOD = ("ask",)  # ("state", "wish-or-excl", "ask")  # Keep statements
+THRES_SIM_SCORE = (
+    1  # Keep queries syntactically similar to seed
+)
+FILT_MOOD = (
+    "ask",
+)  # ("state", "wish-or-excl", "ask")  # Keep statements
 DIST_THRES = 2  # inference threshold for clustering, low values -> more clusters
-with open(proj_path + "intent/conf/base/parameters.yml") as file:
+with open(
+    proj_path + "intent/conf/base/parameters.yml"
+) as file:
     prms = yaml.load(file)
 # %% [markdown]
 ## LOAD DATA
@@ -107,7 +115,9 @@ with open(proj_path + "intent/conf/base/parameters.yml") as file:
 ### Raw data
 # %%
 t0 = time()
-corpus_path = proj_path + "intent/data/01_raw/banking77/train.csv"
+corpus_path = (
+    proj_path + "intent/data/01_raw/banking77/train.csv"
+)
 corpus = pd.read_csv(corpus_path)
 # %% [markdown]
 ## PREPROCESSING
@@ -123,28 +133,44 @@ cfg = Cfg(corpus, prms).do()
 # %% [markdown]
 # We kept intents with N sentences
 # %%
-cfg_cx = preprocess.filter_n_sent_eq(cfg, NUM_SENT, verbose=True)
+cfg_cx = preprocess.filter_n_sent_eq(
+    cfg, NUM_SENT, verbose=True
+)
 # %% [markdown]
 #### filter mood
 # %%
-cfg_mood = preprocess.filter_in_only_mood(cfg_cx, FILT_MOOD)
+cfg_mood = preprocess.filter_mood(cfg_cx, FILT_MOOD)
 # %%
-tag = parsing.from_cfg_to_constituents(cfg_mood["cfg"])
+tag = parsing.chunk_cfg(cfg_mood["cfg"])
 # %% [markdown]
 #### filter syntax similarity
 # %%
 # calculate similarity
 similarity_matrix = Lcs().do(cfg_mood)
-test_run.test_len_similarity_matx(cfg_mood, similarity_matrix)
+test_run.test_len_similarity_matx(
+    cfg_mood, similarity_matrix
+)
 # %%
-sim_ranked = similarity.rank_nearest_to_seed(similarity_matrix, seed=SEED, verbose=True)
+sim_ranked = similarity.rank_nearest_to_seed(
+    similarity_matrix, seed=SEED, verbose=True
+)
 posting_list = retrieval.create_posting_list(tag)
-ranked = similarity.print_ranked_VPs(cfg_mood, posting_list, sim_ranked)
-filtered = similarity.filter_by_similarity(ranked, THRES_SIM_SCORE)
+ranked = similarity.print_ranked_VPs(
+    cfg_mood, posting_list, sim_ranked
+)
+filtered = similarity.filter_by_similarity(
+    ranked, THRES_SIM_SCORE
+)
 # test [TODO]
-test_run.test_rank_nearest_to_seed(similarity_matrix, seed=SEED)
-test_run.test_posting_list(posting_list, similarity_matrix, seed=SEED)
-test_run.test_get_posting_index(cfg_mood, posting_list, sim_ranked)
+test_run.test_rank_nearest_to_seed(
+    similarity_matrix, seed=SEED
+)
+test_run.test_posting_list(
+    posting_list, similarity_matrix, seed=SEED
+)
+test_run.test_get_posting_index(
+    cfg_mood, posting_list, sim_ranked
+)
 
 # %%
 # map back to raw intent indices
@@ -161,22 +187,30 @@ intents = parsing.parse_intent(filtered)
 # %%
 # show (intent, intendeed)
 cfg_mood.index = cfg_mood["index"]
-cfg_mood.merge(todf(intents, index=filtered_raw_ix), left_index=True, right_index=True)[
-    ["index", "text", "intent", "intendeed"]
-]
+cfg_mood.merge(
+    todf(intents, index=filtered_raw_ix),
+    left_index=True,
+    right_index=True,
+)[["index", "text", "intent", "intendeed"]]
 # %% [markdown]
 ## LABEL INFERENCE
 #
 # 1. Filter words not in Wordnet
 # 2. Apply verb phrase hierarchical clustering
 # %%
-filtered_corpus = preprocess.filter_words(cfg_mood["VP"], "not_in_wordnet")
+filtered_corpus = preprocess.filter_words(
+    cfg_mood["VP"], "not_in_wordnet"
+)
 # %%
-filtered_corpus = preprocess.drop_empty_queries(filtered_corpus)
+filtered_corpus = preprocess.drop_empty_queries(
+    filtered_corpus
+)
 # %%
 # [warning] this is very slow
 tic = time()
-labels = inference.label_queries(tuple(filtered_corpus), DIST_THRES)
+labels = inference.label_queries(
+    tuple(filtered_corpus), DIST_THRES
+)
 # %%
 labels.index = filtered_corpus.index
 print(f"{round(time() - tic, 2)} secs")
@@ -224,7 +258,9 @@ for ix, this_label in enumerate(unique_labels):
     # assign this true label as predicted label and its conditional proba
     # as proba of predicted
     predicted_labels_all += [predicted[0]] * nb_label
-    proba_predicted_all += [predicted[1] / n_labelled] * nb_label
+    proba_predicted_all += [
+        predicted[1] / n_labelled
+    ] * nb_label
 labelled["predicted"] = predicted_labels_all
 labelled["proba_predicted (ratio)"] = proba_predicted_all
 labelled
@@ -235,9 +271,14 @@ labelled
 # %% [markdown]
 ### Calculate performance metrics
 # %%
-nb_TP = sum(labelled["predicted"] == labelled["true_labels"])
+nb_TP = sum(
+    labelled["predicted"] == labelled["true_labels"]
+)
 accuracy = nb_TP / n_labelled
 print("Task info:")
-print("- number of classes:", labelled["true_labels"].nunique())
+print(
+    "- number of classes:",
+    labelled["true_labels"].nunique(),
+)
 print("\nMetrics:")
 print("- accuracy:", accuracy)

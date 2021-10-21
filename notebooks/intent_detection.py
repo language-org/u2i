@@ -21,7 +21,10 @@ import pandas as pd
 
 # my intent analysis package
 import intent
-from intent.nodes.utils import classify_sentence_type, detect_sentence_type
+from intent.nodes.utils import (
+    classify_mood,
+    detect_sentence_type,
+)
 from intent.nodes.utils import UtteranceComplexity
 
 
@@ -29,8 +32,12 @@ from intent.nodes.utils import UtteranceComplexity
 # ### set paths
 # %%
 proj_path = "/Users/steeve_laquitaine/desktop/CodeHub/intent/intent/"
-train_data_path = proj_path + "data/01_raw/banking77/train.csv"
-test_data_path = proj_path + "data/01_raw/banking77/test.csv"
+train_data_path = (
+    proj_path + "data/01_raw/banking77/train.csv"
+)
+test_data_path = (
+    proj_path + "data/01_raw/banking77/test.csv"
+)
 
 
 # %%
@@ -56,17 +63,21 @@ train_data.head()
 #   - [TODO]: only filter in declarative & imperative sentences. Currently sentences are mixed.
 
 # classify sentences
-sentence_type = classify_sentence_type(train_data.text.tolist())
+sentence_type = classify_mood(train_data.text.tolist())
 train_data_feat = train_data.copy()
 train_data_feat["sentence_type"] = sentence_type
 
 
 # %%
 # keep only queries made of one sentence
-train_data_feat["sentence_count"] = UtteranceComplexity.count_sentences(
+train_data_feat[
+    "sentence_count"
+] = UtteranceComplexity.count_sentences(
     train_data_feat.text.tolist()
 )
-train_data_feat_filtered = train_data_feat[train_data_feat.sentence_count.eq(1)]
+train_data_feat_filtered = train_data_feat[
+    train_data_feat.sentence_count.eq(1)
+]
 train_data_feat_filtered.head()
 print("Number of queries:", len(train_data_feat_filtered))
 
@@ -75,7 +86,12 @@ print("Number of queries:", len(train_data_feat_filtered))
 # keep declarative sentences
 TYPE = "state"
 declarative_queries = train_data_feat[
-    train_data_feat.apply(lambda x: detect_sentence_type(x.sentence_type, TYPE), axis=1)
+    train_data_feat.apply(
+        lambda x: detect_sentence_type(
+            x.sentence_type, TYPE
+        ),
+        axis=1,
+    )
 ]
 filtered
 
