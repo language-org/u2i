@@ -4906,3 +4906,125 @@
 2021-10-21 19:46:10,284 - src.intent.pipelines.train_predict - INFO - Metrics: {'rand_index': 0.7876923076923077, 'mutual_info': 0.36933873890960833}
 2021-10-21 19:46:10,324 - src.intent.pipelines.train_predict - INFO - Precictions & metrics have been written
 2021-10-21 19:46:10,324 - src.intent.pipelines.train_predict - INFO - Pipeline took 191.5579891204834 secs
+2021-10-21 19:56:20,767 - src.intent.pipelines.train_predict - INFO - Loading pipeline parameters...
+2021-10-21 19:56:20,807 - src.intent.pipelines.train_predict - INFO - Reading dataset took 0.033007144927978516 secs
+2021-10-21 19:56:20,807 - src.intent.pipelines.train_predict - INFO - Training model...
+2021-10-21 19:56:20,808 - root - INFO - -------- PROCESSING ------------
+2021-10-21 19:56:20,808 - root - INFO - Parameters:
+2021-10-21 19:56:20,808 - root - INFO - - Sentences/query: 1
+2021-10-21 19:56:20,808 - root - INFO - - Mood: ask
+2021-10-21 19:56:20,808 - root - INFO -  Threshold similarity score:  1
+2021-10-21 19:56:20,808 - root - INFO - - Seed:  VB NP
+2021-10-21 19:56:21,842 - filelock - INFO - Lock 140523039150600 acquired on /Users/steeve_laquitaine/.allennlp/cache/653d0c5a1fb85ac98e84e332fa2a2c0596d9c86a2f38189886d65a422dabe1e9.8cfb67d64c5824347f7328a0f84e46d2e74f9d9bb1aba6441b313d5aaccdea4d.lock
+2021-10-21 19:56:21,843 - filelock - INFO - Lock 140523039150600 released on /Users/steeve_laquitaine/.allennlp/cache/653d0c5a1fb85ac98e84e332fa2a2c0596d9c86a2f38189886d65a422dabe1e9.8cfb67d64c5824347f7328a0f84e46d2e74f9d9bb1aba6441b313d5aaccdea4d.lock
+2021-10-21 19:56:36,650 - filelock - INFO - Lock 140523052386848 acquired on /var/folders/_k/b_712yyj7vn5l6zfgz7s3xmc0000gn/T/tmpe3f9mv4m/vocabulary/.lock
+2021-10-21 19:56:36,653 - filelock - INFO - Lock 140523052386848 released on /var/folders/_k/b_712yyj7vn5l6zfgz7s3xmc0000gn/T/tmpe3f9mv4m/vocabulary/.lock
+2021-10-21 19:56:37,455 - filelock - INFO - Lock 140523052455192 acquired on /Users/steeve_laquitaine/.allennlp/cache/c45ba807fc3368c761c5effbe59c21e13dde7f13778f238d1c2a0acec66c5722.15c465f454169b1ddb0b7f0d48dca2484f5b3350e81e870a0c3a797233eaac66.lock
+2021-10-21 19:56:37,455 - filelock - INFO - Lock 140523052455192 released on /Users/steeve_laquitaine/.allennlp/cache/c45ba807fc3368c761c5effbe59c21e13dde7f13778f238d1c2a0acec66c5722.15c465f454169b1ddb0b7f0d48dca2484f5b3350e81e870a0c3a797233eaac66.lock
+2021-10-21 19:56:38,124 - filelock - INFO - Lock 140523052567240 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:38,125 - filelock - INFO - Lock 140523052567240 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:38,894 - filelock - INFO - Lock 140523052567520 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:38,895 - filelock - INFO - Lock 140523052567520 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:39,577 - filelock - INFO - Lock 140523052594120 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:39,578 - filelock - INFO - Lock 140523052594120 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:40,252 - filelock - INFO - Lock 140523052614320 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:40,252 - filelock - INFO - Lock 140523052614320 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:40,930 - filelock - INFO - Lock 140523052615832 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:40,930 - filelock - INFO - Lock 140523052615832 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:41,607 - filelock - INFO - Lock 140523052629128 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:41,607 - filelock - INFO - Lock 140523052629128 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:42,287 - filelock - INFO - Lock 140523052594904 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:42,288 - filelock - INFO - Lock 140523052594904 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:42,976 - filelock - INFO - Lock 140523052642032 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:42,976 - filelock - INFO - Lock 140523052642032 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:43,858 - filelock - INFO - Lock 140523052641808 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:43,859 - filelock - INFO - Lock 140523052641808 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:44,785 - filelock - INFO - Lock 140523052576840 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:44,785 - filelock - INFO - Lock 140523052576840 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:45,624 - filelock - INFO - Lock 140523052580704 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:45,624 - filelock - INFO - Lock 140523052580704 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:46,322 - filelock - INFO - Lock 140523052455192 acquired on /Users/steeve_laquitaine/.allennlp/cache/c45ba807fc3368c761c5effbe59c21e13dde7f13778f238d1c2a0acec66c5722.15c465f454169b1ddb0b7f0d48dca2484f5b3350e81e870a0c3a797233eaac66.lock
+2021-10-21 19:56:46,322 - filelock - INFO - Lock 140523052455192 released on /Users/steeve_laquitaine/.allennlp/cache/c45ba807fc3368c761c5effbe59c21e13dde7f13778f238d1c2a0acec66c5722.15c465f454169b1ddb0b7f0d48dca2484f5b3350e81e870a0c3a797233eaac66.lock
+2021-10-21 19:56:53,266 - filelock - INFO - Lock 140523052659992 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:56:53,267 - filelock - INFO - Lock 140523052659992 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 19:59:24,321 - root - INFO - Parsing constituents
+2021-10-21 19:59:24,323 - root - INFO - N=381 queries left
+2021-10-21 19:59:24,323 - root - INFO - took 183.1957812309265 secs
+2021-10-21 19:59:24,358 - root - INFO - Filtering complex queries
+2021-10-21 19:59:24,359 - root - INFO - N=333 queries left
+2021-10-21 19:59:24,359 - root - INFO - took 0.011287927627563477 secs
+2021-10-21 19:59:24,377 - root - INFO - Filtering moods
+2021-10-21 19:59:24,377 - root - INFO - N=300 queries left
+2021-10-21 19:59:24,377 - root - INFO - took 0.012992143630981445 secs
+2021-10-21 19:59:30,123 - root - INFO - 52 querie(s) left after filtering.
+2021-10-21 19:59:30,123 - root - INFO - Filtering 'not-intent' syntax
+2021-10-21 19:59:30,124 - root - INFO - N=52 queries left
+2021-10-21 19:59:30,124 - root - INFO - took 5.725761890411377 secs
+2021-10-21 20:00:58,856 - src.intent.pipelines.train_predict - INFO - Training took 278.04883003234863 secs
+2021-10-21 20:00:58,857 - src.intent.pipelines.train_predict - INFO - Calculating preds...
+2021-10-21 20:00:58,872 - src.intent.pipelines.train_predict - INFO - Inference took 0.014757871627807617 secs
+2021-10-21 20:00:58,872 - src.intent.pipelines.train_predict - INFO - Evaluating model...
+2021-10-21 20:00:58,891 - src.intent.pipelines.train_predict - INFO - Metrics: {'rand_index': 0.691553544494721, 'mutual_info': 0.5268707093833211}
+2021-10-21 20:00:58,906 - src.intent.pipelines.train_predict - INFO - Precictions & metrics have been written
+2021-10-21 20:00:58,906 - src.intent.pipelines.train_predict - INFO - Pipeline took 278.13204288482666 secs
+2021-10-21 20:18:18,699 - src.intent.pipelines.train_predict - INFO - Loading pipeline parameters...
+2021-10-21 20:18:18,734 - src.intent.pipelines.train_predict - INFO - Reading dataset took 0.02986598014831543 secs
+2021-10-21 20:18:18,734 - src.intent.pipelines.train_predict - INFO - Training model...
+2021-10-21 20:18:18,734 - root - INFO - -------- PROCESSING ------------
+2021-10-21 20:18:18,734 - root - INFO - Parameters:
+2021-10-21 20:18:18,734 - root - INFO - - Sentences/query: 1
+2021-10-21 20:18:18,735 - root - INFO - - Mood: ask
+2021-10-21 20:18:18,735 - root - INFO -  Threshold similarity score:  1
+2021-10-21 20:18:18,735 - root - INFO - - Seed:  VB NP
+2021-10-21 20:18:19,643 - filelock - INFO - Lock 140687678158384 acquired on /Users/steeve_laquitaine/.allennlp/cache/653d0c5a1fb85ac98e84e332fa2a2c0596d9c86a2f38189886d65a422dabe1e9.8cfb67d64c5824347f7328a0f84e46d2e74f9d9bb1aba6441b313d5aaccdea4d.lock
+2021-10-21 20:18:19,643 - filelock - INFO - Lock 140687678158384 released on /Users/steeve_laquitaine/.allennlp/cache/653d0c5a1fb85ac98e84e332fa2a2c0596d9c86a2f38189886d65a422dabe1e9.8cfb67d64c5824347f7328a0f84e46d2e74f9d9bb1aba6441b313d5aaccdea4d.lock
+2021-10-21 20:18:33,395 - filelock - INFO - Lock 140687667518544 acquired on /var/folders/_k/b_712yyj7vn5l6zfgz7s3xmc0000gn/T/tmp71kc47zd/vocabulary/.lock
+2021-10-21 20:18:33,399 - filelock - INFO - Lock 140687667518544 released on /var/folders/_k/b_712yyj7vn5l6zfgz7s3xmc0000gn/T/tmp71kc47zd/vocabulary/.lock
+2021-10-21 20:18:34,106 - filelock - INFO - Lock 140687678362904 acquired on /Users/steeve_laquitaine/.allennlp/cache/c45ba807fc3368c761c5effbe59c21e13dde7f13778f238d1c2a0acec66c5722.15c465f454169b1ddb0b7f0d48dca2484f5b3350e81e870a0c3a797233eaac66.lock
+2021-10-21 20:18:34,107 - filelock - INFO - Lock 140687678362904 released on /Users/steeve_laquitaine/.allennlp/cache/c45ba807fc3368c761c5effbe59c21e13dde7f13778f238d1c2a0acec66c5722.15c465f454169b1ddb0b7f0d48dca2484f5b3350e81e870a0c3a797233eaac66.lock
+2021-10-21 20:18:34,777 - filelock - INFO - Lock 140687678474952 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:34,778 - filelock - INFO - Lock 140687678474952 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:35,463 - filelock - INFO - Lock 140687678475232 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:35,464 - filelock - INFO - Lock 140687678475232 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:36,270 - filelock - INFO - Lock 140687678501832 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:36,270 - filelock - INFO - Lock 140687678501832 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:37,176 - filelock - INFO - Lock 140687678522032 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:37,176 - filelock - INFO - Lock 140687678522032 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:37,845 - filelock - INFO - Lock 140687678523544 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:37,845 - filelock - INFO - Lock 140687678523544 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:38,525 - filelock - INFO - Lock 140687678532744 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:38,525 - filelock - INFO - Lock 140687678532744 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:39,202 - filelock - INFO - Lock 140687678502616 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:39,202 - filelock - INFO - Lock 140687678502616 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:39,894 - filelock - INFO - Lock 140687678549744 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:39,894 - filelock - INFO - Lock 140687678549744 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:40,774 - filelock - INFO - Lock 140687678549520 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:40,774 - filelock - INFO - Lock 140687678549520 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:41,572 - filelock - INFO - Lock 140687678484552 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:41,573 - filelock - INFO - Lock 140687678484552 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:42,437 - filelock - INFO - Lock 140687678488416 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:42,437 - filelock - INFO - Lock 140687678488416 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:43,125 - filelock - INFO - Lock 140687678362904 acquired on /Users/steeve_laquitaine/.allennlp/cache/c45ba807fc3368c761c5effbe59c21e13dde7f13778f238d1c2a0acec66c5722.15c465f454169b1ddb0b7f0d48dca2484f5b3350e81e870a0c3a797233eaac66.lock
+2021-10-21 20:18:43,343 - filelock - INFO - Lock 140687678362904 released on /Users/steeve_laquitaine/.allennlp/cache/c45ba807fc3368c761c5effbe59c21e13dde7f13778f238d1c2a0acec66c5722.15c465f454169b1ddb0b7f0d48dca2484f5b3350e81e870a0c3a797233eaac66.lock
+2021-10-21 20:18:49,664 - filelock - INFO - Lock 140687678567704 acquired on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:18:49,665 - filelock - INFO - Lock 140687678567704 released on /Users/steeve_laquitaine/.allennlp/cache/2a11b63baaa61c59d833d62d19ec9d1fe39ddc87a457ea9e0667752928cda08c.e6623c55f61b49e14a2ef0881ac5dbe85b2bfe9fb014760bc706855d4f7f48b7.lock
+2021-10-21 20:24:14,515 - root - INFO - Parsing constituents
+2021-10-21 20:24:14,516 - root - INFO - N=750 queries left
+2021-10-21 20:24:14,516 - root - INFO - took 355.5432131290436 secs
+2021-10-21 20:24:14,543 - root - INFO - Filtering complex queries
+2021-10-21 20:24:14,543 - root - INFO - N=555 queries left
+2021-10-21 20:24:14,543 - root - INFO - took 0.012242317199707031 secs
+2021-10-21 20:24:14,558 - root - INFO - Filtering moods
+2021-10-21 20:24:14,558 - root - INFO - N=423 queries left
+2021-10-21 20:24:14,559 - root - INFO - took 0.010788917541503906 secs
+2021-10-21 20:24:25,851 - root - INFO - 62 querie(s) left after filtering.
+2021-10-21 20:24:25,851 - root - INFO - Filtering 'not-intent' syntax
+2021-10-21 20:24:25,851 - root - INFO - N=62 queries left
+2021-10-21 20:24:25,852 - root - INFO - took 11.271827936172485 secs
+2021-10-21 20:26:36,714 - src.intent.pipelines.train_predict - INFO - Training took 497.9794330596924 secs
+2021-10-21 20:26:36,714 - src.intent.pipelines.train_predict - INFO - Calculating preds...
+2021-10-21 20:26:36,732 - src.intent.pipelines.train_predict - INFO - Inference took 0.01810908317565918 secs
+2021-10-21 20:26:36,732 - src.intent.pipelines.train_predict - INFO - Evaluating model...
+2021-10-21 20:26:36,747 - src.intent.pipelines.train_predict - INFO - Metrics: {'rand_index': 0.8080380750925437, 'mutual_info': 0.9867223113747359}
+2021-10-21 20:26:36,764 - src.intent.pipelines.train_predict - INFO - Precictions & metrics have been written
+2021-10-21 20:26:36,764 - src.intent.pipelines.train_predict - INFO - Pipeline took 498.06051993370056 secs
